@@ -1,8 +1,10 @@
 import React from 'react';
-
 import { createBrowserRouter } from 'react-router-dom';
-import HomePage from '../pages/app';
+
 import NotFoundPage from '../pages/404';
+import HomePage from '../pages/home/Home';
+import LoginPage from '../pages/login/Login';
+import RegisterPage from '../pages/register/Register';
 
 const modules = import.meta.glob('/src/pages/**/[a-z[]*.jsx', { eager: true });
 
@@ -27,8 +29,16 @@ const pages = Object.keys(modules)
 const routes = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
+    element: <RegisterPage />,
     children: [...pages],
+  },
+  {
+    path: 'login',
+    element: <LoginPage />,
+  },
+  {
+    path: 'home',
+    element: <HomePage />,
   },
   {
     path: '*',
