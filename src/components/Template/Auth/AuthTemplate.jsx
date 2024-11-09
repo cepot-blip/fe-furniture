@@ -6,7 +6,7 @@ function AuthTemplate(props) {
   const { title, children, type } = props;
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#e5e5e5]">
-      <div className="w-[1240px] h-[800px] flex bg-[#fafafa] rounded-xl overflow-hidden border-2 shadow-2xl">
+      <div className="w-[1260px] h-[1000px] flex bg-[#fafafa] rounded-xl overflow-hidden border-2 shadow-2xl">
         {/* left */}
         <section className="w-1/2 relative">
           <img src="./authbg.png" className="object-cover w-full h-full" />

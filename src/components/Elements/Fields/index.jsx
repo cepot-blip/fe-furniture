@@ -15,6 +15,7 @@ function Fields(props) {
     placeholder,
     className,
     autoComplete,
+    children,
   } = props;
 
   return (
@@ -26,6 +27,7 @@ function Fields(props) {
         {label}
       </Label>
       <Input
+        icons={children}
         type={type}
         name={name}
         id={id}

@@ -1,31 +1,25 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-alert */
-import { useNavigate } from 'react-router-dom';
-
-import Button from '../../components/Elements/Button/Button';
-import useUser from '../../hooks/useUser';
+import About from '../../components/Fragments/About/About';
+import Brands from '../../components/Fragments/Hero/Brands';
+import Hero from '../../components/Fragments/Hero/Hero';
+import Navbar from '../../components/Fragments/Navbar/Navbar';
+import Category from '../../components/Fragments/ProductCategory/Category';
 
 function HomePage() {
-  const navigate = useNavigate();
-  const isUser = useUser();
-
-  const handleLogout = () => {
-    const conf = window.confirm('Anda yakin ingin keluar?');
-
-    if (conf) {
-      localStorage.removeItem('userFurniture');
-      navigate('/');
-    }
-  };
-
   return (
-    <div className="flex min-h-screen justify-center items-center">
-      <h1 className="font-semibold">
-        Hello {isUser ? `${isUser.username} Welcome 👋` : 'Lu siape'}
-      </h1>
+    <main className="flex flex-col mx-auto max-w-[1500px]">
+      <Navbar />
+      <Hero>
+        <Brands />
+      </Hero>
 
-      <Button onClick={handleLogout}>Logout</Button>
-    </div>
+      <Category />
+      <About />
+    </main>
   );
 }
 
