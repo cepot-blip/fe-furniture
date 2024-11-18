@@ -1,38 +1,40 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 /* eslint-disable react/react-in-jsx-scope */
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useFormik } from 'formik';
-import Notiflix from 'notiflix';
 
+import useRegister from '../../../hooks/users/useRegister';
 import authRegister from '../../../schema/auth/register';
 import Button from '../../Elements/Button/Button';
 import Fields from '../../Elements/Fields';
+import SelectOpt from '../../Elements/Option/Option';
 
 function FormRegister() {
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const { register, isLoading, isError } = useRegister();
+
   const formik = useFormik({
     initialValues: {
-      username: '',
+      name: '',
       email: '',
+      phone_number: '',
       password: '',
-      confirmPassword: '',
+      role: '',
     },
     validationSchema: authRegister,
-    onSubmit: (values) => {
-      const userData = {
-        username: values.username,
+    onSubmit: async (values) => {
+      const payload = {
+        name: values.name,
         email: values.email,
+        phone_number: values.phone_number,
         password: values.password,
+        role: values.role === 'admin' ? 'Admin' : 'User', // admin dulu khususnya
       };
 
-      // Simpan data pengguna ke local storage
-      localStorage.setItem('userFurniture', JSON.stringify(userData));
-      Notiflix.Notify.success('Registrasi berhasil! Selamat datang!');
-
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-
-      formik.resetForm();
+      setLoading(true);
+      register(payload);
     },
   });
 
@@ -40,22 +42,20 @@ function FormRegister() {
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6 w-full">
       <div>
         <Fields
-          htmlFor="username"
-          label="Username"
+          htmlFor="name"
+          label="Name"
           type="text"
-          name="username"
-          id="username"
-          value={formik.values.username}
+          name="name"
+          id="name"
+          value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder="Enter your username"
-          className={`mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm ${formik.errors.username && formik.touched.username ? 'ring-2 ring-red-500' : ''}`}
+          placeholder="Enter your name"
+          className={`mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm ${formik.errors.name && formik.touched.name ? 'ring-2 ring-red-500' : ''}`}
           autoComplete="off"
         />
-        {formik.errors.username && formik.touched.username && (
-          <small className="text-red-500 text-xs">
-            {formik.errors.username}
-          </small>
+        {formik.errors.name && formik.touched.name && (
+          <small className="text-red-500 text-xs">{formik.errors.name}</small>
         )}
       </div>
 
@@ -101,22 +101,39 @@ function FormRegister() {
 
       <div>
         <Fields
-          htmlFor="confirmPassword"
-          label="Confirm Password"
-          type="password"
-          name="confirmPassword"
-          id="confirmPassword"
-          value={formik.values.confirmPassword}
+          htmlFor="phone_number"
+          label="Phone Number"
+          type="text"
+          name="phone_number"
+          id="phone_number"
+          value={formik.values.phone_number}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           placeholder="Confirm your password"
-          className={`mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm ${formik.errors.confirmPassword && formik.touched.confirmPassword ? 'ring-2 ring-red-500' : ''}`}
+          className={`mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm ${formik.errors.phone_number && formik.touched.phone_number ? 'ring-2 ring-red-500' : ''}`}
           autoComplete="off"
         />
-        {formik.errors.confirmPassword && formik.touched.confirmPassword && (
+        {formik.errors.phone_number && formik.touched.phone_number && (
           <small className="text-red-500 text-xs">
-            {formik.errors.confirmPassword}
+            {formik.errors.phone_number}
           </small>
+        )}
+      </div>
+
+      <div>
+        <SelectOpt
+          name="role"
+          value={formik.values.role}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm cursor-pointer text-gray-500"
+          options={[
+            { value: 'admin', label: 'Admin' },
+            { value: 'users', label: 'Users' },
+          ]}
+        />
+        {formik.errors.role && formik.touched.role && (
+          <small className="text-red-500 text-xs">{formik.errors.role}</small>
         )}
       </div>
 
@@ -124,7 +141,7 @@ function FormRegister() {
         type="submit"
         className="bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-all duration-200 text-lg font-semibold"
       >
-        Register
+        {loading ? 'Loading...' : 'Register'}
       </Button>
     </form>
   );

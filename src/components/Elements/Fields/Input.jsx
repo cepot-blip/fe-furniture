@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable react/react-in-jsx-scope */
 function Input(props) {
   const {
@@ -10,9 +11,11 @@ function Input(props) {
     className,
     placeholder,
     autoComplete,
+    icons,
   } = props;
   return (
     <input
+      icons={icons}
       type={type}
       name={name}
       id={id}
