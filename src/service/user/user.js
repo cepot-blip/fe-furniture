@@ -8,11 +8,9 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 import { authStore } from '../../redux/reducers/authReducer';
-import { setUserData } from '../../redux/reducers/userReducer';
 import instance from '../api';
 
 export const userService = (dispatch) => {
-  // getState = action
   const createUser = async ({
     id,
     name,
@@ -65,32 +63,26 @@ export const userService = (dispatch) => {
       password,
     });
 
-    const { token } = response.data;
-
-    Cookies.set('token', token, { sameSite: 'None', secure: true });
-    dispatch(authStore({ token })); // token disimpan juga ke authStore redux
+    if (response.data.success) {
+      const token = response.data.token;
+      // const user = response.data.loginData;
+      Cookies.set('token', token); // encrypt
+      dispatch(authStore({ token, loginData }));
+    } else {
+      throw new Error('Login failed');
+    }
 
     return response.data;
   };
 
   const getUserData = async (id) => {
     try {
+      // belum kelar
       const response = await instance.get(`/users/${id}`);
-      if (!response.data) throw new Error('User data tidak ditemukan');
-
-      const token = response.data;
-      dispatch(
-        authStore({
-          // id: response.data.id,
-          // name: response.data.name,
-          // email: response.data.email,
-          // phone_number: response.data.phone_number,
-          loginData: response.data.loginData,
-          // role: response.data.role,
-          token,
-        }),
-      );
-      return response.data;
+      if (!response.data.success) {
+        throw new Error('User data tidak ditemukan');
+      }
+      return response.data.data;
     } catch (error) {
       console.error('Gagal mendapatkan data user:', error.message);
       throw error;
