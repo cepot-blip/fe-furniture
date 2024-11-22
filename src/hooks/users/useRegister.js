@@ -1,16 +1,19 @@
+/* eslint-disable no-return-await */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable camelcase */
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import Notiflix from 'notiflix';
 
-import { userService } from '../../service/user/userService';
+import { userService } from '../../service/user/user';
 
 export default function useRegister() {
   const navigate = useNavigate();
-  const { createUser } = userService();
+  const dispatch = useDispatch();
+  const { createUser } = userService(dispatch);
 
   const {
     mutate: register,
@@ -18,11 +21,27 @@ export default function useRegister() {
     isError,
   } = useMutation({
     // mutasi data untuk kasih response ke server
-    mutationFn: ({ name, email, password, phone_number, role }) => {
-      createUser({ name, email, password, phone_number, role });
-    },
+    mutationFn: async ({
+      id,
+      name,
+      email,
+      password,
+      phone_number,
+      role,
+      token,
+    }) =>
+      await createUser({
+        id,
+        name,
+        email,
+        password,
+        phone_number,
+        role,
+        token,
+      }),
+
     onSuccess: (data) => {
-      console.log('Registration successful:', data);
+      console.log('Registration successfuly:', data);
       Notiflix.Notify.success('Register berhasil! Selamat datang');
       navigate('/login');
     },
@@ -31,6 +50,7 @@ export default function useRegister() {
       Notiflix.Notify.failure(
         'Mohon perika kembali, jika anda belum mendapatkan token. Pilih role Admin',
       );
+      isLoading(false);
     },
   });
   return { register, isLoading, isError };
