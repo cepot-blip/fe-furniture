@@ -5,7 +5,7 @@ import { Search, ShoppingCart } from 'lucide-react';
 import NavMenu from '../../Elements/NavMenu/NavMenu';
 import Profile from '../Profile/Profile';
 
-function Navbar() {
+function Navbar({ onCartClick }) {
   return (
     <div className="w-full border-b-2 border-b-gray-300">
       <header className="w-full py-2">
@@ -16,10 +16,13 @@ function Navbar() {
 
           <NavMenu />
 
-          <div className="flex items-center ml-auto gap-16">
+          <div className="flex items-center ml-auto gap-24">
             <div className="flex items-center gap-8">
               <Search className="text-lg cursor-pointer" />
-              <ShoppingCart className="text-lg cursor-pointer" />
+              <ShoppingCart
+                className="text-lg cursor-pointer"
+                onClick={onCartClick}
+              />
             </div>
             <div>
               <Profile />

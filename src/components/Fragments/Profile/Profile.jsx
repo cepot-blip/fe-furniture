@@ -1,34 +1,27 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { User } from 'lucide-react';
 
 import useDataUser from '../../../hooks/users/useUserData';
 
 function Profile({ id }) {
-  console.log('data user:', id);
-  const { userData } = useDataUser();
+  const user = useSelector((state) => state.auth.userAuth);
 
-  if (!userData || !userData.id) {
+  if (!user || !user?.loginData) {
     return (
       <div className="flex items-center gap-2">
         <User className="text-lg cursor-pointer" />
-        null
+        Unknown
       </div>
     );
   }
 
-  console.log('data user:', userData.id);
-
-  //  jika tes data user nya, hapus saja dlu token nya
-  //  lalu login dari awal atau register dari awal
-  //  apakah data user nya udh dapet atau belum
-  function nonamed() {
-    console.log(userData);
-  }
   return (
-    <div className="text-lg cursor-pointer">
+    <div className="text-lg cursor-pointer flex items-center gap-2">
       <User className="text-lg cursor-pointer" />
+      <span>{user?.loginData}</span>
     </div>
   );
 }

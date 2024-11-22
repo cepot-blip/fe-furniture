@@ -2,15 +2,18 @@
 /* eslint-disable no-console */
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 
 import useRegister from '../../../hooks/users/useRegister';
+import { authStore } from '../../../redux/reducers/authReducer';
 import authRegister from '../../../schema/auth/register';
 import Button from '../../Elements/Button/Button';
 import Fields from '../../Elements/Fields';
 import SelectOpt from '../../Elements/Option/Option';
 
 function FormRegister() {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   const { register, isLoading, isError } = useRegister();
@@ -30,11 +33,13 @@ function FormRegister() {
         email: values.email,
         phone_number: values.phone_number,
         password: values.password,
-        role: values.role === 'admin' ? 'Admin' : 'User', // admin dulu khususnya
+        role: values.role === 'admin' ? 'Admin' : 'Customer', // fallback nya cust
       };
 
+      dispatch(authStore(payload)); // store ke redux
       setLoading(true);
       register(payload);
+      console.log(payload);
     },
   });
 
@@ -129,7 +134,7 @@ function FormRegister() {
           className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm cursor-pointer text-gray-500"
           options={[
             { value: 'admin', label: 'Admin' },
-            { value: 'users', label: 'Users' },
+            { value: 'customer', label: 'Customer' },
           ]}
         />
         {formik.errors.role && formik.touched.role && (
