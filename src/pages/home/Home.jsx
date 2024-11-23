@@ -6,11 +6,13 @@
 import { useState } from 'react';
 
 import About from '../../components/Fragments/About/About';
+import Gallery from '../../components/Fragments/Gallery/Gallery';
 import Brands from '../../components/Fragments/Hero/Brands';
 import Hero from '../../components/Fragments/Hero/Hero';
 import Navbar from '../../components/Fragments/Navbar/Navbar';
 import Category from '../../components/Fragments/Product/Category';
 import ItemProduct from '../../components/Fragments/Product/ItemProduct';
+import Review from '../../components/Fragments/Review/Review';
 import Sidebar from '../../components/Fragments/Sidebar/Sidebar';
 
 function HomePage() {
@@ -31,6 +33,8 @@ function HomePage() {
       <Category />
       <About />
       <ItemProduct />
+      <Gallery />
+      <Review />
     </main>
   );
 }

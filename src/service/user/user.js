@@ -33,7 +33,7 @@ export const userService = (dispatch) => {
       throw new Error(response.data.message || 'Gagal Register');
     }
 
-    Cookies.set('token', response.data.token);
+    Cookies.set('token', response.data.token && response.data);
     dispatch(
       authStore({
         // id: response.data.id,
@@ -47,7 +47,7 @@ export const userService = (dispatch) => {
     return response.data;
   };
 
-  const loginUser = async ({ loginData, password }) => {
+  const loginUser = async ({ id, loginData, password }) => {
     let email = '';
     let phone_number = '';
 
@@ -58,6 +58,7 @@ export const userService = (dispatch) => {
     }
 
     const response = await instance.post('/login', {
+      id,
       email,
       phone_number,
       password,
@@ -67,7 +68,9 @@ export const userService = (dispatch) => {
       const token = response.data.token;
       // const user = response.data.loginData;
       Cookies.set('token', token); // encrypt
-      dispatch(authStore({ token, loginData }));
+      dispatch(authStore({ token, loginData, id }));
+
+      // console.log(res)
     } else {
       throw new Error('Login failed');
     }
