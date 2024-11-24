@@ -24,7 +24,7 @@ function Navbar({ onCartClick }) {
                 onClick={onCartClick}
               />
             </div>
-            <div>
+            <div className="">
               <Profile />
             </div>
           </div>

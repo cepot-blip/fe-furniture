@@ -1,57 +1,47 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
+import { Plus, ShoppingCart } from 'lucide-react';
 
+import useAllProduct from '../../../hooks/product/useAllProduct';
+import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
-function ItemProduct() {
-  const dummyProd = [
-    {
-      cart_id: 1,
-      name: 'Bangku Sekolah',
-      price: 200000,
-      description: 'Ini adalah bangku sekolah',
-      stock: 4,
-      category_id: 1,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-    {
-      cart_id: 2,
-      name: 'Meja Belajar',
-      price: 300000,
-      description: 'Ini adalah bangku sekolah',
-      stock: 2,
-      category_id: 2,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-    {
-      cart_id: 3,
-      name: 'Lemari Buku',
-      price: 500000,
-      description: 'Ini adalah bangku sekolah',
-      stock: 1,
-      category_id: 3,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-    {
-      cart_id: 4,
-      name: 'Lemari Buku',
-      price: 500000,
-      description: 'Ini adalah bangku sekolah',
-      stock: 1,
-      category_id: 3,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-  ];
+import FormProduct from './FormProduct';
 
+function ItemProduct() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { products, isLoading, isError, refetch } = useAllProduct();
+  const { createProd } = useCreateProduct();
+
+  console.log(products);
+
+  const dataProductFromRedux = useSelector((state) => state.product.quantity);
+
+  const handleProductToCart = () => {
+    console.log('dataProductFromRedux', dataProductFromRedux);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCreateProduct = async (productData) => {
+    await createProd(productData);
+    refetch();
+  };
   return (
     <section className="w-full py-16">
       <div className="w-full flex pb-3">
@@ -76,24 +66,57 @@ function ItemProduct() {
         </div>
       </div>
       <div className="grid lg:grid-cols-4 gap-4">
-        {dummyProd.map((product) => (
-          <Card key={product.id} className="border rounded-lg p-4">
+        {products?.map((item) => (
+          <Card key={item.cart_id} className="border rounded-lg p-4">
             <Card.Header className="mb-4">
               <img
-                src={product.img_url}
+                src={item.image_url}
                 className="w-full h-60 object-contain rounded-lg"
               />
             </Card.Header>
             <Card.Body className="mb-4">
-              <h2 className="text-lg font-bold">{product.name}</h2>
-              <p className="text-gray-600">{product.description}</p>
+              <h2 className="text-lg font-bold">{item.name}</h2>
+              <p className="text-gray-600">{item.description}</p>
             </Card.Body>
             <Card.Footer className="flex justify-between items-center">
-              <p className="font-semibold">Rp {product.price}</p>
-              <ShoppingCart className="text-lg cursor-pointer" />
+              <p className="font-semibold">Rp {item.price}</p>
+              <ShoppingCart
+                className="text-lg cursor-pointer"
+                onClick={handleProductToCart}
+              />
             </Card.Footer>
           </Card>
         ))}
+
+        {/* modal form */}
+        <div
+          className="border rounded-lg p-6 bg-white cursor-pointer"
+          onClick={openModal}
+        >
+          <div className="w-full py-16 border-2 border-dashed border-gray-300 rounded-lg flex flex-col justify-center items-center gap-5 hover:border-orange-600 transition-colors">
+            <Plus className="text-gray-500 text-6xl" />
+            <h3 className="text-sm font-base text-gray-400">Create Product</h3>
+          </div>
+        </div>
+
+        {/* overlay */}
+        {isModalOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+            onClick={closeModal}
+          >
+            <div
+              className="bg-white p-8 rounded-lg w-[40%]"
+              onClick={(e) => e.stopPropagation()} // close overlay
+            >
+              <h3 className="text-2xl font-semibold mb-6">Create Product</h3>
+              <FormProduct onSubmit={handleCreateProduct} />
+              {/* <Button className="mt-4 w-full" onClick={closeModal}>
+                Close
+              </Button> */}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,11 +1,31 @@
+/* eslint-disable no-alert */
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable no-const-assign */
+/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { setProductAddToCart } from '../../../redux/reducers/productReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
 function Sidebar(props) {
   const { isVisible, onClose } = props;
+  const dispatch = useDispatch();
+
+  const cartItemFromRedux = useSelector((state) => state.cartItem);
+
+  const cartFromRedux = useSelector((state) => state.cart);
+
+  console.log('cartItemFromRedux', cartItemFromRedux);
+
+  const insertToCart = () => {
+    console.log('cartFromRedux:', cartFromRedux);
+
+    dispatch(setProductAddToCart());
+  };
+
   const dummyProd = [
     {
       cart_id: 1,
@@ -45,7 +65,7 @@ function Sidebar(props) {
       <div className="w-full h-full flex flex-col">
         {/*  header sidebar */}
         <div className="p-6 flex justify-between items-center border-b-2 border-gray-300">
-          <h2 className="text-xl font-semibold">Products Cart</h2>
+          <h2 className="text-xl font-semibold">Cart</h2>
           <Button className="text-red-500 text-xs" onClick={onClose}>
             Close
           </Button>
@@ -71,11 +91,11 @@ function Sidebar(props) {
                   <p className="text-gray-600">
                     Rp {item.price.toLocaleString('id-ID')}
                   </p>
-                </Card.Body>
 
-                <Card.Footer className="flex items-center justify-end">
-                  <Button className="text-blue-500 text-xs">Edit</Button>
-                </Card.Footer>
+                  {/* <Card.Footer className="flex items-center justify-end">
+                    <h3>+</h3>
+                  </Card.Footer> */}
+                </Card.Body>
               </Card>
             ))}
           </div>
@@ -83,7 +103,10 @@ function Sidebar(props) {
 
         {/* cta checkout */}
         <div className="p-4 border-t-2 border-gray-300">
-          <Button className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3  hover:shadow-lg cursor-pointer">
+          <Button
+            className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3  hover:shadow-lg cursor-pointer"
+            onClick={insertToCart}
+          >
             Checkout Now
           </Button>
         </div>
