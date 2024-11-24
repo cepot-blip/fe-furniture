@@ -22,6 +22,7 @@ function Footer({ className, children }) {
   return <div className={className}>{children}</div>;
 }
 
+// composition patern
 Card.Header = Header;
 Card.Body = Body;
 Card.Footer = Footer;
