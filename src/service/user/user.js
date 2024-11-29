@@ -78,24 +78,22 @@ export const userService = (dispatch) => {
     return response.data;
   };
 
-  const getUserData = async (id) => {
-    try {
-      // belum kelar
-      const response = await instance.get(`/users/${id}`);
-      if (!response.data.success) {
-        throw new Error('User data tidak ditemukan');
-      }
-      return response.data.data;
-    } catch (error) {
-      console.error('Gagal mendapatkan data user:', error.message);
-      throw error;
+  const getUserById = async (id) => {
+    console.log(`id: ${id}`);
+    const response = await instance.get(`/users/${id}`);
+
+    console.log(response.data);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Failed get user by id');
     }
   };
 
   const getAllUsers = async () => {
     const response = await instance.get('/users');
-    return response.data;
+
+    return response.data.query;
   };
 
-  return { createUser, loginUser, getUserData, getAllUsers };
+  return { createUser, loginUser, getUserById, getAllUsers };
 };

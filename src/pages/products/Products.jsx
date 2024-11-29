@@ -1,33 +1,32 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-console */
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Plus, ShoppingCart } from 'lucide-react';
 
-import useAllProduct from '../../../hooks/product/useAllProduct';
-import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
-import Button from '../../Elements/Button/Button';
-import Card from '../Card/Card';
+import Card from '../../components/Fragments/Card/Card';
+import Footer from '../../components/Fragments/Footer/Footer';
+import Brands from '../../components/Fragments/Hero/Brands';
+import Hero from '../../components/Fragments/Hero/Hero';
+import Navbar from '../../components/Fragments/Navbar/Navbar';
+import FormProduct from '../../components/Fragments/Product/FormProduct';
+import Sidebar from '../../components/Fragments/Sidebar/Sidebar';
+import useAllProduct from '../../hooks/product/useAllProduct';
+import { useCreateProduct } from '../../hooks/product/useCreateProduct';
 
-import FormProduct from './FormProduct';
-
-function ItemProduct() {
+function Products() {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { products, isLoading, isError, refetch } = useAllProduct();
+  const { products, refetch } = useAllProduct();
+  console.log(products);
   const { createProd } = useCreateProduct();
 
-  console.log(products);
-
-  const dataProductFromRedux = useSelector((state) => state.product.quantity); // redux
-
-  const handleProductToCart = () => {
-    console.log('dataProductFromRedux', dataProductFromRedux);
+  const handleSidebarToggle = () => {
+    setIsSidebarVisible(!isSidebarVisible);
   };
 
   const openModal = () => {
@@ -42,8 +41,15 @@ function ItemProduct() {
     await createProd(productData);
     refetch();
   };
+
   return (
-    <section className="w-full py-16">
+    <main className="flex flex-col mx-auto max-w-[1500px]">
+      <Navbar onCartClick={handleSidebarToggle} />
+      <Sidebar isVisible={isSidebarVisible} onClose={handleSidebarToggle} />
+      <Hero>
+        <Brands />
+      </Hero>
+
       <div className="w-full flex pb-3">
         <div className="flex w-1/2 justify-start items-start flex-col gap-2">
           <div className="bg-gray-200 py-2 px-3 rounded-full">
@@ -65,10 +71,11 @@ function ItemProduct() {
           <Link className="text-gray-500 underline">See All</Link>
         </div>
       </div>
+
       <div className="grid lg:grid-cols-4 gap-4">
         {products?.map((item) => (
-          <Card className="border rounded-lg p-4">
-            <Link key={item.id} to={`/product/${item.id}`}>
+          <Link key={item.id} to={`/product/${item.id}`}>
+            <Card className="border rounded-lg p-4">
               <Card.Header className="mb-4">
                 <img
                   src={item.image_url}
@@ -79,15 +86,15 @@ function ItemProduct() {
                 <h2 className="text-lg font-bold">{item.name}</h2>
                 <p className="text-gray-600">{item.description}</p>
               </Card.Body>
-            </Link>
-            <Card.Footer className="flex justify-between items-center">
-              <p className="font-semibold">Rp {item.price}</p>
-              <ShoppingCart
-                className="text-lg cursor-pointer"
-                onClick={handleProductToCart}
-              />
-            </Card.Footer>
-          </Card>
+              <Card.Footer className="flex justify-between items-center">
+                <p className="font-semibold">Rp {item.price}</p>
+                <ShoppingCart
+                  className="text-lg cursor-pointer"
+                  // onClick={handleProductToCart}
+                />
+              </Card.Footer>
+            </Card>
+          </Link>
         ))}
 
         {/* modal form */}
@@ -120,8 +127,10 @@ function ItemProduct() {
           </div>
         )}
       </div>
-    </section>
+
+      <Footer />
+    </main>
   );
 }
 
-export default ItemProduct;
+export default Products;

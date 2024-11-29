@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 import { User } from 'lucide-react';
 import Notiflix from 'notiflix';
 
-import useDataUser from '../../../hooks/users/useUserData';
+import useUserId from '../../../hooks/users/useUserId';
 
 function Profile({ id }) {
   const user = useSelector((state) => state.auth.userAuth);
