@@ -1,11 +1,17 @@
+/* eslint-disable no-console */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { Star } from 'lucide-react';
 
+import { useAllReview } from '../../../hooks/review/useAllReview';
 import Card from '../Card/Card';
 
 function Review() {
+  const { createRev } = useAllReview();
+
+  console.log(createRev);
+
   const dummyReview = [
     {
       user_id: 1,
