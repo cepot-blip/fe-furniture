@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { userService } from '../../service/user/user';
 
-export default function useDataUser(id) {
-  const { getUserData } = userService();
+export default function useUserId(id) {
+  const { getUserById } = userService();
 
   const {
     data: user,
@@ -12,7 +12,7 @@ export default function useDataUser(id) {
     isLoading,
   } = useQuery({
     queryKey: ['GET_DATA_USER_ID', id],
-    queryFn: () => getUserData(id),
+    queryFn: () => getUserById(id),
     enabled: !!id,
   });
 

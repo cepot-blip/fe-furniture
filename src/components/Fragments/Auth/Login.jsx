@@ -19,10 +19,11 @@ function FormLogin() {
   const dispatch = useDispatch();
 
   const formik = useFormik({
-    initialValues: { loginData: '', password: '' },
+    initialValues: { loginData: '', password: '', id: '' },
     validationSchema: authLogin,
     onSubmit: async (values) => {
       const payload = {
+        id: values.id,
         loginData: values.loginData,
         password: values.password,
       };
@@ -34,7 +35,7 @@ function FormLogin() {
       //   console.error('Login error:', error.message);
       //   setLoading(false);
       // }
-      dispatch(authStore(payload)); // store ke redux
+      dispatch(authStore(payload));
       setLoading(true);
       login(payload);
       console.log(payload);

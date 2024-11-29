@@ -6,7 +6,10 @@ function NavMenu() {
     <nav className="font-poppins flex-1">
       <ul className="flex justify-center space-x-8">
         <li>
-          <NavLink className="font-semibold text-sm hover:text-orange-500 transition-colors ease-in cursor-pointer">
+          <NavLink
+            className="font-semibold text-sm hover:text-orange-500 transition-colors ease-in cursor-pointer"
+            to="/products"
+          >
             PRODUCT
           </NavLink>
         </li>

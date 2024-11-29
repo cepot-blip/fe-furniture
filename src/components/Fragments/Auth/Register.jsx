@@ -36,7 +36,7 @@ function FormRegister() {
         role: values.role === 'admin' ? 'Admin' : 'Customer', // fallback nya cust
       };
 
-      dispatch(authStore(payload)); // store ke redux
+      dispatch(authStore(payload));
       setLoading(true);
       register(payload);
       console.log(payload);

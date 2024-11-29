@@ -1,6 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable camelcase */
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -10,7 +8,7 @@ const initialState = {
     name: '',
     password: '',
     email: '',
-    phone_number: '',
+    phoneNumber: '',
     role: '',
     loginData: '',
     token: '',
@@ -22,16 +20,23 @@ const authReducer = createSlice({
   initialState,
   reducers: {
     authStore(state, action) {
-      console.log('Payload', action.payload);
-      state.userAuth.id = action.payload.id || '';
-      state.userAuth.name = action.payload.name || '';
-      state.userAuth.email = action.payload.email || '';
-      state.userAuth.phone_number = action.payload.phone_number || '';
-      state.userAuth.role = action.payload.role || '';
-      state.userAuth.loginData = action.payload.loginData || '';
-      state.userAuth.token = action.payload.token || '';
+      console.log('payloaded:', action.payload);
+      const { payload } = action;
+      state.userAuth = {
+        ...state.userAuth,
+        id: payload.id || '',
+        name: payload.name || '',
+        password: payload.password || '',
+        email: payload.email || '',
+        phoneNumber: payload.phoneNumber || '',
+        role: payload.role || '',
+        loginData: payload.loginData || '',
+        token: payload.token || '',
+      };
     },
-    setReset: () => initialState,
+    setReset() {
+      return initialState;
+    },
   },
 });
 
