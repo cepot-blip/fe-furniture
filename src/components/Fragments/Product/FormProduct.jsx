@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 
@@ -41,7 +42,7 @@ function FormProduct() {
       // onSubmit(refetch());
       refetch();
     } catch (error) {
-      console.error('Failed to create product:', error);
+      console.log(error.message && 'Failed to create product');
     } finally {
       setLoading(false);
     }
@@ -52,6 +53,7 @@ function FormProduct() {
       <form
         className="flex flex-col gap-6 w-full"
         onSubmit={handleCreateProductSubmit}
+        refetch={refetch}
       >
         <div>
           <Fields

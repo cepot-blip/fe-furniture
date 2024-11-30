@@ -41,5 +41,17 @@ export const productService = (dispatch) => {
     return response.data.data;
   };
 
-  return { getAllProduct, createProduct };
+  const getProductById = async (id) => {
+    console.log(`id: ${id}`);
+
+    const response = await instance.get(`/product/${id}`);
+
+    console.log(response.data);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Failed fetring product by id');
+    }
+  };
+
+  return { getAllProduct, createProduct, getProductById };
 };

@@ -12,7 +12,8 @@ function AuthTemplate(props) {
           <img src="./authbg.png" className="object-cover w-full h-full" />
         </section>
         {/* right */}
-        <section className="w-1/2 flex justify-between h-full px-6 py-14 flex-col">
+        <section className="w-1/2 flex justify-between h-full px-36 py-14 flex-col">
+          {/* <div className="p-10 border border-gray-300 rounded-lg"> */}
           <div className="flex flex-col gap-5">
             <h2 className="text-3xl font-semibold font-poppins text-black">
               {title}
@@ -49,6 +50,7 @@ function AuthTemplate(props) {
               </Link>
             )}
           </div>
+          {/* </div> */}
         </section>
       </div>
     </main>

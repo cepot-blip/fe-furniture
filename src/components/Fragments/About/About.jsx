@@ -7,7 +7,7 @@ function About() {
   return (
     <section className="w-full flex justify-center py-16">
       <div className="flex w-full">
-        {/* Kolom kiri untuk teks */}
+        {/* teks */}
         <div className="w-1/2 flex flex-col justify-start px-8">
           <div className="flex flex-col gap-8">
             <h2 className="text-6xl font-semibold">
@@ -49,7 +49,7 @@ function About() {
           </div>
         </div>
 
-        {/* Kolom kanan untuk gambar */}
+        {/* image */}
         <div className="w-1/2 flex items-end justify-center">
           <img src="/About.png" className="object-cover w-full h-full" />
         </div>
