@@ -3,8 +3,8 @@ import React from 'react';
 import { Search, ShoppingCart } from 'lucide-react';
 
 import NavMenu from '../../Elements/NavMenu/NavMenu';
+// eslint-disable-next-line import/newline-after-import
 import Profile from '../Profile/Profile';
-
 function Navbar({ onCartClick }) {
   return (
     <div className="w-full border-b-2 border-b-gray-300">
