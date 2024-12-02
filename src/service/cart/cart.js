@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/prefer-default-export */
 import instance from '../api';
-export const cartService = (dispatch) => {
+export const cartService = () => {
   const getAllCart = async () => {
     const response = await instance.get('/carts');
 
@@ -16,12 +16,12 @@ export const cartService = (dispatch) => {
       total_price,
     });
     // eslint-disable-next-line no-console
-    console.log(response.data);
+    console.log('Response: ', response.data);
     if (!response.data.success) {
       throw new Error(response.data.message || 'Failed to create cart');
     }
 
-    return response.data.data;
+    return response.data;
   };
 
   return { getAllCart, createCart };
