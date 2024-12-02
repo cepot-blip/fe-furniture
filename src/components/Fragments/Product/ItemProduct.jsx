@@ -15,7 +15,7 @@ import { Plus, ShoppingCart } from 'lucide-react';
 
 import useAllProduct from '../../../hooks/product/useAllProduct';
 import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
-import { addToCart } from '../../../redux/reducers/cartReducer';
+import { addToCart } from '../../../redux/reducers/cartItemReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
