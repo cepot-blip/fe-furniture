@@ -21,45 +21,18 @@ function Sidebar(props) {
   const { isVisible, onClose } = props;
   const dispatch = useDispatch();
 
-  const cartItemFromRedux = useSelector((state) => state.cartItem);
+  const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
 
   const cartFromRedux = useSelector((state) => state.cart.cart);
-  const totalPriceFromRedux = useSelector((state) => state.cart.total_price);
-  // console.log('cartItemFromRedux', cartItemFromRedux);
+  const totalPriceFromRedux = useSelector(
+    (state) => state.cartItem.total_price,
+  );
+  console.log('cartItemFromRedux', cartItemFromRedux);
   console.log('cartFromRedux', cartFromRedux);
-
+  console.log(totalPriceFromRedux);
   const insertToCart = () => {
     dispatch(setProductAddToCart());
   };
-  const dummyProd = [
-    {
-      cart_id: 1,
-      name: 'Bangku Sekolah',
-      price: 200000,
-      stock: 4,
-      category_id: 1,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-    {
-      cart_id: 2,
-      name: 'Meja Belajar',
-      price: 300000,
-      stock: 2,
-      category_id: 2,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-    {
-      cart_id: 3,
-      name: 'Lemari Buku',
-      price: 500000,
-      stock: 1,
-      category_id: 3,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-  ];
 
   return (
     <aside
@@ -79,7 +52,7 @@ function Sidebar(props) {
         {/* content cart */}
         <div className="p-6 flex-grow flex flex-col">
           <div className="flex-grow overflow-y-auto">
-            {cartFromRedux.map((item) => (
+            {cartItemFromRedux.map((item) => (
               <Card
                 key={item.cart_id}
                 className="border-b border-gray-300 py-4 flex gap-4"
