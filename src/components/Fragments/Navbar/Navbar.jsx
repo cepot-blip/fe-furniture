@@ -41,6 +41,7 @@ function Navbar({ onCartClick }) {
               <Search className="text-gray-900 hover:text-gray-800 text-2xl cursor-pointer transition-colors" />
               <ShoppingCart
                 className="text-gray-900 hover:text-gray-800 text-2xl cursor-pointer transition-colors"
+
                 onClick={handleCrartClick}
               />
             </div>

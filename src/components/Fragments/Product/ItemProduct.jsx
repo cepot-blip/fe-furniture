@@ -30,6 +30,9 @@ function ItemProduct() {
 
   // const dataProductFromRedux = useSelector((state) => state.product.quantity);
 
+//   const dataProductFromRedux = useSelector((state) => state.product.quantity); // redux
+
+
   const dispatch = useDispatch();
 
   const handleProductToCart = (product) => {
