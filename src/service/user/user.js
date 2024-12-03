@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
@@ -5,12 +6,38 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable camelcase */
 import axios from 'axios';
+import cryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 import { authStore } from '../../redux/reducers/authReducer';
 import instance from '../api';
 
 export const userService = (dispatch) => {
+  const saveToken = (token) => {
+    Cookies.set('token', token, { expires: 7, sameSite: 'None', secure: true });
+  };
+
+  const getToken = () => {
+    const token = Cookies.get('token');
+    if (token) {
+      const decryptedToken = cryptoJS.AES.decrypt(
+        token,
+        import.meta.env.VITE_API_SECRET,
+      ).toString(cryptoJS.enc.Utf8);
+      return decryptedToken;
+    }
+    return null;
+  };
+
+  const decodeToken = () => {
+    const token = getToken();
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      return decodedToken;
+    }
+    return null;
+  };
   const createUser = async ({
     id,
     name,
@@ -50,7 +77,6 @@ export const userService = (dispatch) => {
   const loginUser = async ({ id, loginData, password }) => {
     let email = '';
     let phone_number = '';
-
     if (/^\d+$/.test(loginData)) {
       phone_number = loginData;
     } else {
@@ -65,12 +91,16 @@ export const userService = (dispatch) => {
     });
 
     if (response.data.success) {
-      const token = response.data.token;
-      // const user = response.data.loginData;
-      Cookies.set('token', token); // encrypt
-      dispatch(authStore({ token, loginData, id }));
+      const { token } = response.data;
 
-      // console.log(res)
+      saveToken(token);
+      const decodedToken = decodeToken();
+      if (decodedToken) {
+        const user_id = decodedToken.id;
+        dispatch(authStore({ token, loginData, id: user_id }));
+      } else {
+        throw new Error('Token invalid');
+      }
     } else {
       throw new Error('Login failed');
     }
