@@ -1,3 +1,5 @@
+/* eslint-disable semi */
+/* eslint-disable import/no-duplicates */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/alt-text */
@@ -7,11 +9,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Plus, ShoppingCart } from 'lucide-react';
 
 import useAllProduct from '../../../hooks/product/useAllProduct';
 import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
+import { addToCart } from '../../../redux/reducers/cartItemReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
@@ -24,10 +28,15 @@ function ItemProduct() {
 
   console.log(products);
 
-  const dataProductFromRedux = useSelector((state) => state.product.quantity); // redux
+  // const dataProductFromRedux = useSelector((state) => state.product.quantity);
 
-  const handleProductToCart = () => {
-    console.log('dataProductFromRedux', dataProductFromRedux);
+  //   const dataProductFromRedux = useSelector((state) => state.product.quantity); // redux
+
+  const dispatch = useDispatch();
+
+  const handleProductToCart = (product) => {
+    console.log('dataProductFromRedux', product);
+    dispatch(addToCart(product));
   };
 
   const openModal = () => {
@@ -85,7 +94,7 @@ function ItemProduct() {
               <p className="font-semibold">Rp {item.price}</p>
               <ShoppingCart
                 className="text-lg cursor-pointer"
-                onClick={handleProductToCart}
+                onClick={() => handleProductToCart(item)}
               />
             </Card.Footer>
           </Card>

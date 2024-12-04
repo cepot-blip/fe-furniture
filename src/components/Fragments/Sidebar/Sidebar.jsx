@@ -1,3 +1,11 @@
+/* eslint-disable no-multiple-empty-lines */
+/* eslint-disable arrow-spacing */
+/* eslint-disable indent */
+/* eslint-disable react/jsx-closing-tag-location */
+/* eslint-disable padded-blocks */
+/* eslint-disable quotes */
+/* eslint-disable no-unused-vars */
+/* eslint-disable simple-import-sort/imports */
 /* eslint-disable no-alert */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable no-const-assign */
@@ -16,51 +24,22 @@ function Sidebar(props) {
   const { isVisible, onClose } = props;
   const dispatch = useDispatch();
 
-  const cartItemFromRedux = useSelector((state) => state.cartItem);
+  const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
 
-  const cartFromRedux = useSelector((state) => state.cart);
-
+  const cartFromRedux = useSelector((state) => state.cart.cart);
+  const totalPriceFromRedux = useSelector(
+    (state) => state.cartItem.total_price,
+  );
   console.log('cartItemFromRedux', cartItemFromRedux);
-
+  console.log('cartFromRedux', cartFromRedux);
+  console.log(totalPriceFromRedux);
   const insertToCart = () => {
-    console.log('cartFromRedux:', cartFromRedux);
-
     dispatch(setProductAddToCart());
 
     onClose();
 
     navigate('/checkout', { replace: true });
   };
-
-  const dummyProd = [
-    {
-      cart_id: 1,
-      name: 'Bangku Sekolah',
-      price: 200000,
-      stock: 4,
-      category_id: 1,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-    {
-      cart_id: 2,
-      name: 'Meja Belajar',
-      price: 300000,
-      stock: 2,
-      category_id: 2,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-    {
-      cart_id: 3,
-      name: 'Lemari Buku',
-      price: 500000,
-      stock: 1,
-      category_id: 3,
-      img_url:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQamU8svKQxBJ5gnpBdkySaiYK1DE32qrjmEQ&s',
-    },
-  ];
 
   return (
     <aside
@@ -80,14 +59,14 @@ function Sidebar(props) {
         {/* content cart */}
         <div className="p-6 flex-grow flex flex-col">
           <div className="flex-grow overflow-y-auto">
-            {dummyProd.map((item) => (
+            {cartItemFromRedux.map((item) => (
               <Card
                 key={item.cart_id}
                 className="border-b border-gray-300 py-4 flex gap-4"
               >
                 <Card.Header className="w-24 h-24">
                   <img
-                    src={item.img_url}
+                    src={item.image_url}
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </Card.Header>
@@ -97,6 +76,7 @@ function Sidebar(props) {
                   <p className="text-gray-600">
                     Rp {item.price.toLocaleString('id-ID')}
                   </p>
+                  <p>Jumlah: {item.quantity}</p>
 
                   {/* <Card.Footer className="flex items-center justify-end">
                     <h3>+</h3>
@@ -109,16 +89,21 @@ function Sidebar(props) {
 
         {/* cta checkout */}
         <div className="p-4 border-t-2 border-gray-300 flex flex-col gap-3">
-          <Button
-            className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3  hover:shadow-lg cursor-pointer transition-all"
-            onClick={insertToCart}
-          >
-            Checkout Now
-          </Button>
+          <div className="p-4 border-t-2 border-gray-300">
+            <h3 className="mb-2 text-lg font-semibold">
+              Total: Rp {totalPriceFromRedux.toLocaleString('id-ID')}
+            </h3>
+            <Button
+              className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3  hover:shadow-lg cursor-pointer transition-all"
+              onClick={insertToCart}
+            >
+              Checkout Now
+            </Button>
 
-          <Button className="w-full rounded-lg px-5 py-3 border border-gray-800 hover:bg-gray-100 transition-all cursor-pointer font-medium">
-            Continue Shopping
-          </Button>
+            <Button className="w-full rounded-lg px-5 py-3 border border-gray-800 hover:bg-gray-100 transition-all cursor-pointer font-medium">
+              Continue Shopping
+            </Button>
+          </div>
         </div>
       </div>
     </aside>
