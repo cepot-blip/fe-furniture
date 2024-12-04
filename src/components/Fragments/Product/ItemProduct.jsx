@@ -80,6 +80,7 @@ function ItemProduct() {
                 <p className="text-gray-600">{item.description}</p>
               </Card.Body>
             </Link>
+
             <Card.Footer className="flex justify-between items-center">
               <p className="font-semibold">Rp {item.price}</p>
               <ShoppingCart
@@ -113,9 +114,6 @@ function ItemProduct() {
             >
               <h3 className="text-2xl font-semibold mb-6">Create Product</h3>
               <FormProduct onSubmit={handleCreateProduct} />
-              {/* <Button className="mt-4 w-full" onClick={closeModal}>
-                Close
-              </Button> */}
             </div>
           </div>
         )}

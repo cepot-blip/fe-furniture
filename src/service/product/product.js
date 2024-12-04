@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 import { productStore } from '../../redux/reducers/productReducer';
 import instance from '../api';
 
-export const productService = (dispatch) => {
+export const productService = () => {
   const getAllProduct = async () => {
     const response = await instance.get('/products');
 
@@ -49,8 +49,11 @@ export const productService = (dispatch) => {
     console.log(response.data);
 
     if (!response.data.success) {
-      throw new Error(response.data.message || 'Failed fetring product by id');
+      throw new Error(response.data.message || 'Failed fetcing product by id');
     }
+
+    console.log('product data:', response.data.data);
+    return response.data.data;
   };
 
   return { getAllProduct, createProduct, getProductById };

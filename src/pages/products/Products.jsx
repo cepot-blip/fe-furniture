@@ -23,6 +23,7 @@ function Products() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { products, refetch } = useAllProduct();
   console.log(products);
+
   const { createProd } = useCreateProduct();
 
   const handleSidebarToggle = () => {
@@ -120,9 +121,6 @@ function Products() {
             >
               <h3 className="text-2xl font-semibold mb-6">Create Product</h3>
               <FormProduct onSubmit={handleCreateProduct} />
-              {/* <Button className="mt-4 w-full" onClick={closeModal}>
-                Close
-              </Button> */}
             </div>
           </div>
         )}

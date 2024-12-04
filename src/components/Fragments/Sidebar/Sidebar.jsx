@@ -5,12 +5,14 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { setProductAddToCart } from '../../../redux/reducers/productReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
 function Sidebar(props) {
+  const navigate = useNavigate();
   const { isVisible, onClose } = props;
   const dispatch = useDispatch();
 
@@ -24,6 +26,10 @@ function Sidebar(props) {
     console.log('cartFromRedux:', cartFromRedux);
 
     dispatch(setProductAddToCart());
+
+    onClose();
+
+    navigate('/checkout', { replace: true });
   };
 
   const dummyProd = [
@@ -60,7 +66,7 @@ function Sidebar(props) {
     <aside
       className={`fixed top-0 right-0 h-full w-[25%] bg-white shadow-xl text-gray-800 transform ${
         isVisible ? 'translate-x-0' : 'translate-x-full'
-      } transition-transform duration-300 ease-in-out z-10`}
+      } transition-transform duration-300 ease-in-out z-50`}
     >
       <div className="w-full h-full flex flex-col">
         {/*  header sidebar */}
@@ -102,12 +108,16 @@ function Sidebar(props) {
         </div>
 
         {/* cta checkout */}
-        <div className="p-4 border-t-2 border-gray-300">
+        <div className="p-4 border-t-2 border-gray-300 flex flex-col gap-3">
           <Button
-            className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3  hover:shadow-lg cursor-pointer"
+            className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3  hover:shadow-lg cursor-pointer transition-all"
             onClick={insertToCart}
           >
             Checkout Now
+          </Button>
+
+          <Button className="w-full rounded-lg px-5 py-3 border border-gray-800 hover:bg-gray-100 transition-all cursor-pointer font-medium">
+            Continue Shopping
           </Button>
         </div>
       </div>
