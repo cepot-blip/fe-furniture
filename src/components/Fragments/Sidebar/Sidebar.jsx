@@ -13,9 +13,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Trash } from 'lucide-react';
 import { setProductAddToCart } from '../../../redux/reducers/productReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
+
+import { deleteCartItem } from '../../../redux/reducers/cartItemReducer';
 
 function Sidebar(props) {
   const { isVisible, onClose } = props;
@@ -70,10 +73,12 @@ function Sidebar(props) {
                     Rp {item.price.toLocaleString('id-ID')}
                   </p>
                   <p>Jumlah: {item.quantity}</p>
-
-                  {/* <Card.Footer className="flex items-center justify-end">
-                    <h3>+</h3>
-                  </Card.Footer> */}
+                  <Button
+                    className="text-white text-xs bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg"
+                    onClick={() => dispatch(deleteCartItem(item.id))}
+                  >
+                    Hapus
+                  </Button>
                 </Card.Body>
               </Card>
             ))}
