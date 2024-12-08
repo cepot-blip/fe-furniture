@@ -15,7 +15,7 @@ import { Plus, ShoppingCart } from 'lucide-react';
 
 import useAllProduct from '../../../hooks/product/useAllProduct';
 import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
-import { addToCart } from '../../../redux/reducers/cartItemReducer';
+import { addToCartItem } from '../../../redux/reducers/cartItemReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
@@ -37,7 +37,7 @@ function ItemProduct() {
 
   const handleProductToCart = (product) => {
     console.log('dataProductFromRedux', product);
-    dispatch(addToCart(product));
+    dispatch(addToCartItem(product));
   };
 
   const openModal = () => {
