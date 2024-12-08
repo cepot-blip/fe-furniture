@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable simple-import-sort/imports */
 /* eslint-disable arrow-spacing */
 /* eslint-disable camelcase */

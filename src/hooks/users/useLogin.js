@@ -19,8 +19,11 @@ export default function useLogin() {
     isLoading,
     isError,
   } = useMutation({
-    mutationFn: async ({ id, loginData, password }) =>
-      await loginUser({ id, loginData, password }),
+    mutationFn: async ({ loginData, password }) =>
+      await loginUser({
+        loginData,
+        password,
+      }),
 
     onSuccess: async (data) => {
       console.log('Berhasil Login', data);

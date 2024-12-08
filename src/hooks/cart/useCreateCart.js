@@ -17,9 +17,9 @@ export function useCreateCart() {
         'with total price:',
         total_price,
       );
+
       return await createCart({ user_id, total_price });
     },
   });
-
   return { createCartMutation };
 }
