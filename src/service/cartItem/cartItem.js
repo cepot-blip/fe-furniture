@@ -1,7 +1,7 @@
-/* eslint-disable no-console */
 /* eslint-disable camelcase */
+/* eslint-disable no-undef */
 /* eslint-disable import/prefer-default-export */
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 import instance from '../api';
 
 export const cartItemService = () => {
@@ -11,24 +11,20 @@ export const cartItemService = () => {
     return response.data.query;
   };
 
-  const createCartItem = async ({
-    cart_id,
-    product_id,
-    quantity,
-    subtotal_price,
-  }) => {
+  const createCartItem = async () => {
     const response = await instance.post('/cart-item', {
       cart_id,
       product_id,
-      quantity,
+      quantitiy,
       subtotal_price,
     });
+    if (response.data.success) {
+      console.log('Response: ', response.data);
+    }
 
-    console.log('Response', response);
-    if (!response.data.succes) {
+    if (!response.data.success) {
       throw new Error(response.data.message || 'Failed to create cart item');
     }
   };
-
   return { getAllCartItem, createCartItem };
 };
