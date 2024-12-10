@@ -24,7 +24,6 @@ function Products() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { products, refetch } = useAllProduct();
-  console.log(products);
 
   const { createProd } = useCreateProduct();
 
@@ -44,6 +43,8 @@ function Products() {
     await createProd(productData);
     refetch();
   };
+
+  console.log(products);
 
   return (
     <main className="flex flex-col mx-auto max-w-[1500px]">

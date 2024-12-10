@@ -1,26 +1,57 @@
+/* eslint-disable max-len */
 /* eslint-disable no-undef */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Star } from 'lucide-react';
 
-import useAllReview from '../../../hooks/review/useAllReview';
+import { useAllReview } from '../../../hooks/review/useAllReview';
 import { useByIdReview } from '../../../hooks/review/useByIdReview';
+import { useCreateReviews } from '../../../hooks/review/useCreateReview';
 import Button from '../../Elements/Button/Button';
 import Input from '../../Elements/Fields/Input';
 import Card from '../Card/Card';
 
 function ReviewProduct() {
   const { id } = useParams();
-  const { reviews } = useAllReview();
-  console.log('reviews:', reviews);
+  const { reviews, refetch } = useAllReview();
+  // const { review } = useByIdReview();
+  const { createRev } = useCreateReviews();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    user_id: '',
+    product_id: id,
+    rating: '',
+    review_content: '',
+  });
+
+  console.log('reviews', reviews);
+  // console.log('review', review);
 
   const filteredReviews = reviews.filter(
     (reviewers) => reviewers.product_id === Number(id),
   );
+
+  const handleCreateReview = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const dataToSend = {
+      ...formData,
+    };
+
+    try {
+      await createRev(dataToSend);
+      refetch();
+    } catch (error) {
+      console.log(error.message, 'Failed to create review');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="py-8">
@@ -62,16 +93,22 @@ function ReviewProduct() {
         <h3 className="pb-2 text-lg font-base text-gray-500">
           Enter your review for this product
         </h3>
-        <div className="flex items-center gap-4">
-          <Input
-            type="text"
-            placeholder="Write your review..."
-            className="flex-1 py-3 px-4 border border-gray-300 rounded-lg max-w-lg"
-          />
-          <Button className="flex items-center justify-center gap-2 py-3 px-6 rounded-md bg-black text-white font-semibold shadow-lg">
-            Submit
-          </Button>
-        </div>
+
+        <form onSubmit={handleCreateReview}>
+          <div className="flex items-center gap-4">
+            <Input
+              type="text"
+              placeholder="Write your review..."
+              className="flex-1 py-3 px-4 border border-gray-300 rounded-lg max-w-lg"
+            />
+            <Button
+              className="flex items-center justify-center gap-2 py-3 px-6 rounded-md bg-black text-white font-semibold shadow-lg"
+              type="submit"
+            >
+              {loading ? 'Loading...' : 'Submit'}
+            </Button>
+          </div>
+        </form>
       </div>
     </section>
   );

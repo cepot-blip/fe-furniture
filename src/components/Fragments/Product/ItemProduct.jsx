@@ -8,6 +8,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -21,16 +22,14 @@ import Card from '../Card/Card';
 
 import FormProduct from './FormProduct';
 
+import 'react-loading-skeleton/dist/skeleton.css';
+
 function ItemProduct() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { products, isLoading, isError, refetch } = useAllProduct();
   const { createProd } = useCreateProduct();
 
   console.log(products);
-
-  // const dataProductFromRedux = useSelector((state) => state.product.quantity);
-
-  //   const dataProductFromRedux = useSelector((state) => state.product.quantity); // redux
 
   const dispatch = useDispatch();
 
@@ -79,10 +78,14 @@ function ItemProduct() {
           <Card className="border rounded-lg p-4">
             <Link key={item.id} to={`/product/${item.id}`}>
               <Card.Header className="mb-4">
-                <img
-                  src={item.image_url}
-                  className="w-full h-60 object-contain rounded-lg"
-                />
+                {isLoading ? (
+                  <Skeleton height={300} width="100%" />
+                ) : (
+                  <img
+                    src={item.image_url}
+                    className="w-full h-60 object-contain rounded-lg"
+                  />
+                )}
               </Card.Header>
               <Card.Body className="mb-4">
                 <h2 className="text-lg font-bold">{item.name}</h2>

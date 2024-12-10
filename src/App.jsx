@@ -11,7 +11,7 @@ import NotFoundPage from './pages/404.jsx';
 import Checkout from './pages/checkout/checkout.jsx';
 import HomePage from './pages/home/Home';
 import LoginPage from './pages/login/Login';
-import DetailsProduct from './pages/products/id/DetailsProduct.jsx';
+import DetailsProduct from './pages/products/DetailsProduct.jsx';
 import Products from './pages/products/Products.jsx';
 import RegisterPage from './pages/register/Register';
 import store from './redux/store/index.js';

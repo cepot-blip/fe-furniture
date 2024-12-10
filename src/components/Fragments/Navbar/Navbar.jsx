@@ -28,6 +28,7 @@ function Navbar({ onCartClick }) {
     });
     onCartClick();
   };
+
   return (
     <div className="border-b-2 border-b-gray-300 relative pb-20 pt-3">
       <header className="w-[1500px] py-2 fixed bg-gray10 rounded-lg z-50 border border-gray-100">

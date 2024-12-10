@@ -17,13 +17,11 @@ export const cartService = () => {
     return response.data.query;
   };
 
-  const createCart = async ({ id, user_id, total_price }) => {
+  const createCart = async ({ user_id, total_price }) => {
     const response = await instance.post('/cart', {
-      id,
       user_id,
       total_price,
     });
-    // eslint-disable-next-line no-console
     if (response.data.success) {
       console.log('Response: ', response.data);
       const cart_id = response.data.data.id;
@@ -36,5 +34,20 @@ export const cartService = () => {
     return response.data;
   };
 
-  return { getAllCart, createCart };
+  const deleteCart = async (id) => {
+    console.log(`id: ${id}`);
+    const response = await instance.delete(`/cart/${id}`);
+
+    console.log(response.data);
+
+    if (!response.data || !response.data.data) {
+      throw new Error(response.data.message || 'Failed deleted cart by id');
+    }
+
+    console.log('data:', response.data);
+
+    return response.data;
+  };
+
+  return { getAllCart, createCart, deleteCart };
 };
