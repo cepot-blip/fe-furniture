@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/no-array-index-key */
@@ -10,7 +11,7 @@ import Card from '../Card/Card';
 function Review() {
   const { createRev } = useAllReview();
 
-  console.log(createRev);
+  // console.log(createRev);
 
   const dummyReview = [
     {

@@ -5,10 +5,9 @@
 /* eslint-disable no-unused-vars */
 import Cookies from 'js-cookie';
 
-import { productStore } from '../../redux/reducers/productReducer';
 import instance from '../api';
 
-export const productService = (dispatch) => {
+export const productService = () => {
   const getAllProduct = async () => {
     const response = await instance.get('/products');
 
@@ -38,7 +37,7 @@ export const productService = (dispatch) => {
       throw new Error(response.data.message || 'Failed to create product');
     }
 
-    return response.data.data;
+    return response.data;
   };
 
   const getProductById = async (id) => {
@@ -48,10 +47,28 @@ export const productService = (dispatch) => {
 
     console.log(response.data);
 
-    if (!response.data.success) {
-      throw new Error(response.data.message || 'Failed fetring product by id');
+    if (!response.data || !response.data.data) {
+      throw new Error(response.data.message || 'Failed fetcing product by id');
     }
+
+    console.log('product data:', response.data);
+    return response.data.data;
   };
 
-  return { getAllProduct, createProduct, getProductById };
+  const deletedProduct = async (id) => {
+    console.log(`id: ${id}`);
+
+    const response = await instance.delete(`/product/${id}`);
+
+    console.log(response.data);
+
+    if (!response.data || !response.data.data) {
+      throw new Error(response.data.message || 'Failed deleted product by id');
+    }
+
+    console.log('product data deleted:', response.data);
+    return response.data.data;
+  };
+
+  return { getAllProduct, createProduct, getProductById, deletedProduct };
 };
