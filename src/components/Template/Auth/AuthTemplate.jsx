@@ -36,7 +36,7 @@ function AuthTemplate(props) {
 
             {type === 'login' ? (
               <Link
-                to="/"
+                to="/register"
                 className="text-blue-500 font-semibold text-base hover:text-blue-700 transition duration-300"
               >
                 Register

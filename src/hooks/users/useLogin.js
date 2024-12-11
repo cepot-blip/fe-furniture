@@ -28,7 +28,7 @@ export default function useLogin() {
     onSuccess: async (data) => {
       console.log('Berhasil Login', data);
       Notiflix.Notify.success('Login berhasil! Selamat datang');
-      navigate('/home');
+      navigate('/');
     },
 
     onError: (error) => {

@@ -1,47 +1,73 @@
-/* eslint-disable no-multiple-empty-lines */
-/* eslint-disable arrow-spacing */
-/* eslint-disable indent */
-/* eslint-disable react/jsx-closing-tag-location */
-/* eslint-disable padded-blocks */
-/* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
-/* eslint-disable simple-import-sort/imports */
-/* eslint-disable no-alert */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable no-const-assign */
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Trash } from 'lucide-react';
+
+import { useCreateCart } from '../../../hooks/cart/useCreateCart';
+import { useDeleteCart } from '../../../hooks/cart/useDeleteCart';
+import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
+import { useDeleteCartItem } from '../../../hooks/cartItem/useDeleteCartItem';
 import { setProductAddToCart } from '../../../redux/reducers/productReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
-import { deleteCartItem } from '../../../redux/reducers/cartItemReducer';
-
 function Sidebar(props) {
+  const navigate = useNavigate();
+  const { createCartMutation } = useCreateCart();
+  const { deleteCartMutation } = useDeleteCart();
+  const { createCartItemMutation } = useCreateCartItem();
+  const { deleteCartItemMutation } = useDeleteCartItem();
   const { isVisible, onClose } = props;
   const dispatch = useDispatch();
 
   const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
 
   const cartFromRedux = useSelector((state) => state.cart.cart);
+
   const totalPriceFromRedux = useSelector(
     (state) => state.cartItem.total_price,
   );
+
+  const handleToCart = async () => {
+    // await createCartItemMutation();
+    await createCartMutation(cartItemFromRedux);
+
+    console.log('createCartItemMutation', createCartMutation);
+
+    dispatch(setProductAddToCart());
+
+    onClose();
+
+    navigate('/checkout', { replace: true });
+  };
+
+  const handleDeleteFromCart = async (id) => {
+    try {
+      // await deleteCartItemMutation({ id });
+      await deleteCartMutation({ id });
+      console.log('Berhasil dihapus:', id);
+    } catch (error) {
+      console.error('Gagal menghapus:', error);
+    }
+
+    // console.log('deleteCartItemMutation', deleteCartItemMutation);
+    console.log('deleteCartItemMutation', deleteCartMutation);
+  };
+
   console.log('cartItemFromRedux', cartItemFromRedux);
   console.log('cartFromRedux', cartFromRedux);
   console.log(totalPriceFromRedux);
-  const insertToCart = () => {
-    dispatch(setProductAddToCart());
-  };
 
   return (
     <aside
       className={`fixed top-0 right-0 h-full w-[25%] bg-white shadow-xl text-gray-800 transform ${
         isVisible ? 'translate-x-0' : 'translate-x-full'
-      } transition-transform duration-300 ease-in-out z-10`}
+      } transition-transform duration-300 ease-in-out z-50`}
     >
       <div className="w-full h-full flex flex-col">
         {/*  header sidebar */}
@@ -54,49 +80,75 @@ function Sidebar(props) {
 
         {/* content cart */}
         <div className="p-6 flex-grow flex flex-col">
-          <div className="flex-grow overflow-y-auto">
-            {cartItemFromRedux.map((item) => (
-              <Card
-                key={item.cart_id}
-                className="border-b border-gray-300 py-4 flex gap-4"
-              >
-                <Card.Header className="w-24 h-24">
-                  <img
-                    src={item.image_url}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                </Card.Header>
+          {cartItemFromRedux.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-gray-500">
+              <h1 className="text-lg font-medium">No Product Found</h1>
+            </div>
+          ) : (
+            <div className="flex-grow overflow-y-auto">
+              {cartItemFromRedux.map((item) => (
+                <Card
+                  key={item.cart_id}
+                  className="border border-gray-300 rounded-md mb-4 flex py-3 px-2"
+                >
+                  <Card.Header className="w-1/3 rounded-lg overflow-hidden shadow-sm">
+                    <img
+                      src={item.image_url}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </Card.Header>
+                  <Card.Body className="flex-grow px-4">
+                    <h4 className="font-medium text-lg text-gray-800">
+                      {item.name}
+                    </h4>
+                    <p className="text-gray-600 mb-2">
+                      Rp {item.price.toLocaleString('id-ID')}
+                    </p>
 
-                <Card.Body className="flex-grow">
-                  <h4 className="font-medium text-lg">{item.name}</h4>
-                  <p className="text-gray-600">
-                    Rp {item.price.toLocaleString('id-ID')}
-                  </p>
-                  <p>Jumlah: {item.quantity}</p>
-                  <Button
-                    className="text-white text-xs bg-red-500 hover:bg-red-600 px-2 py-1 rounded-lg"
-                    onClick={() => dispatch(deleteCartItem(item.id))}
-                  >
-                    Hapus
-                  </Button>
-                </Card.Body>
-              </Card>
-            ))}
-          </div>
+                    <Card.Footer className="flex justify-between items-center mt-4">
+                      <div className="flex gap-3 items-center bg-gray-100 rounded-md border border-gray-300 py-1 px-3">
+                        <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                          -
+                        </Button>
+                        <p className="text-gray-700">{item.quantity}</p>
+                        <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                          +
+                        </Button>
+                      </div>
+
+                      <Button
+                        className="text-red-500 hover:text-red-700 transition-colors"
+                        onClick={() => handleDeleteFromCart(item.id)}
+                      >
+                        <Trash className="w-5 h-5" />
+                      </Button>
+                    </Card.Footer>
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* cta checkout */}
-        <div className="p-4 border-t-2 border-gray-300">
-          <h3 className="mb-2 text-lg font-semibold">
-            Total: Rp {totalPriceFromRedux.toLocaleString('id-ID')}
-          </h3>
-          <Button
-            className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3  hover:shadow-lg cursor-pointer"
-            onClick={insertToCart}
-          >
-            Checkout Now
-          </Button>
-        </div>
+        {cartItemFromRedux.length > 0 && (
+          <div className="p-4 border-t-2 border-gray-300 flex flex-col gap-3">
+            <div className="p-4 flex flex-col gap-3">
+              <h3 className="mb-2 text-lg font-semibold">
+                Total: Rp {totalPriceFromRedux.toLocaleString('id-ID')}
+              </h3>
+              <Button
+                className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3 hover:shadow-lg cursor-pointer transition-all"
+                onClick={handleToCart}
+              >
+                Checkout Now
+              </Button>
+              <Button className="w-full rounded-lg px-5 py-3 border border-gray-800 hover:bg-gray-100 transition-all cursor-pointer font-medium">
+                Continue Shopping
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </aside>
   );
