@@ -1,15 +1,7 @@
-/* eslint-disable object-curly-spacing */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable quotes */
-/* eslint-disable no-console */
 /* eslint-disable camelcase */
 /* eslint-disable no-undef */
-/* eslint-disable indent */
-/* eslint-disable no-multiple-empty-lines */
-/* eslint-disable eol-last */
-/* eslint-disable semi */
-/* eslint-disable no-unused-vars */
 /* eslint-disable import/prefer-default-export */
+/* eslint-disable no-console */
 import instance from '../api';
 
 export const cartItemService = () => {
@@ -23,9 +15,10 @@ export const cartItemService = () => {
     const response = await instance.post('/cart-item', {
       cart_id,
       product_id,
-      quantitiy,
+      quantity,
       subtotal_price,
     });
+
     if (response.data.success) {
       console.log('Response: ', response.data);
     }
@@ -34,5 +27,23 @@ export const cartItemService = () => {
       throw new Error(response.data.message || 'Failed to create cart item');
     }
   };
-  return { getAllCartItem, createCartItem };
+
+  const deleteCartItem = async (id) => {
+    console.log(`id: ${id}`);
+
+    const response = await instance.delete(`/cart-item/${id}`);
+
+    console.log(response.data);
+
+    if (!response.data || !response.data.data) {
+      throw new Error(
+        response.data.message || 'Failed deleted cart item by id',
+      );
+    }
+
+    console.log('data:', response.data);
+
+    return response.data;
+  };
+  return { getAllCartItem, createCartItem, deleteCartItem };
 };

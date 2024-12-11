@@ -4,28 +4,31 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { User } from 'lucide-react';
 import Notiflix from 'notiflix';
 
 import useUserId from '../../../hooks/users/useUserId';
+import { setReset } from '../../../redux/reducers/authReducer';
 
 function Profile({ id }) {
   const user = useSelector((state) => state.auth.userAuth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     const confirmation = window.confirm('Apakah Anda yakin ingin keluar?');
 
     if (confirmation) {
       Cookies.remove('token');
+      dispatch(setReset());
       console.log('Berhasil logout');
 
       Notiflix.Notify.success('Anda berhasil logout');
       navigate('/login');
-      window.location.reload();
+      // window.location.reload();
     } else {
       console.log('Logout dibatalkan');
     }

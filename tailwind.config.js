@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         'oren-200': '#FFA567',
         'oren-500': '#F73308',
+        gray10: '#fffffff3',
         gray50: '#EDEDED',
         gray100: '#F6F6F6',
       },

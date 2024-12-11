@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member */
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -22,7 +24,7 @@ function Products() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { products, refetch } = useAllProduct();
-  console.log(products);
+
   const { createProd } = useCreateProduct();
 
   const handleSidebarToggle = () => {
@@ -41,6 +43,8 @@ function Products() {
     await createProd(productData);
     refetch();
   };
+
+  console.log(products);
 
   return (
     <main className="flex flex-col mx-auto max-w-[1500px]">
@@ -120,9 +124,6 @@ function Products() {
             >
               <h3 className="text-2xl font-semibold mb-6">Create Product</h3>
               <FormProduct onSubmit={handleCreateProduct} />
-              {/* <Button className="mt-4 w-full" onClick={closeModal}>
-                Close
-              </Button> */}
             </div>
           </div>
         )}

@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-alert */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import About from '../../components/Fragments/About/About';
 import Category from '../../components/Fragments/Category/Category';

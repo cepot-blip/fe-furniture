@@ -27,5 +27,11 @@ export const reviewService = () => {
     return response.data.data;
   };
 
-  return { createReview };
+  const getAllReview = async () => {
+    const response = await instance.get('/reviews');
+
+    return response.data.data;
+  };
+
+  return { createReview, getAllReview };
 };

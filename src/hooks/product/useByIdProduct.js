@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
 import { useQuery } from '@tanstack/react-query';
 
@@ -9,11 +10,12 @@ export function useByIdProduct(id) {
     data: product,
     isLoading,
     isError,
+    error,
   } = useQuery({
     queryKey: ['product', id],
     queryFn: () => getProductById(id),
     enabled: !!id,
   });
 
-  return { product, isError, isLoading };
+  return { product, isError, isLoading, error };
 }

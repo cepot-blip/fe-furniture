@@ -12,6 +12,9 @@ function Input(props) {
     placeholder,
     autoComplete,
     icons,
+    required,
+    min,
+    max,
   } = props;
   return (
     <input
@@ -25,6 +28,9 @@ function Input(props) {
       className={className}
       placeholder={placeholder}
       autoComplete={autoComplete}
+      required={required}
+      min={min}
+      max={max}
     />
   );
 }
