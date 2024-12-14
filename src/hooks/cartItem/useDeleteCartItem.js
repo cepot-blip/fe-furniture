@@ -12,7 +12,7 @@ export function useDeleteCartItem() {
   const { deleteCartItem } = cartItemService();
 
   const { mutate: deleteCartItemMutation } = useMutation({
-    mutationFn: async (id) => await deleteCartItem({ id }),
+    mutationFn: async (id) => await deleteCartItem(id),
     onSuccess: (data) => {
       Notiflix.Notify.success(data.message || 'Berhasil menghapus item cart!');
       console.log('Delete cart item success:', data);

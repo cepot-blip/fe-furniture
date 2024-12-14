@@ -12,18 +12,19 @@ import { useCreateCart } from '../../../hooks/cart/useCreateCart';
 import { useDeleteCart } from '../../../hooks/cart/useDeleteCart';
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import { useDeleteCartItem } from '../../../hooks/cartItem/useDeleteCartItem';
+import { deleteCartItem } from '../../../redux/reducers/cartItemReducer';
 import { setProductAddToCart } from '../../../redux/reducers/productReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
 function Sidebar(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { createCartMutation } = useCreateCart();
-  const { deleteCartMutation } = useDeleteCart();
+  const { deleteCartMutation } = useDeleteCart(dispatch);
   const { createCartItemMutation } = useCreateCartItem();
   const { deleteCartItemMutation } = useDeleteCartItem();
   const { isVisible, onClose } = props;
-  const dispatch = useDispatch();
 
   const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
 
@@ -50,6 +51,7 @@ function Sidebar(props) {
     try {
       // await deleteCartItemMutation({ id });
       await deleteCartMutation({ id });
+      dispatch(deleteCartItem);
       console.log('Berhasil dihapus:', id);
     } catch (error) {
       console.error('Gagal menghapus:', error);

@@ -11,14 +11,19 @@ export const cartItemService = () => {
     return response.data.query;
   };
 
-  const createCartItem = async () => {
+  const createCartItem = async ({
+    cart_id,
+    product_id,
+    quantity,
+    subtotal_price,
+  }) => {
     const response = await instance.post('/cart-item', {
       cart_id,
       product_id,
       quantity,
       subtotal_price,
     });
-
+    console.log(response.data);
     if (response.data.success) {
       console.log('Response: ', response.data);
     }
@@ -26,6 +31,8 @@ export const cartItemService = () => {
     if (!response.data.success) {
       throw new Error(response.data.message || 'Failed to create cart item');
     }
+
+    return response.data;
   };
 
   const deleteCartItem = async (id) => {

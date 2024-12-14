@@ -1,7 +1,13 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable max-len */
 /* eslint-disable comma-spacing */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-return-await */
+/* eslint-disable import/prefer-default-export */
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -9,7 +15,7 @@ const initialState = {
   cart_id: 0,
   product_id: 0,
   quantitiy: 0,
-  sub_totalprice: 0,
+  subtotal_price: 0,
   total_price: 0,
 };
 
@@ -26,6 +32,9 @@ const cartItemReducer = createSlice({
         state.cartItem[existProduct] = {
           ...state.cartItem[existProduct],
           quantity: state.cartItem[existProduct].quantity + 1,
+          subtotal_price:
+            state.cartItem[existProduct].price *
+            (state.cartItem[existProduct].quantity + 1),
         };
         state.total_price = state.cartItem.reduce(
           (total, item) => total + item.price * item.quantity,
