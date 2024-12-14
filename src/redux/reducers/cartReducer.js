@@ -1,5 +1,6 @@
-/* eslint-disable no-console */
+/* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -15,12 +16,14 @@ const cartReducer = createSlice({
   reducers: {
     cartStore(state, action) {
       console.log('payloaded:', action.payload);
-      const { payload } = action;
-      state.id = payload.id || 0;
-      state.user_id = payload.user_id || 0;
-      state.total_price = payload.total_price || 0;
+      const { cart_id, user_id, total_price } = action.payload;
+      state.id = cart_id || 0;
+      state.user_id = user_id || 0;
+      state.total_price = total_price || 0;
+      console.log('Update state:', state);
     },
   },
 });
+
 export const { cartStore } = cartReducer.actions;
 export default cartReducer.reducer;
