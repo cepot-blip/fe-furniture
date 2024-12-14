@@ -1,3 +1,7 @@
+/* eslint-disable radix */
+/* eslint-disable no-use-before-define */
+/* eslint-disable array-callback-return */
+/* eslint-disable camelcase */
 /* eslint-disable semi */
 /* eslint-disable import/no-duplicates */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -14,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Plus, ShoppingCart } from 'lucide-react';
 
+import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import useAllProduct from '../../../hooks/product/useAllProduct';
 import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
 import { addToCartItem } from '../../../redux/reducers/cartItemReducer';
@@ -30,11 +35,18 @@ function ItemProduct() {
   const { createProd } = useCreateProduct();
 
   console.log(products);
-
   const dispatch = useDispatch();
-
+  const cart_id = useSelector((state) => state.cart.id);
+  const { createCartItemMutation } = useCreateCartItem(dispatch);
   const handleProductToCart = (product) => {
-    console.log('dataProductFromRedux', product);
+    const cartItem = {
+      cart_id,
+      product_id: product.id,
+      quantity: 1,
+      subtotal_price: product.price * 1,
+    };
+    createCartItemMutation(cartItem);
+    console.log('isi cartItem: ', cartItem);
     dispatch(addToCartItem(product));
   };
 

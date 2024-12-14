@@ -1,18 +1,19 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-return-await */
 /* eslint-disable no-console */
 /* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import Notiflix from 'notiflix';
 
 import { cartService } from '../../service/cart/cart';
 
 export function useCreateCart() {
-  const { createCart } = cartService();
-
+  const dispatch = useDispatch();
+  const { createCart } = cartService(dispatch);
   const { mutate: createCartMutation } = useMutation({
     mutationFn: async ({ user_id, total_price }) => {
       console.log(
