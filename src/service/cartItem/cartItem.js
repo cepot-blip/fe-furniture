@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 /* eslint-disable no-undef */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-console */
+import { addToCartItemStore } from '../../redux/reducers/cartItemReducer';
 import instance from '../api';
 
-export const cartItemService = () => {
+export const cartItemService = (dispatch) => {
   const getAllCartItem = async () => {
     const response = await instance.get('/cart-items');
 
@@ -23,10 +25,17 @@ export const cartItemService = () => {
       quantity,
       subtotal_price,
     });
-    console.log(response.data);
-    if (response.data.success) {
-      console.log('Response: ', response.data);
-    }
+    console.log(' Response : ', response.data);
+    const cartItemId = response.data.data.id;
+    console.log('cartItemId: ', cartItemId);
+
+    dispatch(
+      addToCartItemStore({
+        ...response.data.data,
+        cartItemId,
+      }),
+    );
+    console.log('Response: ', response.data);
 
     if (!response.data.success) {
       throw new Error(response.data.message || 'Failed to create cart item');
@@ -35,8 +44,8 @@ export const cartItemService = () => {
     return response.data;
   };
 
-  const deleteCartItem = async (id) => {
-    console.log(`id: ${id}`);
+  const deleteCartItem = async ({ id }) => {
+    console.log(` isi id cartItem: ${id}`);
 
     const response = await instance.delete(`/cart-item/${id}`);
 

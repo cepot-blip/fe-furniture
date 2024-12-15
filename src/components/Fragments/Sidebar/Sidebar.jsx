@@ -3,6 +3,7 @@
 /* eslint-disable no-const-assign */
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -21,15 +22,13 @@ function Sidebar(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { createCartMutation } = useCreateCart();
-  const { deleteCartMutation } = useDeleteCart(dispatch);
-  const { createCartItemMutation } = useCreateCartItem();
-  const { deleteCartItemMutation } = useDeleteCartItem();
+  const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
   const { isVisible, onClose } = props;
 
   const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
 
   const cartFromRedux = useSelector((state) => state.cart.cart);
-
+  const cartItemStore = useSelector((state) => state.cartItem.cartItemStore);
   const totalPriceFromRedux = useSelector(
     (state) => state.cartItem.total_price,
   );
@@ -49,20 +48,23 @@ function Sidebar(props) {
 
   const handleDeleteFromCart = async (id) => {
     try {
-      // await deleteCartItemMutation({ id });
-      await deleteCartMutation({ id });
-      dispatch(deleteCartItem);
-      console.log('Berhasil dihapus:', id);
+      const cartItemToDelete = cartItemStore.find((item) => item.id === id);
+      if (cartItemToDelete) {
+        await deleteCartItemMutation({ id: cartItemToDelete.id });
+        dispatch(deleteCartItem(cartItemToDelete.id));
+        console.log(`CartItem dengan id ${id} berhasil dihapus.`);
+      } else {
+        console.warn(
+          `CartItem dengan id ${id} tidak ditemukan di cartItemStore.`,
+        );
+      }
     } catch (error) {
-      console.error('Gagal menghapus:', error);
+      console.error('Gagal menghapus CartItem:', error);
     }
-
-    // console.log('deleteCartItemMutation', deleteCartItemMutation);
-    console.log('deleteCartItemMutation', deleteCartMutation);
   };
-
   console.log('cartItemFromRedux', cartItemFromRedux);
   console.log('cartFromRedux', cartFromRedux);
+  console.log('cartItemStore', cartItemStore);
   console.log(totalPriceFromRedux);
 
   return (
@@ -88,46 +90,57 @@ function Sidebar(props) {
             </div>
           ) : (
             <div className="flex-grow overflow-y-auto">
-              {cartItemFromRedux.map((item) => (
-                <Card
-                  key={item.cart_id}
-                  className="border border-gray-300 rounded-md mb-4 flex py-3 px-2"
-                >
-                  <Card.Header className="w-1/3 rounded-lg overflow-hidden shadow-sm">
-                    <img
-                      src={item.image_url}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </Card.Header>
-                  <Card.Body className="flex-grow px-4">
-                    <h4 className="font-medium text-lg text-gray-800">
-                      {item.name}
-                    </h4>
-                    <p className="text-gray-600 mb-2">
-                      Rp {item.price.toLocaleString('id-ID')}
-                    </p>
+              {cartItemFromRedux.map((item) => {
+                const cartItemFromStore = cartItemStore.find(
+                  (storeItem) => storeItem.product_id === item.id,
+                );
+                if (!cartItemFromStore) return null;
 
-                    <Card.Footer className="flex justify-between items-center mt-4">
-                      <div className="flex gap-3 items-center bg-gray-100 rounded-md border border-gray-300 py-1 px-3">
-                        <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
-                          -
-                        </Button>
-                        <p className="text-gray-700">{item.quantity}</p>
-                        <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
-                          +
-                        </Button>
-                      </div>
+                return (
+                  <Card
+                    key={cartItemFromStore.id}
+                    className="border border-gray-300 rounded-md mb-4 flex py-3 px-2"
+                  >
+                    <Card.Header className="w-1/3 rounded-lg overflow-hidden shadow-sm">
+                      <img
+                        src={item.image_url}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </Card.Header>
+                    <Card.Body className="flex-grow px-4">
+                      <h4 className="font-medium text-lg text-gray-800">
+                        {item.name}
+                      </h4>
+                      <p className="text-gray-600 mb-2">
+                        Rp {item.price.toLocaleString('id-ID')}
+                      </p>
 
-                      <Button
-                        className="text-red-500 hover:text-red-700 transition-colors"
-                        onClick={() => handleDeleteFromCart(item.id)}
-                      >
-                        <Trash className="w-5 h-5" />
-                      </Button>
-                    </Card.Footer>
-                  </Card.Body>
-                </Card>
-              ))}
+                      <Card.Footer className="flex justify-between items-center mt-4">
+                        <div className="flex gap-3 items-center bg-gray-100 rounded-md border border-gray-300 py-1 px-3">
+                          <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                            -
+                          </Button>
+                          <p className="text-gray-700">
+                            {cartItemFromStore.quantity}
+                          </p>
+                          <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                            +
+                          </Button>
+                        </div>
+
+                        <Button
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                          onClick={() =>
+                            handleDeleteFromCart(cartItemFromStore.id)
+                          }
+                        >
+                          <Trash className="w-5 h-5" />
+                        </Button>
+                      </Card.Footer>
+                    </Card.Body>
+                  </Card>
+                );
+              })}
             </div>
           )}
         </div>
