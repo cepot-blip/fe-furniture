@@ -130,9 +130,10 @@ function Sidebar(props) {
 
                         <Button
                           className="text-red-500 hover:text-red-700 transition-colors"
-                          onClick={() =>
-                            handleDeleteFromCart(cartItemFromStore.id)
-                          }
+                          onClick={() => {
+                            handleDeleteFromCart(cartItemFromStore.id);
+                            dispatch(deleteCartItem(item.id));
+                          }}
                         >
                           <Trash className="w-5 h-5" />
                         </Button>
