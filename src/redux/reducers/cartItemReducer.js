@@ -67,6 +67,12 @@ const cartItemReducer = createSlice({
       );
     },
 
+    deleteCartItemStore: (state, action) => {
+      const filterCart = state.cartItemStore.filter(
+        (item) => item.id !== action.payload,
+      );
+      state.cartItemStore = filterCart;
+    },
     addToCartItemStore: (state, action) => {
       console.log('payloaded:', action.payload);
 
@@ -85,6 +91,10 @@ const cartItemReducer = createSlice({
     },
   },
 });
-export const { addToCartItem, deleteCartItem, addToCartItemStore } =
-  cartItemReducer.actions;
+export const {
+  addToCartItem,
+  deleteCartItem,
+  addToCartItemStore,
+  deleteCartItemStore,
+} = cartItemReducer.actions;
 export default cartItemReducer.reducer;

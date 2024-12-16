@@ -13,7 +13,10 @@ import { useCreateCart } from '../../../hooks/cart/useCreateCart';
 import { useDeleteCart } from '../../../hooks/cart/useDeleteCart';
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import { useDeleteCartItem } from '../../../hooks/cartItem/useDeleteCartItem';
-import { deleteCartItem } from '../../../redux/reducers/cartItemReducer';
+import {
+  deleteCartItem,
+  deleteCartItemStore,
+} from '../../../redux/reducers/cartItemReducer';
 import { setProductAddToCart } from '../../../redux/reducers/productReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
@@ -133,6 +136,7 @@ function Sidebar(props) {
                           onClick={() => {
                             handleDeleteFromCart(cartItemFromStore.id);
                             dispatch(deleteCartItem(item.id));
+                            dispatch(deleteCartItemStore(cartItemFromStore.id));
                           }}
                         >
                           <Trash className="w-5 h-5" />
