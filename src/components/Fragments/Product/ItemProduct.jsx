@@ -22,6 +22,7 @@ import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import useAllProduct from '../../../hooks/product/useAllProduct';
 import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
 import { addToCartItem } from '../../../redux/reducers/cartItemReducer';
+import { addToCartItemStore } from '../../../redux/reducers/cartItemReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
@@ -33,7 +34,6 @@ function ItemProduct() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { products, isLoading, isError, refetch } = useAllProduct();
   const { createProd } = useCreateProduct();
-
   console.log(products);
   const dispatch = useDispatch();
   const cart_id = useSelector((state) => state.cart.id);

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable max-len */
@@ -12,6 +13,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   cartItem: [],
+  cartItemStore: [],
+  id: 0,
   cart_id: 0,
   product_id: 0,
   quantitiy: 0,
@@ -63,7 +66,35 @@ const cartItemReducer = createSlice({
         0,
       );
     },
+
+    deleteCartItemStore: (state, action) => {
+      const filterCart = state.cartItemStore.filter(
+        (item) => item.id !== action.payload,
+      );
+      state.cartItemStore = filterCart;
+    },
+    addToCartItemStore: (state, action) => {
+      console.log('payloaded:', action.payload);
+
+      const { cartItemId, cart_id, product_id, quantity, subtotal_price } =
+        action.payload;
+
+      state.cartItemStore.push({
+        id: cartItemId || 0,
+        cart_id: cart_id || 0,
+        product_id: product_id || 0,
+        quantity: quantity || 0,
+        subtotal_price: subtotal_price || 0,
+      });
+
+      console.log('Update state:', state.cartItem);
+    },
   },
 });
-export const { addToCartItem, deleteCartItem } = cartItemReducer.actions;
+export const {
+  addToCartItem,
+  deleteCartItem,
+  addToCartItemStore,
+  deleteCartItemStore,
+} = cartItemReducer.actions;
 export default cartItemReducer.reducer;
