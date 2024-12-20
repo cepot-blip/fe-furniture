@@ -8,12 +8,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import ProtectedRoute from './components/Template/Auth/ProtectedRoute.jsx';
 import NotFoundPage from './pages/404.jsx';
+import AddressPages from './pages/address/address.jsx';
 import Checkout from './pages/checkout/checkout.jsx';
 import HomePage from './pages/home/Home';
 import LoginPage from './pages/login/Login';
 import DetailsProduct from './pages/products/DetailsProduct.jsx';
 import Products from './pages/products/Products.jsx';
 import RegisterPage from './pages/register/Register';
+import ShippingPages from './pages/shipping/shipping.jsx';
 import store from './redux/store/index.js';
 
 const queryClient = new QueryClient({
@@ -38,6 +40,8 @@ function App() {
             <Route path="/products" element={<Products />} />
 
             <Route path="/product/:id" element={<DetailsProduct />} />
+            <Route path="/shipping" element={<ShippingPages />} />
+            <Route path="/address-pages" element={<AddressPages />} />
 
             <Route
               path="/checkout"

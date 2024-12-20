@@ -3,6 +3,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-console */
+
 import { addToCartItemStore } from '../../redux/reducers/cartItemReducer';
 import instance from '../api';
 
@@ -13,6 +14,33 @@ export const cartItemService = (dispatch) => {
     return response.data.query;
   };
 
+  const updateCartItem = async ({
+    id,
+    cart_id,
+    product_id,
+    quantity,
+    subtotal_price,
+  }) => {
+    console.log('Updating Cart Item:', {
+      id,
+      cart_id,
+      product_id,
+      quantity,
+      subtotal_price,
+    });
+    const response = await instance.put('/cart-item', {
+      id,
+      cart_id,
+      product_id,
+      quantity,
+      subtotal_price,
+    });
+    console.log('response Update:', response.data);
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Failed to update cart item');
+    }
+    return response.data;
+  };
   const createCartItem = async ({
     cart_id,
     product_id,
@@ -61,5 +89,5 @@ export const cartItemService = (dispatch) => {
 
     return response.data;
   };
-  return { getAllCartItem, createCartItem, deleteCartItem };
+  return { getAllCartItem, createCartItem, deleteCartItem, updateCartItem };
 };

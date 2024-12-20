@@ -9,7 +9,11 @@ import instance from '../api';
 
 export const productService = () => {
   const getAllProduct = async () => {
-    const response = await instance.get('/products');
+    const response = await instance.get('/products', {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    });
 
     return response.data.query;
   };
@@ -22,14 +26,22 @@ export const productService = () => {
     category_id,
     image_url,
   }) => {
-    const response = await instance.post('/product', {
-      name,
-      description,
-      price,
-      stock,
-      category_id,
-      image_url,
-    });
+    const response = await instance.post(
+      '/product',
+      {
+        name,
+        description,
+        price,
+        stock,
+        category_id,
+        image_url,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+      },
+    );
 
     console.log(response.data);
 

@@ -8,7 +8,7 @@ const instance = axios.create({
   timeout: 5000,
 });
 
-axios.interceptors.request.use(
+instance.interceptors.request.use(
   (conf) => {
     const token = Cookies.get('token');
     console.log('Token yang digunakan:', token);
