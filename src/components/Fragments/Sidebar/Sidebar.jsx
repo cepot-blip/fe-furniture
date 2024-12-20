@@ -97,8 +97,6 @@ function Sidebar(props) {
         user_id,
         total_price: totalPriceFromRedux,
       });
-      console.log(' isi updateCartItemMutation', updateCartItemMutation);
-      console.log('isi item price', cartItem.price);
     } catch (error) {
       console.log(error);
     }
