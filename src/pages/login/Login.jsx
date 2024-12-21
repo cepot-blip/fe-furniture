@@ -6,6 +6,7 @@ function LoginPage() {
   return (
     <AuthTemplate
       title="Welcome back, lets explore our collection"
+      subtitle="Please enter our details"
       type="login"
     >
       <FormLogin />

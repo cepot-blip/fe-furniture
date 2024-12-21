@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Plus, ShoppingCart } from 'lucide-react';
 
+import { useCartById } from '../../../hooks/cart/useCartById';
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import useAllProduct from '../../../hooks/product/useAllProduct';
 import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
@@ -33,11 +34,15 @@ import 'react-loading-skeleton/dist/skeleton.css';
 function ItemProduct() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { products, isLoading, isError, refetch } = useAllProduct();
-  const { createProd } = useCreateProduct();
-  console.log(products);
   const dispatch = useDispatch();
+  const { createProd } = useCreateProduct();
   const cart_id = useSelector((state) => state.cart.id);
   const { createCartItemMutation } = useCreateCartItem(dispatch);
+  const { cartIdQuery } = useCartById();
+  console.log('cartIdQuery:', cartIdQuery);
+
+  console.log(products);
+
   const handleProductToCart = (product) => {
     const cartItem = {
       cart_id,
@@ -133,7 +138,7 @@ function ItemProduct() {
             onClick={closeModal}
           >
             <div
-              className="bg-white p-8 rounded-lg w-[40%]"
+              className="bg-white p-8 rounded-lg w-[30%] h-auto"
               onClick={(e) => e.stopPropagation()} // close overlay
             >
               <h3 className="text-2xl font-semibold mb-6">Create Product</h3>

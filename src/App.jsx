@@ -11,6 +11,7 @@ import NotFoundPage from './pages/404.jsx';
 import Checkout from './pages/checkout/checkout.jsx';
 import HomePage from './pages/home/Home';
 import LoginPage from './pages/login/Login';
+import Mitra from './pages/mitra/Mitra.jsx';
 import DetailsProduct from './pages/products/DetailsProduct.jsx';
 import Products from './pages/products/Products.jsx';
 import RegisterPage from './pages/register/Register';
@@ -34,6 +35,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/daftar-mitra" element={<Mitra />} />
 
             <Route path="/products" element={<Products />} />
 

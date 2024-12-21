@@ -18,8 +18,8 @@ import FormCategory from './FormCategory';
 
 function Category() {
   const [isModalOpen, setIsModalOpen] = useState();
-  const { category, isLoading, isError } = useAllCategory();
-  const { createCtg } = useCreateCategory();
+  const { category, isLoading, isError, refetch } = useAllCategory();
+  const { createCategoryMutation } = useCreateCategory();
 
   console.log(category);
 
@@ -32,7 +32,8 @@ function Category() {
   };
 
   const handleCreateCategory = async (ctgData) => {
-    await createCtg(ctgData);
+    await createCategoryMutation(ctgData);
+    refetch();
   };
 
   return (

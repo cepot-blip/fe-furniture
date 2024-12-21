@@ -20,7 +20,6 @@ export default function useRegister() {
     isLoading,
     isError,
   } = useMutation({
-    // mutasi data untuk kasih response ke server
     mutationFn: async ({
       id,
       name,

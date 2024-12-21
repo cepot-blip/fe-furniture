@@ -14,6 +14,7 @@ import Card from '../../components/Fragments/Card/Card';
 import Footer from '../../components/Fragments/Footer/Footer';
 import Brands from '../../components/Fragments/Hero/Brands';
 import Hero from '../../components/Fragments/Hero/Hero';
+import Mitra from '../../components/Fragments/Mitra/Mitra';
 import Navbar from '../../components/Fragments/Navbar/Navbar';
 import FormProduct from '../../components/Fragments/Product/FormProduct';
 import Sidebar from '../../components/Fragments/Sidebar/Sidebar';
@@ -47,7 +48,7 @@ function Products() {
   console.log(products);
 
   return (
-    <main className="flex flex-col mx-auto max-w-[1500px]">
+    <main className="flex flex-col mx-auto max-w-[1300px]">
       <Navbar onCartClick={handleSidebarToggle} />
       <Sidebar isVisible={isSidebarVisible} onClose={handleSidebarToggle} />
       <Hero>
@@ -119,7 +120,7 @@ function Products() {
             onClick={closeModal}
           >
             <div
-              className="bg-white p-8 rounded-lg w-[40%]"
+              className="bg-white p-8 rounded-lg w-[30%]"
               onClick={(e) => e.stopPropagation()} // close overlay
             >
               <h3 className="text-2xl font-semibold mb-6">Create Product</h3>
@@ -128,6 +129,8 @@ function Products() {
           </div>
         )}
       </div>
+
+      <Mitra />
 
       <Footer />
     </main>

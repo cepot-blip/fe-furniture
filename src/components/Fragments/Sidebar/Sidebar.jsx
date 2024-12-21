@@ -38,7 +38,7 @@ function Sidebar(props) {
 
   const handleToCart = async () => {
     // await createCartItemMutation();
-    await createCartMutation(cartItemFromRedux);
+    await createCartMutation();
 
     console.log('createCartItemMutation', createCartMutation);
 

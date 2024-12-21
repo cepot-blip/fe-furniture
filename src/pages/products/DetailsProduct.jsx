@@ -29,7 +29,7 @@ function DetailsProduct() {
   };
 
   // console.log('Id', id);
-  // console.log('data', product);
+  console.log('data', product);
 
   // if (isLoading) return <p>Loading...</p>;
   // if (isError) return <p>Failed to load product details</p>;

@@ -11,13 +11,14 @@ import { productService } from '../../service/product/product';
 
 export function useCreateProduct() {
   const { createProduct } = productService();
-  const { mutate: createProd } = useMutation({
+  const { mutate: createProd, refetch } = useMutation({
     mutationFn: async ({
       name,
       description,
       price,
       stock,
       category_id,
+      mitra_id,
       image_url,
     }) =>
       await createProduct({
@@ -26,6 +27,7 @@ export function useCreateProduct() {
         price,
         stock,
         category_id,
+        mitra_id,
         image_url,
       }),
 
@@ -43,5 +45,5 @@ export function useCreateProduct() {
     },
   });
 
-  return { createProd };
+  return { createProd, refetch };
 }

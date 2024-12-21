@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable react/react-in-jsx-scope */
@@ -33,10 +34,15 @@ function FormRegister() {
         email: values.email,
         phone_number: values.phone_number,
         password: values.password,
-        role: values.role === 'admin' ? 'Admin' : 'Customer', // fallback nya cust
+        role:
+          values.role === 'admin'
+            ? 'Admin'
+            : values.role === 'mitra'
+              ? 'Mitra'
+              : 'User',
       };
 
-      dispatch(authStore(payload));
+      // dispatch(authStore(payload));
       setLoading(true);
       register(payload);
       console.log(payload);
@@ -134,7 +140,8 @@ function FormRegister() {
           className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm cursor-pointer text-gray-500"
           options={[
             { value: 'admin', label: 'Admin' },
-            { value: 'customer', label: 'Customer' },
+            { value: 'mitra', label: 'Mitra' },
+            { value: 'user', label: 'User' },
           ]}
         />
         {formik.errors.role && formik.touched.role && (

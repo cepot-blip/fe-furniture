@@ -48,5 +48,24 @@ export const cartService = (dispatch) => {
     return response.data;
   };
 
-  return { getAllCart, createCart, deleteCart };
+  const getCartById = async (id) => {
+    try {
+      const response = await instance.get(`/cart/${id}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+      });
+
+      if (!response.data || !response.data.data) {
+        throw new Error(response.data.message || 'Cart ID not found');
+      }
+
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching cart by ID:', error);
+      throw error;
+    }
+  };
+
+  return { getAllCart, createCart, deleteCart, getCartById };
 };

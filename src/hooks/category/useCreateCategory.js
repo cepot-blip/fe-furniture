@@ -10,7 +10,7 @@ import { categoryService } from '../../service/category/category';
 
 export default function useCreateCategory() {
   const { createCategory } = categoryService();
-  const { mutate: createCtg } = useMutation({
+  const { mutate: createCategoryMutation } = useMutation({
     mutationFn: async ({ category_name }) =>
       await createCategory({
         category_name,
@@ -30,5 +30,5 @@ export default function useCreateCategory() {
     },
   });
 
-  return { createCtg };
+  return { createCategoryMutation };
 }
