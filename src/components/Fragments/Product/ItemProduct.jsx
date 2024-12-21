@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Plus, ShoppingCart } from 'lucide-react';
 
+import { useUpdateCart } from '../../../hooks/cart/useUpdateCartI';
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import useAllProduct from '../../../hooks/product/useAllProduct';
 import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
@@ -37,7 +38,12 @@ function ItemProduct() {
   console.log(products);
   const dispatch = useDispatch();
   const cart_id = useSelector((state) => state.cart.id);
+  const user_id = useSelector((state) => state.auth.userAuth.id);
+  const totalPriceFromRedux = useSelector(
+    (state) => state.cartItem.total_price,
+  );
   const { createCartItemMutation } = useCreateCartItem(dispatch);
+  const { updateCartMutation } = useUpdateCart(dispatch);
   const handleProductToCart = (product) => {
     const cartItem = {
       cart_id,
@@ -46,6 +52,11 @@ function ItemProduct() {
       subtotal_price: product.price * 1,
     };
     createCartItemMutation(cartItem);
+    updateCartMutation({
+      id: cart_id,
+      user_id,
+      total_price: totalPriceFromRedux,
+    });
     console.log('isi cartItem: ', cartItem);
     dispatch(addToCartItem(product));
   };
