@@ -1,3 +1,11 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
+/* eslint-disable simple-import-sort/imports */
+/* eslint-disable radix */
+/* eslint-disable no-shadow */
+/* eslint-disable camelcase */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable no-const-assign */
@@ -13,9 +21,15 @@ import { useCreateCart } from '../../../hooks/cart/useCreateCart';
 import { useDeleteCart } from '../../../hooks/cart/useDeleteCart';
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import { useDeleteCartItem } from '../../../hooks/cartItem/useDeleteCartItem';
+import { useUpdateCartItem } from '../../../hooks/cartItem/useUpdateCartItem';
+import { useUpdateCart } from '../../../hooks/cart/useUpdateCartI';
 import {
+  decreaseCartItem,
+  decreaseCartItemStore,
   deleteCartItem,
   deleteCartItemStore,
+  increaseCartItem,
+  increaseCartItemStore,
 } from '../../../redux/reducers/cartItemReducer';
 import { setProductAddToCart } from '../../../redux/reducers/productReducer';
 import Button from '../../Elements/Button/Button';
@@ -26,19 +40,21 @@ function Sidebar(props) {
   const dispatch = useDispatch();
   const { createCartMutation } = useCreateCart();
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
+  const { updateCartItemMutation } = useUpdateCartItem(dispatch);
+  const { updateCartMutation } = useUpdateCart(dispatch);
   const { isVisible, onClose } = props;
 
   const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
-
   const cartFromRedux = useSelector((state) => state.cart.cart);
   const cartItemStore = useSelector((state) => state.cartItem.cartItemStore);
+
+  const user_id = useSelector((state) => state.auth.userAuth.id);
   const totalPriceFromRedux = useSelector(
     (state) => state.cartItem.total_price,
   );
-
   const handleToCart = async () => {
     // await createCartItemMutation();
-    await createCartMutation(cartItemFromRedux);
+    createCartMutation(cartItemFromRedux);
 
     console.log('createCartItemMutation', createCartMutation);
 
@@ -53,22 +69,42 @@ function Sidebar(props) {
     try {
       const cartItemToDelete = cartItemStore.find((item) => item.id === id);
       if (cartItemToDelete) {
-        await deleteCartItemMutation({ id: cartItemToDelete.id });
+        deleteCartItemMutation({ id: cartItemToDelete.id });
         dispatch(deleteCartItem(cartItemToDelete.id));
         console.log(`CartItem dengan id ${id} berhasil dihapus.`);
-      } else {
-        console.warn(
-          `CartItem dengan id ${id} tidak ditemukan di cartItemStore.`,
-        );
       }
     } catch (error) {
       console.error('Gagal menghapus CartItem:', error);
     }
   };
+
+  const handleUpdateCartItem = async (item, increment) => {
+    const newQuantity = increment ? item.quantity + 1 : item.quantity - 1;
+    if (newQuantity < 1) {
+      handleDeleteFromCart(item.id);
+      return;
+    }
+    try {
+      updateCartItemMutation({
+        id: item.id,
+        cart_id: item.cart_id,
+        product_id: item.product_id,
+        quantity: newQuantity,
+        subtotal_price: item.subtotal_price,
+      });
+      updateCartMutation({
+        id: item.cart_id,
+        user_id,
+        total_price: totalPriceFromRedux,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   console.log('cartItemFromRedux', cartItemFromRedux);
   console.log('cartFromRedux', cartFromRedux);
   console.log('cartItemStore', cartItemStore);
-  console.log(totalPriceFromRedux);
+  console.log('Isi dari total Price : ', totalPriceFromRedux);
 
   return (
     <aside
@@ -120,13 +156,29 @@ function Sidebar(props) {
 
                       <Card.Footer className="flex justify-between items-center mt-4">
                         <div className="flex gap-3 items-center bg-gray-100 rounded-md border border-gray-300 py-1 px-3">
-                          <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                          <Button
+                            className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200"
+                            onClick={() => {
+                              handleUpdateCartItem(cartItemFromStore, false);
+                              dispatch(decreaseCartItem(item.id));
+                              dispatch(
+                                decreaseCartItemStore(cartItemFromStore.id),
+                              );
+                            }}
+                          >
                             -
                           </Button>
-                          <p className="text-gray-700">
-                            {cartItemFromStore.quantity}
-                          </p>
-                          <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                          <p className="text-gray-700">{item.quantity}</p>
+                          <Button
+                            className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200"
+                            onClick={() => {
+                              handleUpdateCartItem(cartItemFromStore, true);
+                              dispatch(increaseCartItem(item.id));
+                              dispatch(
+                                increaseCartItemStore(cartItemFromStore.id),
+                              );
+                            }}
+                          >
                             +
                           </Button>
                         </div>
