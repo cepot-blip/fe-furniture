@@ -4,7 +4,7 @@ const authMitra = yup.object().shape({
   user_id: yup
     .number()
     .required('User Id harus diisi')
-    .min(2, 'User Id maksimal 2 angka'),
+    .min(1, 'User Id maksimal 1 angka'),
 
   company_name: yup.string().required('Company Name harus diisi'),
 

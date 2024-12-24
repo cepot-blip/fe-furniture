@@ -15,11 +15,15 @@ function Input(props) {
     required,
     min,
     max,
+    maxLength,
+    minLength,
   } = props;
   return (
     <input
       icons={icons}
       type={type}
+      maxLength={maxLength}
+      minLength={minLength}
       name={name}
       id={id}
       value={value}

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-closing-tag-location */
@@ -39,18 +40,43 @@ function Category() {
   return (
     <section className="w-full flex justify-center">
       <div className="grid grid-cols-3 gap-12">
+        <Link
+          className="w-[400px] bg-gray-100 rounded-lg hover:shadow-sm"
+          to="/category"
+        >
+          <Card className="flex items-center justify-center">
+            <div className="w-2/6 flex flex-col items-start">
+              <Card.Body>
+                <h2 className="font-semibold text-xl mb-3">All Category</h2>
+                <p className="text-sm text-gray-600">
+                  Lorem Ipsum dolor sit amet
+                </p>
+              </Card.Body>
+            </div>
+
+            <div className="w-1/2">
+              <Card.Body className="w-full h-auto object-cover rounded-lg">
+                <img src="/Wardrobe.png" />
+              </Card.Body>
+            </div>
+          </Card>
+        </Link>
         {category?.map((item) => (
           <div className="flex flex-col items-center text-center" key={item.id}>
-            <Link className="w-[500px] bg-gray-100 rounded-lg hover:shadow-sm">
+            <Link
+              className="w-[400px] bg-gray-100 rounded-lg hover:shadow-sm"
+              to={`/category/${item.id}`}
+            >
               <Card className="flex items-center justify-center">
                 <div className="w-2/6 flex flex-col items-start">
-                  <Card.Body className="font-semibold text-2xl mb-3">
-                    {item.category_name}
-                  </Card.Body>
                   <Card.Body>
-                    <Button className="py-2 px-3 bg-white border border-gray-100 text-black hover:bg-gray-200 transition-all rounded-lg">
-                      See More
-                    </Button>
+                    <h2 className="font-semibold text-xl mb-3 text-start">
+                      {item.category_name}
+                    </h2>
+
+                    <p className="text-sm text-gray-600 text-start">
+                      Lorem Ipsum dolor sit amet
+                    </p>
                   </Card.Body>
                 </div>
 

@@ -15,20 +15,16 @@ function FormCategory() {
   });
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target.value;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCreateCategorySubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const dataToSend = {
-      ctg_name: formData.category_name,
-    };
-
     try {
-      await createCategoryMutation(dataToSend);
+      await createCategoryMutation(formData);
     } catch (error) {
       console.log(error.message && 'Failed to create category');
     } finally {
@@ -45,6 +41,7 @@ function FormCategory() {
         htmlFor="category_name"
         label="Category Name"
         id="category_name"
+        name="category_name"
         placeholder="Enter category name"
         className="px-3 py-3 border border-gray-300 rounded-lg shadow-sm mt-1 w-full"
         value={formData.category_name}

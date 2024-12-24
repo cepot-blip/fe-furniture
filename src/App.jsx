@@ -9,6 +9,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ProtectedRoute from './components/Template/Auth/ProtectedRoute.jsx';
 import NotFoundPage from './pages/404.jsx';
 import AddressPages from './pages/address/address.jsx';
+import CategoryDetailId from './pages/category/[params]/categoryDetailId.jsx';
+import Category from './pages/category/category.jsx';
 import Checkout from './pages/checkout/checkout.jsx';
 import HomePage from './pages/home/Home';
 import LoginPage from './pages/login/Login';
@@ -40,6 +42,9 @@ function App() {
             <Route path="/daftar-mitra" element={<Mitra />} />
 
             <Route path="/products" element={<Products />} />
+
+            <Route path="/category" element={<Category />} />
+            <Route path="/category/:id" element={<CategoryDetailId />} />
 
             <Route path="/product/:id" element={<DetailsProduct />} />
             <Route path="/shipping" element={<ShippingPages />} />

@@ -53,7 +53,7 @@ function FormProduct() {
   return (
     <section>
       <form
-        className="flex flex-col gap-6 w-full"
+        className="flex flex-col gap-2 w-full"
         onSubmit={handleCreateProductSubmit}
       >
         <Fields

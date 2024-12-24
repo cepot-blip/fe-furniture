@@ -1,14 +1,17 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable no-alert */
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 
+import useCreateMitra from '../../../hooks/mitra/useCreateMitra';
 import authMitra from '../../../schema/auth/mitra';
 import Button from '../../Elements/Button/Button';
 import Fields from '../../Elements/Fields';
 
 function FormMitra() {
   const [loading, setLoading] = useState(false);
+  const { createMitraMutation, isSuccess, isError } = useCreateMitra();
 
   const formik = useFormik({
     initialValues: {
@@ -21,17 +24,8 @@ function FormMitra() {
 
     validationSchema: authMitra,
     onSubmit: async (values) => {
-      const payloaded = {
-        user_id: values.user_id,
-        company_name: values.company_name,
-        business_type: values.business_type,
-        address: values.address,
-        contact_info: values.contact_info,
-      };
-
-      setLoading(true);
-      alert('masuk pak eko');
-      console.log('masuk pak eko', payloaded);
+      createMitraMutation(values);
+      console.log(values);
     },
   });
 

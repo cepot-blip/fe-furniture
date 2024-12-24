@@ -46,7 +46,7 @@ function Sidebar(props) {
 
     onClose();
 
-    navigate('/checkout', { replace: true });
+    navigate('/address-pages', { replace: true });
   };
 
   const handleDeleteFromCart = async (id) => {
@@ -102,7 +102,7 @@ function Sidebar(props) {
                 return (
                   <Card
                     key={cartItemFromStore.id}
-                    className="border border-gray-300 rounded-md mb-4 flex py-3 px-2"
+                    className="border border-gray-300 rounded-md mb-4 flex py-3 px-2 justify-between w-auto"
                   >
                     <Card.Header className="w-1/3 rounded-lg overflow-hidden shadow-sm">
                       <img
@@ -123,9 +123,9 @@ function Sidebar(props) {
                           <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
                             -
                           </Button>
-                          <p className="text-gray-700">
+                          <span className="text-gray-700">
                             {cartItemFromStore.quantity}
-                          </p>
+                          </span>
                           <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
                             +
                           </Button>
@@ -161,7 +161,7 @@ function Sidebar(props) {
                 className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3 hover:shadow-lg cursor-pointer transition-all"
                 onClick={handleToCart}
               >
-                Checkout Now
+                Continue to delivery address
               </Button>
               <Button className="w-full rounded-lg px-5 py-3 border border-gray-800 hover:bg-gray-100 transition-all cursor-pointer font-medium">
                 Continue Shopping

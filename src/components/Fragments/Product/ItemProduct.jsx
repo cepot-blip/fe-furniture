@@ -18,7 +18,6 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Plus, ShoppingCart } from 'lucide-react';
 
-import { useCartById } from '../../../hooks/cart/useCartById';
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import useAllProduct from '../../../hooks/product/useAllProduct';
 import { useCreateProduct } from '../../../hooks/product/useCreateProduct';
@@ -38,8 +37,6 @@ function ItemProduct() {
   const { createProd } = useCreateProduct();
   const cart_id = useSelector((state) => state.cart.id);
   const { createCartItemMutation } = useCreateCartItem(dispatch);
-  const { cartIdQuery } = useCartById();
-  console.log('cartIdQuery:', cartIdQuery);
 
   console.log(products);
 
@@ -80,7 +77,10 @@ function ItemProduct() {
         </div>
 
         <div className="flex w-1/2 items-center gap-8 justify-end">
-          <Link className="py-2 px-3 rounded-full border border-black">
+          <Link
+            className="py-2 px-3 rounded-full border border-black"
+            to="/category"
+          >
             All Product
           </Link>
 
@@ -90,6 +90,7 @@ function ItemProduct() {
           <Link className="text-gray-500 underline">See All</Link>
         </div>
       </div>
+
       <div className="grid lg:grid-cols-4 gap-4">
         {products?.map((item) => (
           <Card className="border rounded-lg p-4">
@@ -138,7 +139,7 @@ function ItemProduct() {
             onClick={closeModal}
           >
             <div
-              className="bg-white p-8 rounded-lg w-[30%] h-auto"
+              className="bg-white p-8 rounded-lg w-[30%] h-[90%]"
               onClick={(e) => e.stopPropagation()} // close overlay
             >
               <h3 className="text-2xl font-semibold mb-6">Create Product</h3>

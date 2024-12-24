@@ -11,10 +11,7 @@ import { categoryService } from '../../service/category/category';
 export default function useCreateCategory() {
   const { createCategory } = categoryService();
   const { mutate: createCategoryMutation } = useMutation({
-    mutationFn: async ({ category_name }) =>
-      await createCategory({
-        category_name,
-      }),
+    mutationFn: async (payload) => await createCategory(payload),
 
     onSuccess: (data) => {
       Notiflix.Notify.success('Category berhasil dibuat');
@@ -25,7 +22,6 @@ export default function useCreateCategory() {
       Notiflix.Notify.failure(
         error.message || 'Gagal membuat category, periksa kembali',
       );
-
       console.log('Error creating category', error);
     },
   });

@@ -12,7 +12,11 @@ import { reviewService } from '../../service/review/review';
 export const useCreateReviews = () => {
   const { createReview } = reviewService();
 
-  const { mutate: createRev } = useMutation({
+  const {
+    mutate: createReviewMutation,
+    isError,
+    isSuccess,
+  } = useMutation({
     mutationFn: async ({ user_id, product_id, rating, review_content }) =>
       await createReview({
         user_id,
@@ -35,5 +39,5 @@ export const useCreateReviews = () => {
     },
   });
 
-  return { createRev };
+  return { createReviewMutation, isError, isSuccess };
 };
