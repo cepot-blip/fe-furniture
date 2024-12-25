@@ -9,10 +9,11 @@ export default function useAllCategory() {
     data: category,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ['category'],
     queryFn: getAllCategory,
   });
 
-  return { category, isError, isLoading };
+  return { category, isError, isLoading, refetch };
 }

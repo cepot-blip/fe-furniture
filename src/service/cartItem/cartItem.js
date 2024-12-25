@@ -3,13 +3,18 @@
 /* eslint-disable no-undef */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-console */
+import Cookies from 'js-cookie';
 
 import { addToCartItemStore } from '../../redux/reducers/cartItemReducer';
 import instance from '../api';
 
 export const cartItemService = (dispatch) => {
   const getAllCartItem = async () => {
-    const response = await instance.get('/cart-items');
+    const response = await instance.get('/cart-items', {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    });
 
     return response.data.query;
   };
@@ -47,12 +52,20 @@ export const cartItemService = (dispatch) => {
     quantity,
     subtotal_price,
   }) => {
-    const response = await instance.post('/cart-item', {
-      cart_id,
-      product_id,
-      quantity,
-      subtotal_price,
-    });
+    const response = await instance.post(
+      '/cart-item',
+      {
+        cart_id,
+        product_id,
+        quantity,
+        subtotal_price,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+      },
+    );
     console.log(' Response : ', response.data);
     const cartItemId = response.data.data.id;
     console.log('cartItemId: ', cartItemId);

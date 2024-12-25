@@ -24,6 +24,7 @@ export const productService = () => {
     price,
     stock,
     category_id,
+    mitra_id,
     image_url,
   }) => {
     const response = await instance.post(
@@ -34,6 +35,7 @@ export const productService = () => {
         price,
         stock,
         category_id,
+        mitra_id,
         image_url,
       },
       {
@@ -45,7 +47,7 @@ export const productService = () => {
 
     console.log(response.data);
 
-    if (!response.data.success) {
+    if (!response.data.succes) {
       throw new Error(response.data.message || 'Failed to create product');
     }
 
@@ -55,7 +57,11 @@ export const productService = () => {
   const getProductById = async (id) => {
     console.log(`id: ${id}`);
 
-    const response = await instance.get(`/product/${id}`);
+    const response = await instance.get(`/product/${id}`, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    });
 
     console.log(response.data);
 

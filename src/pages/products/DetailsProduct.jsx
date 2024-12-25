@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-undef */
 /* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-unused-vars */
@@ -5,6 +7,7 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Star } from 'lucide-react';
 
@@ -14,29 +17,41 @@ import Footer from '../../components/Fragments/Footer/Footer';
 import Navbar from '../../components/Fragments/Navbar/Navbar';
 import ReviewProduct from '../../components/Fragments/Product/ReviewProduct';
 import Sidebar from '../../components/Fragments/Sidebar/Sidebar';
+import { useCreateCartItem } from '../../hooks/cartItem/useCreateCartItem';
 import { useByIdProduct } from '../../hooks/product/useByIdProduct';
+import { addToCartItem } from '../../redux/reducers/cartItemReducer';
 
 import 'react-loading-skeleton/dist/skeleton.css';
 
 function DetailsProduct() {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const cart_id = useSelector((state) => state.cart.id);
 
   const { product, isLoading, isError } = useByIdProduct(id);
+  const { createCartItemMutation } = useCreateCartItem(dispatch);
 
   const handleSidebarToggle = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
-  // console.log('Id', id);
-  // console.log('data', product);
+  const handleProductToCart = (e) => {
+    const cartItem = {
+      cart_id,
+      product_id: e.id,
+      quantity: 1,
+      subtotal_price: e.price * 1,
+    };
+    createCartItemMutation(cartItem);
+    console.log('isi cartItem: ', cartItem);
+    dispatch(addToCartItem(product));
+  };
 
-  // if (isLoading) return <p>Loading...</p>;
-  // if (isError) return <p>Failed to load product details</p>;
-  // if (!product) return <p>Product not found</p>;
+  console.log('data', product);
 
   return (
-    <main className="flex flex-col mx-auto max-w-[1500px]">
+    <main className="flex flex-col mx-auto max-w-[1300px]">
       <Navbar onCartClick={handleSidebarToggle} />
       <Sidebar isVisible={isSidebarVisible} onClose={handleSidebarToggle} />
 
@@ -58,9 +73,9 @@ function DetailsProduct() {
           </div>
 
           <div className="flex-1">
-            <div className="flex flex-col gap-48">
+            <div className="flex flex-col gap-44">
               <Card className="flex flex-col gap-6 h-full">
-                <Card.Header className="text-6xl font-semibold text-gray-800">
+                <Card.Header className="text-5xl font-semibold text-gray-800">
                   {isLoading ? <Skeleton width={200} /> : product?.name}
                   {/* iternary opt */}
                 </Card.Header>
@@ -75,7 +90,7 @@ function DetailsProduct() {
                   {isLoading ? (
                     <Skeleton width={100} />
                   ) : (
-                    `Price: $${product?.price}`
+                    `Price: Rp. ${product?.price}`
                   )}
                   <div className="flex items-center gap-2">
                     {isLoading ? (
@@ -104,13 +119,22 @@ function DetailsProduct() {
 
               <div className="flex flex-col gap-5">
                 <div className="flex gap-10 items-center">
-                  <div className="flex items-center gap-4 border border-gray-300 rounded-lg py-5 px-14">
-                    <Button>-</Button>
-                    <span className="text-lg">qty</span>
-                    <Button>+</Button>
+                  <div className="flex items-center gap-4 border border-gray-300 rounded-lg py-3 px-10">
+                    <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                      -
+                    </Button>
+                    <span className="text-gray-700">
+                      <h1>0</h1>
+                    </span>
+                    <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                      +
+                    </Button>
                   </div>
 
-                  <Button className="py-5 px-14 bg-[#3AA39F] text-white font-semibold rounded-lg">
+                  <Button
+                    className="py-4 px-14 bg-[#3AA39F] text-white font-semibold rounded-lg"
+                    onClick={() => handleProductToCart(product)}
+                  >
                     Add to Cart
                   </Button>
                 </div>

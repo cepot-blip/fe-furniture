@@ -39,6 +39,7 @@ export const userService = (dispatch) => {
     }
     return null;
   };
+
   const createUser = async ({
     id,
     name,

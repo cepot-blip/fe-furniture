@@ -3,7 +3,7 @@
 import { Link } from 'react-router-dom';
 
 function AuthTemplate(props) {
-  const { title, children, type } = props;
+  const { title, subtitle, children, type } = props;
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#e5e5e5]">
       <div className="w-full h-[100vh] flex bg-[#fafafa] rounded-xl overflow-hidden border-2 shadow-2xl">
@@ -13,13 +13,12 @@ function AuthTemplate(props) {
         </section>
         {/* right */}
         <section className="w-1/2 flex justify-between h-full px-36 py-14 flex-col">
-          {/* <div className="p-10 border border-gray-300 rounded-lg"> */}
           <div className="flex flex-col gap-5">
             <h2 className="text-3xl font-semibold font-poppins text-black">
               {title}
             </h2>
-            <p className="text-sm font-base text-gray-400 mb-6 leading-relaxed">
-              Please enter our details
+            <p className="text-lg font-base text-gray-400 mb-6 leading-relaxed">
+              {subtitle}
             </p>
           </div>
 
@@ -35,22 +34,37 @@ function AuthTemplate(props) {
             </p>
 
             {type === 'login' ? (
-              <Link
-                to="/register"
-                className="text-blue-500 font-semibold text-base hover:text-blue-700 transition duration-300"
-              >
-                Register
-              </Link>
+              <>
+                <Link
+                  to="/register"
+                  className="text-blue-500 font-semibold text-base hover:text-blue-700 transition duration-300"
+                >
+                  Register
+                </Link>
+                <Link
+                  to="/daftar-mitra"
+                  className="ml-4 text-blue-500 font-semibold text-base hover:text-blue-700 transition duration-300"
+                >
+                  Daftar Mitra
+                </Link>
+              </>
             ) : (
-              <Link
-                to="/login"
-                className="text-blue-500 font-semibold text-base hover:text-blue-700 transition duration-300"
-              >
-                Login
-              </Link>
+              <>
+                <Link
+                  to="/login"
+                  className="text-blue-500 font-semibold text-base hover:text-blue-700 transition duration-300"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/daftar-mitra"
+                  className="ml-4 text-blue-500 font-semibold text-base hover:text-blue-700 transition duration-300"
+                >
+                  Daftar Mitra
+                </Link>
+              </>
             )}
           </div>
-          {/* </div> */}
         </section>
       </div>
     </main>
