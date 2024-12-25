@@ -1,75 +1,134 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-console */
+/* eslint-disable camelcase */
+/* eslint-disable no-undef */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Trash } from 'lucide-react';
 
+import { useDeleteCartItem } from '../../../hooks/cartItem/useDeleteCartItem';
+import { useUpdateCartItem } from '../../../hooks/cartItem/useUpdateCartItem';
+import {
+  decreaseCartItem,
+  decreaseCartItemStore,
+  increaseCartItem,
+  increaseCartItemStore,
+} from '../../../redux/reducers/cartItemReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
 function AddressCartItem() {
-  const dummyCartItem = [
-    {
-      id: 1,
-      name: 'Meja Makan',
-      category: 'Chairs',
-      image_url:
-        'https://images.tokopedia.net/img/cache/700/VqbcmM/2024/2/1/729b1a99-7db7-4788-b2f0-e73e7e4f54af.jpg',
-      price: '12.000.000',
-    },
-    {
-      id: 2,
-      name: 'Meja Makan',
-      category: 'Chairs',
-      image_url:
-        'https://images.tokopedia.net/img/cache/700/VqbcmM/2024/2/1/729b1a99-7db7-4788-b2f0-e73e7e4f54af.jpg',
-      price: '12.000.000',
-    },
-    {
-      id: 3,
-      name: 'Meja Makan',
-      category: 'Chairs',
-      image_url:
-        'https://images.tokopedia.net/img/cache/700/VqbcmM/2024/2/1/729b1a99-7db7-4788-b2f0-e73e7e4f54af.jpg',
-      price: '12.000.000',
-    },
-  ];
+  const dispatch = useDispatch();
+  const { updateCartItemMutation } = useUpdateCartItem(dispatch);
+  const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
+  const user_id = JSON.parse(localStorage.getItem('data')).id;
+  const handleUpdateCartItem = async (item, increment) => {
+    const newQuantity = increment ? item.quantity + 1 : item.quantity - 1;
+    if (newQuantity < 1) {
+      handleDeleteFromCart(item.id);
+      return;
+    }
+    try {
+      updateCartItemMutation({
+        id: item.id,
+        cart_id: item.cart_id,
+        product_id: item.product_id,
+        quantity: newQuantity,
+        subtotal_price: item.subtotal_price,
+      });
+      updateCartMutation({
+        id: item.cart_id,
+        user_id,
+        total_price: totalPriceFromRedux,
+      });
+      console.log(' isi updateCartItemMutation', updateCartItemMutation);
+      console.log('isi item price', cartItem.price);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleDeleteFromCart = async (id) => {
+    try {
+      const cartItemToDelete = cartItemStore.find((item) => item.id === id);
+      if (cartItemToDelete) {
+        await deleteCartItemMutation({ id: cartItemToDelete.id });
+        dispatch(deleteCartItem(cartItemToDelete.id));
+        console.log(`CartItem dengan id ${id} berhasil dihapus.`);
+      } else {
+        console.warn(
+          `CartItem dengan id ${id} tidak ditemukan di cartItemStore.`,
+        );
+      }
+    } catch (error) {
+      console.error('Gagal menghapus CartItem:', error);
+    }
+  };
+  const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
+  const cartItemStore = useSelector((state) => state.cartItem.cartItemStore);
   return (
     <section className="w-full pt-5">
       <div className="flex flex-col gap-3 pb-5">
-        {dummyCartItem.map((item) => (
-          <Card
-            key={item.id}
-            className="w-full py-2 px-5 flex border border-gray-300 rounded-lg items-center justify-between"
-          >
-            <Card.Header className="">
-              <img src={item.image_url} className="w-36 h-3w-36" />
-            </Card.Header>
-            <Card.Body className="flex flex-col">
-              <h2 className="font-medium">{item.name}</h2>
-              <p className="text-sm text-gray-500">{item.category}</p>
-            </Card.Body>
+        {cartItemFromRedux.map((item) => {
+          const cartItemFromStore = cartItemStore.find(
+            (cartItem) => cartItem.product_id === item.id,
+          );
+          if (!cartItemFromStore) return null;
 
-            <Card.Body className="text-normal text-gray-500">
-              <h3>Rp. {item.price}</h3>
-            </Card.Body>
+          return (
+            <Card
+              key={item.id}
+              className="w-full py-2 px-5 flex border border-gray-300 rounded-lg items-center justify-between"
+            >
+              <Card.Header>
+                <img
+                  src={item.image_url}
+                  className="w-36 h-36"
+                  alt={item.name}
+                />
+              </Card.Header>
+              <Card.Body className="flex flex-col">
+                <h2 className="font-medium">{item.name}</h2>
+                <p className="text-sm text-gray-500">{item.category}</p>
+              </Card.Body>
 
-            <Card.Footer className="flex gap-3 flex-col items-center">
-              <div className="flex items-center gap-4 border border-gray-300 rounded-md py-1 px-3">
-                <Button>-</Button>
-                <span className="text-sm">qty</span>
-                <Button>+</Button>
-              </div>
+              <Card.Body className="text-normal text-gray-500">
+                <h3>Rp. {cartItemFromStore.subtotal_price}</h3>
+              </Card.Body>
 
-              {/* <Trash className="w-5 h-5 cursor-pointer hover:text-red-600 transition-all" /> */}
-              {/* <p className="text-normal text-gray-500">Remove</p> */}
-            </Card.Footer>
-          </Card>
-        ))}
+              <Card.Footer className="flex gap-3 flex-col items-center">
+                <div className="flex items-center gap-4 border border-gray-300 rounded-md py-1 px-3">
+                  <Button
+                    onClick={() => {
+                      handleUpdateCartItem(cartItemFromStore, false);
+                      dispatch(decreaseCartItemStore(item.id));
+                      dispatch(decreaseCartItemStore(cartItemFromStore.id));
+                    }}
+                  >
+                    -
+                  </Button>
+                  <span className="text-sm">{item.quantity}</span>
+                  <Button
+                    onClick={() => {
+                      handleUpdateCartItem(cartItemFromStore, true);
+                      dispatch(increaseCartItem(item.id));
+                      dispatch(increaseCartItemStore(cartItemFromStore.id));
+                    }}
+                  >
+                    +
+                  </Button>
+                </div>
+
+                {/* Hapus atau aktifkan tombol Trash jika diperlukan */}
+                {/* <Trash className="w-5 h-5 cursor-pointer hover:text-red-600 transition-all" onClick={() => handleDeleteFromCart(item.id)} /> */}
+                {/* <p className="text-normal text-gray-500">Remove</p> */}
+              </Card.Footer>
+            </Card>
+          );
+        })}
       </div>
-      {/* <Button className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3 hover:shadow-lg cursor-pointer transition-all">
-        Continue Order
-      </Button> */}
     </section>
   );
 }
