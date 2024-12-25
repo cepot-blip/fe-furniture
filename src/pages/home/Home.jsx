@@ -11,6 +11,7 @@ import Footer from '../../components/Fragments/Footer/Footer';
 import Gallery from '../../components/Fragments/Gallery/Gallery';
 import Brands from '../../components/Fragments/Hero/Brands';
 import Hero from '../../components/Fragments/Hero/Hero';
+import Mitra from '../../components/Fragments/Mitra/Mitra';
 import Navbar from '../../components/Fragments/Navbar/Navbar';
 import ItemProduct from '../../components/Fragments/Product/ItemProduct';
 import Review from '../../components/Fragments/Review/Review';
@@ -24,7 +25,7 @@ function HomePage() {
   };
 
   return (
-    <main className="flex flex-col mx-auto max-w-[1500px]">
+    <main className="flex flex-col mx-auto max-w-[1300px]">
       <Navbar onCartClick={handleSidebarToggle} />
       <Sidebar isVisible={isSidebarVisible} onClose={handleSidebarToggle} />
       <Hero>
@@ -35,7 +36,8 @@ function HomePage() {
       <About />
       <ItemProduct />
       <Gallery />
-      <Review />
+      <Mitra />
+      {/* <Review /> */}
       <Footer />
     </main>
   );

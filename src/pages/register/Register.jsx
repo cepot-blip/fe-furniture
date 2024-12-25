@@ -6,6 +6,7 @@ function RegisterPage() {
   return (
     <AuthTemplate
       title="Hello, lets create an new account in Furniture"
+      subtitle="Please enter our details"
       type="register"
     >
       <FormRegister />

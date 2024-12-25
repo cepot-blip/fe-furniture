@@ -33,19 +33,6 @@ export const cartService = (dispatch) => {
     return response.data;
   };
 
-  const updateCart = async ({ id, user_id, total_price }) => {
-    console.log('Updating Cart:', { id, user_id, total_price });
-    const response = await instance.put('/cart', {
-      id,
-      user_id,
-      total_price,
-    });
-    console.log('response Update:', response.data);
-    if (!response.data.success) {
-      throw new Error(response.data.message || 'Failed to update cart');
-    }
-    return response.data;
-  };
   const deleteCart = async (id) => {
     console.log(`id: ${id}`);
     const response = await instance.delete(`/cart/${id}`);
@@ -61,5 +48,24 @@ export const cartService = (dispatch) => {
     return response.data;
   };
 
-  return { getAllCart, createCart, deleteCart, updateCart };
+  const getCartById = async (id) => {
+    try {
+      const response = await instance.get(`/cart/${id}`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+        },
+      });
+
+      if (!response.data || !response.data.data) {
+        throw new Error(response.data.message || 'Cart ID not found');
+      }
+
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching cart by ID:', error);
+      throw error;
+    }
+  };
+
+  return { getAllCart, createCart, deleteCart, getCartById };
 };

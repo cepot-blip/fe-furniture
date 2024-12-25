@@ -8,28 +8,23 @@ import Fields from '../../Elements/Fields';
 
 function FormCategory() {
   const [loading, setLoading] = useState(false);
-  const { createCtg } = useCreateCategory();
+  const { createCategoryMutation } = useCreateCategory();
 
   const [formData, setFormData] = useState({
     category_name: '',
   });
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCreateCategorySubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const dataToSend = {
-      ctg_name: formData.category_name,
-    };
-
-    // blum kelar
     try {
-      await createCtg(dataToSend);
+      await createCategoryMutation(formData);
     } catch (error) {
       console.log(error.message && 'Failed to create category');
     } finally {
@@ -43,9 +38,10 @@ function FormCategory() {
       onSubmit={handleCreateCategorySubmit}
     >
       <Fields
-        htmlFor="ctg_name"
+        htmlFor="category_name"
         label="Category Name"
-        id="ctg_name"
+        id="category_name"
+        name="category_name"
         placeholder="Enter category name"
         className="px-3 py-3 border border-gray-300 rounded-lg shadow-sm mt-1 w-full"
         value={formData.category_name}
