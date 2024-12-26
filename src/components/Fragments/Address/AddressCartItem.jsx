@@ -9,6 +9,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Trash } from 'lucide-react';
 
+import { useUpdateCart } from '../../../hooks/cart/useUpdateCart';
 import { useDeleteCartItem } from '../../../hooks/cartItem/useDeleteCartItem';
 import { useUpdateCartItem } from '../../../hooks/cartItem/useUpdateCartItem';
 import {
@@ -24,7 +25,11 @@ function AddressCartItem() {
   const dispatch = useDispatch();
   const { updateCartItemMutation } = useUpdateCartItem(dispatch);
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
+  const { updateCartMutation } = useUpdateCart(dispatch);
   const user_id = JSON.parse(localStorage.getItem('data')).id;
+  const totalPriceFromRedux = useSelector(
+    (state) => state.cartItem.total_price,
+  );
   const handleUpdateCartItem = async (item, increment) => {
     const newQuantity = increment ? item.quantity + 1 : item.quantity - 1;
     if (newQuantity < 1) {

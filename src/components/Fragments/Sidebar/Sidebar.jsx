@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
 /* eslint-disable camelcase */
 /* eslint-disable no-undef */
 /* eslint-disable no-use-before-define */
@@ -14,9 +16,11 @@ import { Trash } from 'lucide-react';
 
 import { useCreateCart } from '../../../hooks/cart/useCreateCart';
 import { useDeleteCart } from '../../../hooks/cart/useDeleteCart';
+import { useUpdateCart } from '../../../hooks/cart/useUpdateCart';
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import { useDeleteCartItem } from '../../../hooks/cartItem/useDeleteCartItem';
 import { useUpdateCartItem } from '../../../hooks/cartItem/useUpdateCartItem';
+import useUserId from '../../../hooks/users/useUserId';
 import {
   decreaseCartItem,
   decreaseCartItemStore,
@@ -35,6 +39,8 @@ function Sidebar(props) {
   const { createCartMutation } = useCreateCart();
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
   const { updateCartItemMutation } = useUpdateCartItem(dispatch);
+  const { updateCartMutation } = useUpdateCart(dispatch);
+  const { getUserByIdMutation } = useUserId(dispatch);
   const { isVisible, onClose } = props;
 
   const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
@@ -44,11 +50,11 @@ function Sidebar(props) {
   const totalPriceFromRedux = useSelector(
     (state) => state.cartItem.total_price,
   );
-  const user_id = JSON.parse(localStorage.getItem('data')).id;
+  const data = JSON.parse(localStorage.getItem('data'));
   const handleToCart = async () => {
     // await createCartItemMutation();
     await createCartMutation();
-
+    await getUserByIdMutation(data.id);
     console.log('createCartItemMutation', createCartMutation);
 
     dispatch(setProductAddToCart());
@@ -73,11 +79,9 @@ function Sidebar(props) {
       });
       updateCartMutation({
         id: item.cart_id,
-        user_id,
+        user_id: data.id,
         total_price: totalPriceFromRedux,
       });
-      console.log(' isi updateCartItemMutation', updateCartItemMutation);
-      console.log('isi item price', cartItem.price);
     } catch (error) {
       console.log(error);
     }

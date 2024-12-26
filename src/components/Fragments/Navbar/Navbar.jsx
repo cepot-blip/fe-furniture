@@ -18,13 +18,13 @@ function Navbar({ onCartClick }) {
   const token = Cookies.get('token');
 
   const dispatch = useDispatch();
-  const user_id = JSON.parse(localStorage.getItem('data')).id;
+  const data = JSON.parse(localStorage.getItem('data'));
   const total_price = useSelector((state) => state.cartItem.total_price);
   const { createCartMutation } = useCreateCart(dispatch);
 
   const handleCrartClick = () => {
     createCartMutation({
-      user_id,
+      user_id: data.id,
       total_price,
     });
     onCartClick();
