@@ -40,7 +40,6 @@ function Sidebar(props) {
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
   const { updateCartItemMutation } = useUpdateCartItem(dispatch);
   const { updateCartMutation } = useUpdateCart(dispatch);
-  const { getUserByIdMutation } = useUserId(dispatch);
   const { isVisible, onClose } = props;
 
   const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
@@ -54,7 +53,6 @@ function Sidebar(props) {
   const handleToCart = async () => {
     // await createCartItemMutation();
     await createCartMutation();
-    await getUserByIdMutation(data.id);
     console.log('createCartItemMutation', createCartMutation);
 
     dispatch(setProductAddToCart());
