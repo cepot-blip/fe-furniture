@@ -47,7 +47,7 @@ export const productService = () => {
 
     console.log(response.data);
 
-    if (!response.data.succes) {
+    if (!response.data.success) {
       throw new Error(response.data.message || 'Failed to create product');
     }
 

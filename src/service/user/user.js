@@ -100,6 +100,7 @@ export const userService = (dispatch) => {
       if (decodedToken) {
         const user_id = decodedToken.id;
         dispatch(authStore({ token, loginData, id: user_id }));
+        localStorage.setItem('data', JSON.stringify(decodedToken));
       } else {
         throw new Error('Token invalid');
       }
