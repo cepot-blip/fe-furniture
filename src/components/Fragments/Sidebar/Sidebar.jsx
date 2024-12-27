@@ -1,3 +1,8 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/extensions */
+/* eslint-disable camelcase */
+/* eslint-disable no-undef */
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable no-const-assign */
@@ -11,11 +16,18 @@ import { Trash } from 'lucide-react';
 
 import { useCreateCart } from '../../../hooks/cart/useCreateCart';
 import { useDeleteCart } from '../../../hooks/cart/useDeleteCart';
+import { useUpdateCart } from '../../../hooks/cart/useUpdateCart';
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import { useDeleteCartItem } from '../../../hooks/cartItem/useDeleteCartItem';
+import { useUpdateCartItem } from '../../../hooks/cartItem/useUpdateCartItem';
+import useUserId from '../../../hooks/users/useUserId';
 import {
+  decreaseCartItem,
+  decreaseCartItemStore,
   deleteCartItem,
   deleteCartItemStore,
+  increaseCartItem,
+  increaseCartItemStore,
 } from '../../../redux/reducers/cartItemReducer';
 import { setProductAddToCart } from '../../../redux/reducers/productReducer';
 import Button from '../../Elements/Button/Button';
@@ -26,6 +38,9 @@ function Sidebar(props) {
   const dispatch = useDispatch();
   const { createCartMutation } = useCreateCart();
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
+  const { updateCartItemMutation } = useUpdateCartItem(dispatch);
+  const { updateCartMutation } = useUpdateCart(dispatch);
+  const { getUserByIdMutation } = useUserId(dispatch);
   const { isVisible, onClose } = props;
 
   const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
@@ -35,11 +50,11 @@ function Sidebar(props) {
   const totalPriceFromRedux = useSelector(
     (state) => state.cartItem.total_price,
   );
-
+  const data = JSON.parse(localStorage.getItem('data'));
   const handleToCart = async () => {
     // await createCartItemMutation();
     await createCartMutation();
-
+    await getUserByIdMutation(data.id);
     console.log('createCartItemMutation', createCartMutation);
 
     dispatch(setProductAddToCart());
@@ -47,6 +62,29 @@ function Sidebar(props) {
     onClose();
 
     navigate('/address-pages', { replace: true });
+  };
+  const handleUpdateCartItem = async (item, increment) => {
+    const newQuantity = increment ? item.quantity + 1 : item.quantity - 1;
+    if (newQuantity < 1) {
+      handleDeleteFromCart(item.id);
+      return;
+    }
+    try {
+      updateCartItemMutation({
+        id: item.id,
+        cart_id: item.cart_id,
+        product_id: item.product_id,
+        quantity: newQuantity,
+        subtotal_price: item.subtotal_price,
+      });
+      updateCartMutation({
+        id: item.cart_id,
+        user_id: data.id,
+        total_price: totalPriceFromRedux,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDeleteFromCart = async (id) => {
@@ -102,7 +140,7 @@ function Sidebar(props) {
                 return (
                   <Card
                     key={cartItemFromStore.id}
-                    className="border border-gray-300 rounded-md mb-4 flex py-3 px-2 justify-between w-auto"
+                    className="border border-gray-300 rounded-md mb-4 flex py-3 px-2"
                   >
                     <Card.Header className="w-1/3 rounded-lg overflow-hidden shadow-sm">
                       <img
@@ -120,13 +158,29 @@ function Sidebar(props) {
 
                       <Card.Footer className="flex justify-between items-center mt-4">
                         <div className="flex gap-3 items-center bg-gray-100 rounded-md border border-gray-300 py-1 px-3">
-                          <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                          <Button
+                            className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200"
+                            onClick={() => {
+                              handleUpdateCartItem(cartItemFromStore, false);
+                              dispatch(decreaseCartItem(item.id));
+                              dispatch(
+                                decreaseCartItemStore(cartItemFromStore.id),
+                              );
+                            }}
+                          >
                             -
                           </Button>
-                          <span className="text-gray-700">
-                            {cartItemFromStore.quantity}
-                          </span>
-                          <Button className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200">
+                          <p className="text-gray-700">{item.quantity}</p>
+                          <Button
+                            className="py-1 px-2 rounded-md text-gray-800 hover:bg-gray-200"
+                            onClick={() => {
+                              handleUpdateCartItem(cartItemFromStore, true);
+                              dispatch(increaseCartItem(item.id));
+                              dispatch(
+                                increaseCartItemStore(cartItemFromStore.id),
+                              );
+                            }}
+                          >
                             +
                           </Button>
                         </div>

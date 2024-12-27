@@ -8,23 +8,23 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Search, ShoppingCart } from 'lucide-react';
-
+import Cookies from 'js-cookie';
 import Button from '../../Elements/Button/Button';
 import { useCreateCart } from '../../../hooks/cart/useCreateCart';
 import NavMenu from '../../Elements/NavMenu/NavMenu';
 // eslint-disable-next-line import/newline-after-import
 import Profile from '../Profile/Profile';
 function Navbar({ onCartClick }) {
-  const { token } = useSelector((state) => state.auth.userAuth);
+  const token = Cookies.get('token');
 
   const dispatch = useDispatch();
-  const user_id = useSelector((state) => state.auth.userAuth.id);
+  const data = JSON.parse(localStorage.getItem('data'));
   const total_price = useSelector((state) => state.cartItem.total_price);
   const { createCartMutation } = useCreateCart(dispatch);
 
   const handleCrartClick = () => {
     createCartMutation({
-      user_id,
+      user_id: data.id,
       total_price,
     });
     onCartClick();
