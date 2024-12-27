@@ -1,16 +1,18 @@
+/* eslint-disable no-undef */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 /* eslint-disable no-return-await */
 /* eslint-disable no-console */
 import { useDispatch } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Notiflix from 'notiflix';
 
 import { productService } from '../../service/product/product';
 
 export function useCreateProduct() {
   const { createProduct } = productService();
+  const queryClient = useQueryClient();
   const { mutate: createProd, refetch } = useMutation({
     mutationFn: async ({
       name,
@@ -34,6 +36,7 @@ export function useCreateProduct() {
     onSuccess: (data) => {
       Notiflix.Notify.success('Produk berhasil dibuat!');
       console.log('Create product success:', data);
+      queryClient.invalidateQueries(['products']);
     },
 
     onError: (error) => {

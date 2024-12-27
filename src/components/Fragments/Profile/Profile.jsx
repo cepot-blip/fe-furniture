@@ -12,9 +12,10 @@ import Notiflix from 'notiflix';
 
 import useUserId from '../../../hooks/users/useUserId';
 import { setReset } from '../../../redux/reducers/authReducer';
+import { setResetCartItem } from '../../../redux/reducers/cartItemReducer';
 
 function Profile({ id }) {
-  const user = useSelector((state) => state.auth.userAuth);
+  const user = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,6 +25,8 @@ function Profile({ id }) {
     if (confirmation) {
       Cookies.remove('token');
       dispatch(setReset());
+      dispatch(setResetCartItem());
+      localStorage.removeItem('data');
       console.log('Berhasil logout');
 
       Notiflix.Notify.success('Anda berhasil logout');
@@ -34,7 +37,7 @@ function Profile({ id }) {
     }
   };
 
-  if (!user || !user?.loginData) {
+  if (!user) {
     return (
       <div className="flex items-center gap-2">
         <User className="text-lg cursor-pointer" />
@@ -49,7 +52,7 @@ function Profile({ id }) {
       onClick={handleLogout}
     >
       <User className="text-lg cursor-pointer" />
-      <span>{user?.loginData}</span>
+      <span>{user?.email}</span>
     </div>
   );
 }

@@ -1,8 +1,11 @@
+/* eslint-disable no-empty */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable camelcase */
 /* eslint-disable no-alert */
 import React, { useState } from 'react';
 
+import { useCreateAddress } from '../../../hooks/address/useCreateAddress';
 import Button from '../../Elements/Button/Button';
 import Fields from '../../Elements/Fields';
 
@@ -14,20 +17,25 @@ function AddressForm() {
     postal_code: '',
     country: '',
   });
+  const { createAddressMutation } = useCreateAddress();
+  const data = JSON.parse(localStorage.getItem('data'));
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleCreateAddress = (e) => {
+  const handleCreateAddress = async (e) => {
     e.preventDefault();
-    const { street, city, state, postal_code, country } = formData;
-
-    const data = { street, city, state, postal_code, country };
-
-    console.log('data:', data);
-    alert('Masuk pak eko');
+    const dataToSend = {
+      ...formData,
+    };
+    console.log(dataToSend);
+    try {
+      await createAddressMutation({ user_id: data.id, ...dataToSend });
+    } catch (error) {
+      console.error(error.message, 'Failed to create address');
+    }
   };
 
   return (

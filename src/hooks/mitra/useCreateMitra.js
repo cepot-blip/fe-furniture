@@ -15,8 +15,6 @@ export default function useCreateMitra() {
   const navigate = useNavigate();
   const { createMitra } = mitraService();
   // const { user } = useUserId();
-  console.log('user', id_user);
-
   // const user = user_id;
 
   const {

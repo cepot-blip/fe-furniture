@@ -5,8 +5,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/prefer-default-export */
-import { useDispatch } from 'react-redux';
-
 import { cartStore } from '../../redux/reducers/cartReducer';
 import instance from '../api';
 export const cartService = (dispatch) => {
@@ -33,6 +31,20 @@ export const cartService = (dispatch) => {
     return response.data;
   };
 
+  const updateCart = async ({ id, user_id, total_price }) => {
+    console.log('Updating Cart:', { id, user_id, total_price });
+    const response = await instance.put('/cart', {
+      id,
+      user_id,
+      total_price,
+    });
+    console.log('response Update:', response.data);
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Failed to update cart');
+    }
+    return response.data;
+  };
+
   const deleteCart = async (id) => {
     console.log(`id: ${id}`);
     const response = await instance.delete(`/cart/${id}`);
@@ -56,7 +68,7 @@ export const cartService = (dispatch) => {
         },
       });
 
-      if (!response.data || !response.data.data) {
+      if (!response.data.success) {
         throw new Error(response.data.message || 'Cart ID not found');
       }
 
@@ -67,5 +79,5 @@ export const cartService = (dispatch) => {
     }
   };
 
-  return { getAllCart, createCart, deleteCart, getCartById };
+  return { getAllCart, createCart, deleteCart, getCartById, updateCart };
 };
