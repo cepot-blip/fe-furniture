@@ -26,7 +26,7 @@ function AddressCartItem() {
   const { updateCartItemMutation } = useUpdateCartItem(dispatch);
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
   const { updateCartMutation } = useUpdateCart(dispatch);
-  const user_id = JSON.parse(localStorage.getItem('data')).id;
+  const data = JSON.parse(localStorage.getItem('data'));
   const totalPriceFromRedux = useSelector(
     (state) => state.cartItem.total_price,
   );
@@ -46,7 +46,7 @@ function AddressCartItem() {
       });
       updateCartMutation({
         id: item.cart_id,
-        user_id,
+        user_id: data.id,
         total_price: totalPriceFromRedux,
       });
       console.log(' isi updateCartItemMutation', updateCartItemMutation);

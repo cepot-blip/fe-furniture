@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 /* eslint-disable camelcase */
@@ -20,6 +21,7 @@ import { useUpdateCart } from '../../../hooks/cart/useUpdateCart';
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import { useDeleteCartItem } from '../../../hooks/cartItem/useDeleteCartItem';
 import { useUpdateCartItem } from '../../../hooks/cartItem/useUpdateCartItem';
+import { useCreateOrder } from '../../../hooks/order/useCreateOrder';
 import useUserId from '../../../hooks/users/useUserId';
 import {
   decreaseCartItem,
@@ -40,12 +42,11 @@ function Sidebar(props) {
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
   const { updateCartItemMutation } = useUpdateCartItem(dispatch);
   const { updateCartMutation } = useUpdateCart(dispatch);
-  const { getUserByIdMutation } = useUserId(dispatch);
+  const { createOrderMutation } = useCreateOrder(dispatch);
   const { isVisible, onClose } = props;
 
   const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
-
-  const cartFromRedux = useSelector((state) => state.cart.cart);
+  const cartFromRedux = useSelector((state) => state.cart);
   const cartItemStore = useSelector((state) => state.cartItem.cartItemStore);
   const totalPriceFromRedux = useSelector(
     (state) => state.cartItem.total_price,
@@ -53,9 +54,21 @@ function Sidebar(props) {
   const data = JSON.parse(localStorage.getItem('data'));
   const handleToCart = async () => {
     // await createCartItemMutation();
-    await createCartMutation();
-    await getUserByIdMutation(data.id);
-    console.log('createCartItemMutation', createCartMutation);
+    try {
+      await createOrderMutation({
+        user_id: data.id,
+        cart_id: cartFromRedux.id,
+        total_price: totalPriceFromRedux,
+        status: 'Pending',
+      });
+      updateCartMutation({
+        id: cartFromRedux.id,
+        user_id: data.id,
+        total_price: totalPriceFromRedux,
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     dispatch(setProductAddToCart());
 

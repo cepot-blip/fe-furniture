@@ -4,6 +4,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-alert */
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useCreateAddress } from '../../../hooks/address/useCreateAddress';
 import Button from '../../Elements/Button/Button';
@@ -24,7 +25,7 @@ function AddressForm() {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
-
+  const addresFromRedux = useSelector((state) => state.address);
   const handleCreateAddress = async (e) => {
     e.preventDefault();
     const dataToSend = {
@@ -37,6 +38,8 @@ function AddressForm() {
       console.error(error.message, 'Failed to create address');
     }
   };
+
+  console.log('isi addresFromRedux', addresFromRedux);
 
   return (
     <form className="flex flex-col gap-6 w-full pt-5">
