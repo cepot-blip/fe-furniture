@@ -14,7 +14,7 @@ import useUserId from '../../../hooks/users/useUserId';
 import { setReset } from '../../../redux/reducers/authReducer';
 import { setResetCartItem } from '../../../redux/reducers/cartItemReducer';
 
-function Profile({ id }) {
+function Profile() {
   const user = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
   const dispatch = useDispatch();

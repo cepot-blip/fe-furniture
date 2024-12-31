@@ -10,6 +10,7 @@ import Button from '../../Elements/Button/Button';
 import Fields from '../../Elements/Fields';
 
 function AddressForm() {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     street: '',
     city: '',
@@ -23,6 +24,7 @@ function AddressForm() {
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
+    setIsLoading(true);
   };
 
   const handleCreateAddress = async (e) => {
@@ -30,9 +32,12 @@ function AddressForm() {
     const dataToSend = {
       ...formData,
     };
+
     console.log(dataToSend);
     try {
       await createAddressMutation({ user_id: data.id, ...dataToSend });
+
+      setIsLoading(true);
     } catch (error) {
       console.error(error.message, 'Failed to create address');
     }
@@ -90,7 +95,7 @@ function AddressForm() {
         type="submit"
         onClick={handleCreateAddress}
       >
-        Continue to checkout
+        {isLoading ? 'Loading..' : 'Continue to checkout'}
       </Button>
     </form>
   );
