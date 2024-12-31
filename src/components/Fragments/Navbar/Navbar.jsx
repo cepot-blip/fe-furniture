@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Search, ShoppingCart } from 'lucide-react';
 import Cookies from 'js-cookie';
+import Notiflix from 'notiflix';
 import Button from '../../Elements/Button/Button';
 import { useCreateCart } from '../../../hooks/cart/useCreateCart';
 import NavMenu from '../../Elements/NavMenu/NavMenu';
@@ -23,6 +24,12 @@ function Navbar({ onCartClick }) {
   const { createCartMutation } = useCreateCart(dispatch);
 
   const handleCrartClick = () => {
+    if (!token) {
+      Notiflix.Notify.failure(
+        'Anda belum login, silahkan login terlebih dahulu',
+      );
+      return;
+    }
     createCartMutation({
       user_id: data.id,
       total_price,

@@ -4,6 +4,7 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/prefer-default-export */
+import { addressStore } from '../../redux/reducers/addressReducer';
 import instance from '../api';
 export const addressService = (dispatch) => {
   const getAllAddress = async () => {
@@ -40,7 +41,15 @@ export const addressService = (dispatch) => {
     console.log('response: ', response.data);
     const address_id = response.data.data.id;
     dispatch(
-      addressStore({ id, user_id, street, city, state, postal_code, country }),
+      addressStore({
+        address_id,
+        user_id,
+        street,
+        city,
+        state,
+        postal_code,
+        country,
+      }),
     );
 
     if (!response.data.success) {

@@ -26,16 +26,20 @@ function AddressCartItem() {
   const { updateCartItemMutation } = useUpdateCartItem(dispatch);
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
   const { updateCartMutation } = useUpdateCart(dispatch);
-  const user_id = JSON.parse(localStorage.getItem('data')).id;
+  const data = JSON.parse(localStorage.getItem('data'));
   const totalPriceFromRedux = useSelector(
     (state) => state.cartItem.total_price,
   );
+  const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
+  const cartItemStore = useSelector((state) => state.cartItem.cartItemStore);
+
   const handleUpdateCartItem = async (item, increment) => {
     const newQuantity = increment ? item.quantity + 1 : item.quantity - 1;
     if (newQuantity < 1) {
       handleDeleteFromCart(item.id);
       return;
     }
+
     try {
       updateCartItemMutation({
         id: item.id,
@@ -46,7 +50,7 @@ function AddressCartItem() {
       });
       updateCartMutation({
         id: item.cart_id,
-        user_id,
+        user_id: data.id,
         total_price: totalPriceFromRedux,
       });
       console.log(' isi updateCartItemMutation', updateCartItemMutation);
@@ -55,6 +59,7 @@ function AddressCartItem() {
       console.log(error);
     }
   };
+
   const handleDeleteFromCart = async (id) => {
     try {
       const cartItemToDelete = cartItemStore.find((item) => item.id === id);
@@ -71,9 +76,6 @@ function AddressCartItem() {
       console.error('Gagal menghapus CartItem:', error);
     }
   };
-
-  const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
-  const cartItemStore = useSelector((state) => state.cartItem.cartItemStore);
 
   return (
     <section className="w-full pt-5">
