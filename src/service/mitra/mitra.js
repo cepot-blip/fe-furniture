@@ -48,9 +48,24 @@ export const mitraService = () => {
       address,
       contact_info,
     });
+
+    if (response.data.success) {
+      const mitraData = response.data && {
+        user_id,
+        company_name,
+        business_type,
+        address,
+        contact_info,
+      };
+
+      localStorage.setItem('mitraData', JSON.stringify(mitraData));
+      console.log('mitraData:', mitraData);
+    }
+
     if (!response.data.success) {
       throw new Error(response.data.message || 'Gagal Membuat Mitra');
     }
+
     return response.data;
   };
 

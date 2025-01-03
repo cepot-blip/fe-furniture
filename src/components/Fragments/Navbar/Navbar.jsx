@@ -6,7 +6,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart } from 'lucide-react';
 import Cookies from 'js-cookie';
 import Notiflix from 'notiflix';
@@ -16,6 +16,7 @@ import NavMenu from '../../Elements/NavMenu/NavMenu';
 // eslint-disable-next-line import/newline-after-import
 import Profile from '../Profile/Profile';
 function Navbar({ onCartClick }) {
+  const navigate = useNavigate();
   const token = Cookies.get('token');
 
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function Navbar({ onCartClick }) {
       Notiflix.Notify.failure(
         'Anda belum login, silahkan login terlebih dahulu',
       );
+      navigate('/login');
       return;
     }
     createCartMutation({

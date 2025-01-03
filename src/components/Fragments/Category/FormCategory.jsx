@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
+import Notiflix from 'notiflix';
 
 import useCreateCategory from '../../../hooks/category/useCreateCategory';
 import Button from '../../Elements/Button/Button';
@@ -21,7 +22,16 @@ function FormCategory() {
 
   const handleCreateCategorySubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    const checkRole = JSON.parse(localStorage.getItem('data'));
+    const role = checkRole?.role;
+
+    if (role !== 'Mitra') {
+      setLoading(false);
+      Notiflix.Notify.failure('Anda tidak memiliki hak akses untuk fitur ini!');
+
+      return;
+    }
 
     try {
       await createCategoryMutation(formData);

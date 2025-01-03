@@ -74,6 +74,7 @@ function ItemProduct() {
     await createProd(productData);
     refetch();
   };
+
   return (
     <section className="w-full py-16">
       <div className="w-full flex pb-3">
@@ -149,7 +150,7 @@ function ItemProduct() {
             onClick={closeModal}
           >
             <div
-              className="bg-white p-8 rounded-lg w-[30%] h-[90%]"
+              className="w-[30%] h-[90%]"
               onClick={(e) => e.stopPropagation()} // close overlay
             >
               <h3 className="text-2xl font-semibold mb-6">Create Product</h3>

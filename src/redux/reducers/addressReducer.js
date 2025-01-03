@@ -1,45 +1,80 @@
-/* eslint-disable camelcase */
-/* eslint-disable operator-linebreak */
-/* eslint-disable no-trailing-spaces */
 /* eslint-disable max-len */
-/* eslint-disable comma-spacing */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
+/* eslint-disable operator-linebreak */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-return-await */
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable camelcase */
 
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   address: [],
-  id: null,
-  user_id: null,
-  street: null,
-  city: null,
-  state: null,
-  postal_code: null,
-  country: null,
+  // id: null,
+  // user_id: null,
+  // street: null,
+  // city: null,
+  // states: null,
+  // postal_code: null,
+  // country: null,
 };
+
 const addressReducer = createSlice({
   name: 'address',
   initialState,
   reducers: {
-    addressStore(item, action) {
+    addressStore(state, action) {
       console.log('payloaded:', action.payload);
-      const { address_id, user_id, street, city, state, postal_code, country } =
-        action.payload;
-      item.id = address_id;
-      item.user_id = user_id;
-      item.street = street;
-      item.city = city;
-      item.state = state;
-      item.postal_code = postal_code;
-      item.country = country;
-      console.log('updated state:', item);
+      const {
+        id,
+        user_id,
+        street,
+        city,
+        state: propincies,
+        postal_code,
+        country,
+      } = action.payload;
+
+      const newAddress = {
+        id,
+        user_id,
+        street,
+        city,
+        state: propincies,
+        postal_code,
+        country,
+      };
+
+      state.address = [...state.address, newAddress];
+
+      localStorage.setItem('address', JSON.stringify(state.address));
+
+      console.log('Address:', state.address);
+    },
+
+    addressReset(state) {
+      localStorage.removeItem('address');
+      return initialState;
+    },
+
+    addressById(state, action) {
+      const addressId = action.payload;
+      const address = state.address.find((addr) => addr.id === addressId);
+      return address || null;
+    },
+
+    addressByIdFromStorage(state, action) {
+      const addressId = action.payload;
+      const addressStorage = JSON.parse(localStorage.getItem('address')) || [];
+      const foundAddress = addressStorage.find((addr) => addr.id === addressId); // check adress storage
+      return foundAddress || null;
     },
   },
 });
 
-export const { addressStore } = addressReducer.actions;
+export const {
+  addressStore,
+  addressReset,
+  addressById,
+  addressByIdFromStorage,
+} = addressReducer.actions;
 export default addressReducer.reducer;
