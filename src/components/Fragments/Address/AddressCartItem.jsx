@@ -26,16 +26,20 @@ function AddressCartItem() {
   const { updateCartItemMutation } = useUpdateCartItem(dispatch);
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
   const { updateCartMutation } = useUpdateCart(dispatch);
-  const user_id = JSON.parse(localStorage.getItem('data')).id;
+  const data = JSON.parse(localStorage.getItem('data'));
   const totalPriceFromRedux = useSelector(
     (state) => state.cartItem.total_price,
   );
+  const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
+  const cartItemStore = useSelector((state) => state.cartItem.cartItemStore);
+
   const handleUpdateCartItem = async (item, increment) => {
     const newQuantity = increment ? item.quantity + 1 : item.quantity - 1;
     if (newQuantity < 1) {
       handleDeleteFromCart(item.id);
       return;
     }
+
     try {
       updateCartItemMutation({
         id: item.id,
@@ -46,7 +50,7 @@ function AddressCartItem() {
       });
       updateCartMutation({
         id: item.cart_id,
-        user_id,
+        user_id: data.id,
         total_price: totalPriceFromRedux,
       });
       console.log(' isi updateCartItemMutation', updateCartItemMutation);
@@ -55,6 +59,7 @@ function AddressCartItem() {
       console.log(error);
     }
   };
+
   const handleDeleteFromCart = async (id) => {
     try {
       const cartItemToDelete = cartItemStore.find((item) => item.id === id);
@@ -71,68 +76,71 @@ function AddressCartItem() {
       console.error('Gagal menghapus CartItem:', error);
     }
   };
-  const cartItemFromRedux = useSelector((state) => state.cartItem.cartItem);
-  const cartItemStore = useSelector((state) => state.cartItem.cartItemStore);
+
   return (
     <section className="w-full pt-5">
       <div className="flex flex-col gap-3 pb-5">
-        {cartItemFromRedux.map((item) => {
-          const cartItemFromStore = cartItemStore.find(
-            (cartItem) => cartItem.product_id === item.id,
-          );
-          if (!cartItemFromStore) return null;
+        {cartItemFromRedux.length > 0 ? (
+          cartItemFromRedux.map((item) => {
+            const cartItemFromStore = cartItemStore.find(
+              (cartItem) => cartItem.product_id === item.id,
+            );
+            if (!cartItemFromStore) return null;
 
-          return (
-            <Card
-              key={item.id}
-              className="w-full py-2 px-5 flex border border-gray-300 rounded-lg items-center justify-between"
-            >
-              <Card.Header>
-                <img
-                  src={item.image_url}
-                  className="w-36 h-36"
-                  alt={item.name}
-                />
-              </Card.Header>
-              <Card.Body className="flex flex-col">
-                <h2 className="font-medium">{item.name}</h2>
-                <p className="text-sm text-gray-500">{item.category}</p>
-              </Card.Body>
+            return (
+              <Card
+                key={item.id}
+                className="w-full py-2 px-5 flex border border-gray-300 rounded-lg items-center justify-between"
+              >
+                <Card.Header>
+                  <img
+                    src={item.image_url}
+                    className="w-36 h-36 p-3"
+                    alt={item.name}
+                  />
+                </Card.Header>
+                <Card.Body className="flex flex-col max-w-sm">
+                  <h2 className="font-medium max-w-[180px]">{item.name}</h2>
+                  {/* <p className="text-sm text-gray-500">{item.category}</p> */}
+                </Card.Body>
 
-              <Card.Body className="text-normal text-gray-500">
-                <h3>Rp. {cartItemFromStore.subtotal_price}</h3>
-              </Card.Body>
+                <Card.Body className="text-normal text-gray-500">
+                  <h3>Rp. {cartItemFromStore.subtotal_price}</h3>
+                </Card.Body>
 
-              <Card.Footer className="flex gap-3 flex-col items-center">
-                <div className="flex items-center gap-4 border border-gray-300 rounded-md py-1 px-3">
-                  <Button
-                    onClick={() => {
-                      handleUpdateCartItem(cartItemFromStore, false);
-                      dispatch(decreaseCartItemStore(item.id));
-                      dispatch(decreaseCartItemStore(cartItemFromStore.id));
-                    }}
-                  >
-                    -
-                  </Button>
-                  <span className="text-sm">{item.quantity}</span>
-                  <Button
-                    onClick={() => {
-                      handleUpdateCartItem(cartItemFromStore, true);
-                      dispatch(increaseCartItem(item.id));
-                      dispatch(increaseCartItemStore(cartItemFromStore.id));
-                    }}
-                  >
-                    +
-                  </Button>
-                </div>
-
-                {/* Hapus atau aktifkan tombol Trash jika diperlukan */}
-                {/* <Trash className="w-5 h-5 cursor-pointer hover:text-red-600 transition-all" onClick={() => handleDeleteFromCart(item.id)} /> */}
-                {/* <p className="text-normal text-gray-500">Remove</p> */}
-              </Card.Footer>
-            </Card>
-          );
-        })}
+                <Card.Footer className="flex gap-8 items-center">
+                  <div className="flex items-center gap-4 border border-gray-300 rounded-md py-1 px-3">
+                    <Button
+                      onClick={() => {
+                        handleUpdateCartItem(cartItemFromStore, false);
+                        dispatch(decreaseCartItemStore(item.id));
+                        dispatch(decreaseCartItemStore(cartItemFromStore.id));
+                      }}
+                    >
+                      -
+                    </Button>
+                    <span className="text-sm">{item.quantity}</span>
+                    <Button
+                      onClick={() => {
+                        handleUpdateCartItem(cartItemFromStore, true);
+                        dispatch(increaseCartItem(item.id));
+                        dispatch(increaseCartItemStore(cartItemFromStore.id));
+                      }}
+                    >
+                      +
+                    </Button>
+                  </div>
+                  <Trash
+                    className="w-5 h-5 cursor-pointer hover:text-red-600 transition-all"
+                    onClick={() => handleDeleteFromCart(item.id)}
+                  />
+                </Card.Footer>
+              </Card>
+            );
+          })
+        ) : (
+          <p className="text-center text-gray-500">No Data Available</p>
+        )}
       </div>
     </section>
   );

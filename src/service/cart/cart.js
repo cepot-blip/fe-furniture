@@ -7,6 +7,7 @@
 /* eslint-disable import/prefer-default-export */
 import { cartStore } from '../../redux/reducers/cartReducer';
 import instance from '../api';
+
 export const cartService = (dispatch) => {
   const getAllCart = async () => {
     const response = await instance.get('/carts');
@@ -22,8 +23,10 @@ export const cartService = (dispatch) => {
     if (response.data.success) {
       console.log('Response: ', response.data);
       const cart_id = response.data.data.id;
+
       dispatch(cartStore({ cart_id, user_id, total_price }));
     }
+
     if (!response.data.success) {
       throw new Error(response.data.message || 'Failed to create cart');
     }

@@ -19,23 +19,25 @@ function Input(props) {
     minLength,
   } = props;
   return (
-    <input
-      icons={icons}
-      type={type}
-      maxLength={maxLength}
-      minLength={minLength}
-      name={name}
-      id={id}
-      value={value}
-      onChange={onChange}
-      onBlur={onBlur}
-      className={className}
-      placeholder={placeholder}
-      autoComplete={autoComplete}
-      required={required}
-      min={min}
-      max={max}
-    />
+    <div>
+      <input
+        icons={icons}
+        type={type}
+        maxLength={maxLength}
+        minLength={minLength}
+        name={name}
+        id={id}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        className={className}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
+        required={required}
+        min={min}
+        max={max}
+      />
+    </div>
   );
 }
 

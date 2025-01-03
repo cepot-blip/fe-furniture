@@ -6,15 +6,17 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart } from 'lucide-react';
 import Cookies from 'js-cookie';
+import Notiflix from 'notiflix';
 import Button from '../../Elements/Button/Button';
 import { useCreateCart } from '../../../hooks/cart/useCreateCart';
 import NavMenu from '../../Elements/NavMenu/NavMenu';
 // eslint-disable-next-line import/newline-after-import
 import Profile from '../Profile/Profile';
 function Navbar({ onCartClick }) {
+  const navigate = useNavigate();
   const token = Cookies.get('token');
 
   const dispatch = useDispatch();
@@ -23,6 +25,13 @@ function Navbar({ onCartClick }) {
   const { createCartMutation } = useCreateCart(dispatch);
 
   const handleCrartClick = () => {
+    if (!token) {
+      Notiflix.Notify.failure(
+        'Anda belum login, silahkan login terlebih dahulu',
+      );
+      navigate('/login');
+      return;
+    }
     createCartMutation({
       user_id: data.id,
       total_price,

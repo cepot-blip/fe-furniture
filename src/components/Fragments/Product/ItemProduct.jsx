@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable radix */
 /* eslint-disable no-use-before-define */
 /* eslint-disable array-callback-return */
@@ -16,7 +17,9 @@ import Skeleton from 'react-loading-skeleton';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { Plus, ShoppingCart } from 'lucide-react';
+import Notiflix from 'notiflix';
 
 import { useCreateCartItem } from '../../../hooks/cartItem/useCreateCartItem';
 import useAllProduct from '../../../hooks/product/useAllProduct';
@@ -36,11 +39,18 @@ function ItemProduct() {
   const dispatch = useDispatch();
   const { createProd } = useCreateProduct();
   const cart_id = useSelector((state) => state.cart.id);
+  const token = Cookies.get('token');
   const { createCartItemMutation } = useCreateCartItem(dispatch);
 
   console.log(products);
 
   const handleProductToCart = (product) => {
+    if (!token) {
+      Notiflix.Notify.failure(
+        'Anda belum login, silahkan login terlebih dahulu',
+      );
+      return;
+    }
     const cartItem = {
       cart_id,
       product_id: product.id,
@@ -64,6 +74,7 @@ function ItemProduct() {
     await createProd(productData);
     refetch();
   };
+
   return (
     <section className="w-full py-16">
       <div className="w-full flex pb-3">
@@ -139,7 +150,7 @@ function ItemProduct() {
             onClick={closeModal}
           >
             <div
-              className="bg-white p-8 rounded-lg w-[30%] h-[90%]"
+              className="w-[30%] h-[90%]"
               onClick={(e) => e.stopPropagation()} // close overlay
             >
               <h3 className="text-2xl font-semibold mb-6">Create Product</h3>

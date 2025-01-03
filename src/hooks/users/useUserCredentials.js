@@ -16,7 +16,7 @@ export default function useCredentialsData() {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ['allusers'],
+    queryKey: ['user'],
     queryFn: () => getAllUsers(),
     enabled: !!token,
   });
