@@ -129,10 +129,12 @@ function FormRegister() {
       <div>
         <SelectOpt
           name="role"
+          title="Role"
           value={formik.values.role}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm cursor-pointer text-gray-500"
+          className="mt-1 block w-full px-3 py-3 border border-gray-300 bg-white rounded-lg shadow-sm cursor-pointer text-gray-500"
+          label="Silakhan pilih role anda"
           options={[
             { value: 'admin', label: 'Admin' },
             { value: 'user', label: 'User' },

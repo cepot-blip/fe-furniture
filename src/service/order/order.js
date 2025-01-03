@@ -8,13 +8,13 @@ import instance from '../api';
 
 export const orderService = (dispatch) => {
   const createOrder = async ({ user_id, cart_id, total_price, status }) => {
-    console.log('Creating Order:', { user_id, cart_id, total_price, status });
     const response = await instance.post('/order', {
       user_id,
       cart_id,
       total_price,
       status,
     });
+
     console.log('response: ', response.data);
     const order_id = response.data.data.id;
     dispatch(orderStore({ order_id }));
@@ -24,5 +24,19 @@ export const orderService = (dispatch) => {
     }
     return response.data;
   };
-  return { createOrder };
+
+  const orderById = async (id) => {
+    console.log('order sebelum response:', id);
+
+    const response = await instance.get(`/order/${id}`);
+    console.log('order setelah response:', id);
+
+    const order_id = response.data.data.id;
+    dispatch(orderStore({ order_id }));
+
+    console.log('res redux:', response.data, 'order id:', order_id);
+
+    return response.data || order_id;
+  };
+  return { createOrder, orderById };
 };

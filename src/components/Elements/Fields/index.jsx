@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/react-in-jsx-scope */
 import Input from './Input';
 import Label from './Label';
@@ -16,10 +17,11 @@ function Fields(props) {
     className,
     autoComplete,
     children,
+    icons,
   } = props;
 
   return (
-    <div className="">
+    <div>
       <Label
         htmlFor={htmlFor}
         className="block mb-2 text-base font-semibold text-[#111827]"
@@ -27,7 +29,7 @@ function Fields(props) {
         {label}
       </Label>
       <Input
-        icons={children}
+        icons={icons}
         type={type}
         name={name}
         id={id}

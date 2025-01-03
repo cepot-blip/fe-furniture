@@ -1,15 +1,9 @@
-/* eslint-disable no-empty */
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/extensions */
-/* eslint-disable camelcase */
-/* eslint-disable no-undef */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-no-bind */
-/* eslint-disable no-const-assign */
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable react/jsx-curly-newline */
+
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -42,6 +36,7 @@ function Sidebar(props) {
   const { deleteCartItemMutation } = useDeleteCartItem(dispatch);
   const { updateCartItemMutation } = useUpdateCartItem(dispatch);
   const { updateCartMutation } = useUpdateCart(dispatch);
+  // const { getUserByIdMutation } = useUserId(dispatch);
   const { createOrderMutation } = useCreateOrder(dispatch);
   const { isVisible, onClose } = props;
 
@@ -52,14 +47,17 @@ function Sidebar(props) {
     (state) => state.cartItem.total_price,
   );
   const data = JSON.parse(localStorage.getItem('data'));
+
   const handleToCart = async () => {
-    // await createCartItemMutation();
+    await createCartMutation();
+    console.log('createCartItemMutation', createCartMutation);
+
     try {
       await createOrderMutation({
         user_id: data.id,
         cart_id: cartFromRedux.id,
         total_price: totalPriceFromRedux,
-        status: 'Pending',
+        status: 'Pending', // default
       });
       updateCartMutation({
         id: cartFromRedux.id,
@@ -116,6 +114,7 @@ function Sidebar(props) {
       console.error('Gagal menghapus CartItem:', error);
     }
   };
+
   console.log('cartItemFromRedux', cartItemFromRedux);
   console.log('cartFromRedux', cartFromRedux);
   console.log('cartItemStore', cartItemStore);
@@ -228,7 +227,7 @@ function Sidebar(props) {
                 className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3 hover:shadow-lg cursor-pointer transition-all"
                 onClick={handleToCart}
               >
-                Continue to delivery address
+                Create order to Address
               </Button>
               <Button className="w-full rounded-lg px-5 py-3 border border-gray-800 hover:bg-gray-100 transition-all cursor-pointer font-medium">
                 Continue Shopping

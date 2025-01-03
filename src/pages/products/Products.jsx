@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable no-unused-vars */
@@ -7,8 +8,12 @@
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import { Plus, ShoppingCart } from 'lucide-react';
+import Notiflix from 'notiflix';
 
 import Card from '../../components/Fragments/Card/Card';
 import Footer from '../../components/Fragments/Footer/Footer';
@@ -18,18 +23,41 @@ import Mitra from '../../components/Fragments/Mitra/Mitra';
 import Navbar from '../../components/Fragments/Navbar/Navbar';
 import FormProduct from '../../components/Fragments/Product/FormProduct';
 import Sidebar from '../../components/Fragments/Sidebar/Sidebar';
+import { useCreateCartItem } from '../../hooks/cartItem/useCreateCartItem';
 import useAllProduct from '../../hooks/product/useAllProduct';
 import { useCreateProduct } from '../../hooks/product/useCreateProduct';
+import { addToCartItem } from '../../redux/reducers/cartItemReducer';
 
 function Products() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { products, refetch } = useAllProduct();
-
+  const dispatch = useDispatch();
+  const { products, isLoading, isError, refetch } = useAllProduct();
+  const cart_id = useSelector((state) => state.cart.id);
+  const token = Cookies.get('token');
   const { createProd } = useCreateProduct();
+  const { createCartItemMutation } = useCreateCartItem(dispatch);
 
   const handleSidebarToggle = () => {
     setIsSidebarVisible(!isSidebarVisible);
+  };
+
+  const handleProductToCart = (product) => {
+    if (!token) {
+      Notiflix.Notify.failure(
+        'Anda belum login, silahkan login terlebih dahulu',
+      );
+      return;
+    }
+    const cartItem = {
+      cart_id,
+      product_id: product.id,
+      quantity: 1,
+      subtotal_price: product.price * 1,
+    };
+    createCartItemMutation(cartItem);
+    console.log('isi cartItem: ', cartItem);
+    dispatch(addToCartItem(product));
   };
 
   const openModal = () => {
@@ -79,27 +107,32 @@ function Products() {
 
       <div className="grid lg:grid-cols-4 gap-4">
         {products?.map((item) => (
-          <Link key={item.id} to={`/product/${item.id}`}>
-            <Card className="border rounded-lg p-4">
+          <Card className="border rounded-lg p-4">
+            <Link key={item.id} to={`/product/${item.id}`}>
               <Card.Header className="mb-4">
-                <img
-                  src={item.image_url}
-                  className="w-full h-60 object-contain rounded-lg"
-                />
+                {isLoading ? (
+                  <Skeleton height={300} width="100%" />
+                ) : (
+                  <img
+                    src={item.image_url}
+                    className="w-full h-60 object-contain rounded-lg"
+                  />
+                )}
               </Card.Header>
               <Card.Body className="mb-4">
                 <h2 className="text-lg font-bold">{item.name}</h2>
                 <p className="text-gray-600">{item.description}</p>
               </Card.Body>
-              <Card.Footer className="flex justify-between items-center">
-                <p className="font-semibold">Rp {item.price}</p>
-                <ShoppingCart
-                  className="text-lg cursor-pointer"
-                  // onClick={handleProductToCart}
-                />
-              </Card.Footer>
-            </Card>
-          </Link>
+            </Link>
+
+            <Card.Footer className="flex justify-between items-center">
+              <p className="font-semibold">Rp {item.price}</p>
+              <ShoppingCart
+                className="text-lg cursor-pointer"
+                onClick={() => handleProductToCart(item)}
+              />
+            </Card.Footer>
+          </Card>
         ))}
 
         {/* modal form */}
