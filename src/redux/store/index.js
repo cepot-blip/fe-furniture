@@ -11,6 +11,7 @@ import cartItemReducer from '../reducers/cartItemReducer';
 import cartReducer from '../reducers/cartReducer';
 import orderReducer from '../reducers/orderReducer';
 import productReducer from '../reducers/productReducer';
+import shippingReducer from '../reducers/shippingReducer';
 import userReducer from '../reducers/userReducer';
 
 const store = configureStore({
@@ -22,6 +23,7 @@ const store = configureStore({
     cartItem: cartItemReducer,
     order: orderReducer,
     address: addressStore,
+    shipping: shippingReducer,
   },
   devTools: true,
 });

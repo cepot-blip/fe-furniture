@@ -51,7 +51,7 @@ const addressReducer = createSlice({
       console.log('Address:', state.address);
     },
 
-    addressReset(state) {
+    addressReset() {
       localStorage.removeItem('address');
       return initialState;
     },

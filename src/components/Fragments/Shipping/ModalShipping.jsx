@@ -57,7 +57,7 @@ function ModalShipping() {
             </div>
           </div>
         </Card.Header>
-        {address.map((e) => (
+        {addressData.map((e) => (
           <div key={e.id} className="p-4 flex flex-col gap-10">
             <Card.Body className="grid grid-cols-2 gap-4">
               <div>
@@ -85,6 +85,13 @@ function ModalShipping() {
               <div>
                 <p className="text-xs text-gray-500">State:</p>
                 <h3 className="text-gray-800 font-medium">{e.state}</h3>
+              </div>
+            </Card.Body>
+
+            <Card.Body className="grid grid-cols-1">
+              <div>
+                <p className="text-xs text-gray-500">Cost:</p>
+                <h3 className="text-gray-800 font-medium">Rp10.000</h3>
               </div>
             </Card.Body>
           </div>

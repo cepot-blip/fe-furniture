@@ -56,7 +56,7 @@ function AddressForm() {
       setIsLoading(true);
       try {
         const dataAddress = {
-          user_id: data?.id,
+          user_id: data.id,
           ...dataToSend,
         };
 
