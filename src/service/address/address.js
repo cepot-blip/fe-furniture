@@ -51,7 +51,7 @@ export const addressService = (dispatch) => {
       country,
     };
 
-    dispatch(addressStore(addressData));
+    // dispatch(addressStore(addressData));
 
     if (!response.data.success) {
       throw new Error(response.data.message || 'Failed to create address');

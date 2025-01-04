@@ -8,6 +8,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Trash } from 'lucide-react';
+import Notiflix from 'notiflix';
 
 import { useCreateCart } from '../../../hooks/cart/useCreateCart';
 import { useDeleteCart } from '../../../hooks/cart/useDeleteCart';
@@ -25,6 +26,7 @@ import {
   increaseCartItem,
   increaseCartItemStore,
 } from '../../../redux/reducers/cartItemReducer';
+import { orderStore } from '../../../redux/reducers/orderReducer';
 import { setProductAddToCart } from '../../../redux/reducers/productReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
@@ -49,31 +51,38 @@ function Sidebar(props) {
   const data = JSON.parse(localStorage.getItem('data'));
 
   const handleToCart = async () => {
-    await createCartMutation();
-    console.log('createCartItemMutation', createCartMutation);
-
     try {
-      await createOrderMutation({
+      await createCartMutation();
+      console.log('createCartItemMutation', createCartMutation);
+
+      const orderPayload = {
         user_id: data.id,
         cart_id: cartFromRedux.id,
         total_price: totalPriceFromRedux,
         status: 'Pending', // default
-      });
-      updateCartMutation({
+      };
+
+      await createOrderMutation(orderPayload);
+
+      await updateCartMutation({
         id: cartFromRedux.id,
         user_id: data.id,
         total_price: totalPriceFromRedux,
       });
+
+      dispatch(setProductAddToCart());
+
+      dispatch(orderStore(orderPayload));
+
+      Notiflix.Notify.success('Succes create order!');
+      onClose();
+
+      navigate('/address-pages', { replace: true });
     } catch (error) {
       console.log(error);
     }
-
-    dispatch(setProductAddToCart());
-
-    onClose();
-
-    navigate('/address-pages', { replace: true });
   };
+
   const handleUpdateCartItem = async (item, increment) => {
     const newQuantity = increment ? item.quantity + 1 : item.quantity - 1;
     if (newQuantity < 1) {

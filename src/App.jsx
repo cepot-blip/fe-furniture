@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import ProtectedRoute from './components/Template/Auth/ProtectedRoute.jsx';
+import Payment from './pages/payment/Payment.jsx';
 import store from './redux/store/index.js';
 
 const ErrorElements = lazy(
@@ -100,6 +101,15 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Checkout />
+                  </ProtectedRoute>
+                }
+                errorElement={<ErrorElements />}
+              />
+              <Route
+                path="/payment"
+                element={
+                  <ProtectedRoute>
+                    <Payment />
                   </ProtectedRoute>
                 }
                 errorElement={<ErrorElements />}
