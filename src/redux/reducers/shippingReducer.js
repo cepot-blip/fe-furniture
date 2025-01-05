@@ -14,6 +14,7 @@ const shippingReducer = createSlice({
   initialState,
   reducers: {
     shippingStore(state, action) {
+      console.log('payloaded:', action.payload);
       const { shipping_id } = action.payload;
       state.id = shipping_id || 0;
       console.log('Update state:', state);

@@ -2,17 +2,17 @@
 /* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unused-vars */
-import { orderStore } from '../../redux/reducers/orderReducer';
+import { shippingStore } from '../../redux/reducers/shippingReducer';
 import instance from '../api';
 
 export const shippingService = (dispatch) => {
-  const createShipping = async (
+  const createShipping = async ({
     order_id,
     address_id,
     shipping_cost,
     shipping_date,
     status,
-  ) => {
+  }) => {
     console.log(
       'order_id: ',
       order_id,
@@ -34,7 +34,7 @@ export const shippingService = (dispatch) => {
     });
     console.log('response: ', response.data);
     const shipping_id = response.data.data.id;
-    dispatch(orderStore({ shipping_id }));
+    dispatch(shippingStore({ shipping_id }));
 
     if (!response.data.success) {
       throw new Error(response.data.message || 'Failed create shipping');

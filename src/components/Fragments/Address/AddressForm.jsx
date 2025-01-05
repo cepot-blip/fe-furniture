@@ -13,6 +13,7 @@ import { useFormik } from 'formik';
 import Notiflix from 'notiflix';
 
 import { useCreateAddress } from '../../../hooks/address/useCreateAddress';
+import { useUpdateAddress } from '../../../hooks/address/useUpdateAddress';
 import { addressStore } from '../../../redux/reducers/addressReducer';
 import addressSchema from '../../../schema/address';
 import Button from '../../Elements/Button/Button';
@@ -26,6 +27,7 @@ function AddressForm() {
   const dispatch = useDispatch();
 
   const { createAddressMutation } = useCreateAddress();
+  const { updateAddressMutation } = useUpdateAddress();
   const data = JSON.parse(localStorage.getItem('data'));
 
   const address = JSON.parse(localStorage.getItem('address')); // test untuk 1 user = 1 address
@@ -34,7 +36,7 @@ function AddressForm() {
 
   const formik = useFormik({
     initialValues: {
-      street: '',
+      street: '', // Pastikan 'street' ada atau set ke string kosong
       city: '',
       state: '',
       postal_code: '',
@@ -55,13 +57,22 @@ function AddressForm() {
 
       setIsLoading(true);
       try {
-        const dataAddress = {
-          user_id: data.id,
-          ...dataToSend,
-        };
-
-        await createAddressMutation(dataAddress);
-        dispatch(addressStore(dataToSend));
+        if (!address) {
+          const dataAddress = {
+            user_id: data.id,
+            ...dataToSend,
+          };
+          await createAddressMutation(dataAddress);
+          dispatch(addressStore(dataToSend));
+        } else {
+          const dataAddress = {
+            id: address.id,
+            user_id: data.id,
+            ...dataToSend,
+          };
+          await updateAddressMutation(dataAddress);
+          dispatch(addressStore(dataToSend));
+        }
 
         Notiflix.Notify.success('Success create Address!');
         setModalOpen(true);

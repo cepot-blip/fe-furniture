@@ -29,5 +29,9 @@ export function useCreateShipping() {
     onSuccess: (data) => {
       console.log('Success create shipping : ', data);
     },
+    onError: (error) => {
+      console.log('Error create shipping : ', error);
+    },
   });
+  return { createShippingMutation };
 }
