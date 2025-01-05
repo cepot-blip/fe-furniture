@@ -2,16 +2,16 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 
-function Card({ className, children }) {
-  return <section className={className}>{children}</section>;
+function Card({ className, children, onClick }) {
+  return (
+    <section className={className} onClick={onClick}>
+      {children}
+    </section>
+  );
 }
 
 function Header({ className, children }) {
-  return (
-    <div className={className}>
-      <h1>{children}</h1>
-    </div>
-  );
+  return <div className={className}>{children}</div>;
 }
 
 function Body({ className, children }) {
@@ -19,7 +19,7 @@ function Body({ className, children }) {
 }
 
 function Footer({ className, children }) {
-  return <div className={className}>{children}</div>;
+  return <footer className={className}>{children}</footer>;
 }
 
 // composition patern

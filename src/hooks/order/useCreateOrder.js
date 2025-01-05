@@ -12,17 +12,24 @@ import { orderService } from '../../service/order/order';
 export function useCreateOrder() {
   const dispatch = useDispatch();
   const { createOrder } = orderService(dispatch);
+
   const { mutate: createOrderMutation } = useMutation({
-    mutationFn: async ({ user_id, cart_id, total_price, status }) =>
-      await createOrder({
+    mutationFn: async ({ user_id, cart_id, total_price, status }) => {
+      console.log('Call req order body:', {
         user_id,
         cart_id,
         total_price,
         status,
-      }),
+      });
+      return await createOrder({ user_id, cart_id, total_price, status });
+    },
     onSuccess: (data) => {
-      console.log('isi data: ', data);
+      console.log('Order created successfully, API response:', data);
+    },
+    onError: (error) => {
+      console.error('Error during createOrderMutation:', error);
     },
   });
+
   return { createOrderMutation };
 }

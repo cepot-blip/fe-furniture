@@ -4,34 +4,64 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/react-in-jsx-scope */
 
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Car } from 'lucide-react';
 
 import useAddressById from '../../../hooks/address/useAddressById';
+import useCreateShipping from '../../../hooks/shipping/useCreateShipping';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
 function ModalShipping() {
   const id = useParams();
   const user = JSON.parse(localStorage.getItem('data'));
-  const address = JSON.parse(localStorage.getItem('address'));
+  const addressStorage = JSON.parse(localStorage.getItem('address'));
+  const navigate = useNavigate();
 
   const addressData = useSelector((state) => state.address.address);
   const { addressId } = useAddressById(id);
+  const { createShippingMutation } = useCreateShipping();
 
-  function countryCost() {
-    return {
-      ID: '90000',
-      US: '200000',
-      IN: '122222',
+  const [shippingCostValue, setShippingCostValue] = useState(0);
+
+  // async function handleCreateShipping() {
+  //   navigate('/payment');
+
+  //   try {
+  //     await createShippingMutation();
+
+  //     // belum kelar
+  //     const shippingPayload = {};
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+  const handleNavigate = () => {
+    navigate('/payment');
+  };
+
+  function shippingCost(country) {
+    const costs = {
+      ID: 90000,
+      US: 200000,
+      IN: 122222,
+      default: 150000,
     };
+    return costs[country] || costs.default;
   }
 
+  useEffect(() => {
+    const country = addressStorage?.[0]?.country || 'default'; // berdasarkan country biaya cost
+    const cost = shippingCost(country);
+    setShippingCostValue(cost);
+  }, [addressStorage]);
+
   console.log('user data for shipping', user);
-  console.log('address storage', address);
+  console.log('address storage', addressStorage);
   console.log('address redux', addressData);
-  // console.log('addressId:', addressId);
+  console.log('addressId:', addressId);
 
   return (
     <div>
@@ -57,9 +87,9 @@ function ModalShipping() {
             </div>
           </div>
         </Card.Header>
-        {address.map((e) => (
+        {addressStorage.map((e) => (
           <div key={e.id} className="p-4 flex flex-col gap-10">
-            <Card.Body className="grid grid-cols-2 gap-4">
+            <Card.Body className="grid grid-cols-2 gap-10">
               <div>
                 <p className="text-xs text-gray-500">Street:</p>
                 <h3 className="text-gray-800 font-medium">{e.street}</h3>
@@ -70,14 +100,37 @@ function ModalShipping() {
               </div>
             </Card.Body>
 
-            <Card.Body className="grid grid-cols-2 gap-4">
+            <Card.Body className="grid grid-cols-2 gap-10">
               <div>
                 <p className="text-xs text-gray-500">Country:</p>
                 <h3 className="text-gray-800 font-medium">{e.country}</h3>
               </div>
+
+              <div className="flex flex-col">
+                <p className="text-xs text-gray-500">Shipping Cost:</p>
+                <h3 className="text-gray-800 font-medium">
+                  {shippingCostValue.toLocaleString('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                  })}
+                </h3>
+              </div>
               <div>
                 <p className="text-xs text-gray-500">Postal Code:</p>
                 <h3 className="text-gray-800 font-medium">{e.postal_code}</h3>
+              </div>
+
+              <div>
+                <p className="text-xs text-gray-500">Shipping Date:</p>
+                <h3 className="text-gray-800 font-medium">
+                  {new Date().toLocaleString('ID', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </h3>
               </div>
             </Card.Body>
 
@@ -103,7 +156,10 @@ function ModalShipping() {
           </div>
 
           <div>
-            <Button className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg px-3 py-4 hover:shadow-lg cursor-pointer transition-all text-xs">
+            <Button
+              className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg px-3 py-4 hover:shadow-lg cursor-pointer transition-all text-xs"
+              onClick={handleNavigate}
+            >
               Continue to Payment
             </Button>
           </div>
