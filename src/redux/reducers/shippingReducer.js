@@ -18,6 +18,7 @@ const shippingReducer = createSlice({
       const { shipping_id } = action.payload;
       state.id = shipping_id || 0;
       console.log('Update state:', state);
+      localStorage.setItem('shipping_id', JSON.stringify(state.id));
     },
   },
 });

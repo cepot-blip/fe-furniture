@@ -7,8 +7,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Car } from 'lucide-react';
+import Notiflix from 'notiflix';
 
 import useAddressById from '../../../hooks/address/useAddressById';
 import { useCreateShipping } from '../../../hooks/shipping/useCreateShipping';
@@ -17,6 +18,7 @@ import Card from '../Card/Card';
 
 function ModalShipping() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const id = useParams();
   const user = JSON.parse(localStorage.getItem('data'));
   const address = JSON.parse(localStorage.getItem('address'));
@@ -48,6 +50,8 @@ function ModalShipping() {
       shipping_date: formattedDate,
       status: 'Pending',
     });
+    Notiflix.Notify.success('Succes create shipping!');
+    navigate('/payment', { replace: true });
   };
   // console.log('addressId:', addressId);
 

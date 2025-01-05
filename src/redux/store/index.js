@@ -10,6 +10,7 @@ import authReducer from '../reducers/authReducer';
 import cartItemReducer from '../reducers/cartItemReducer';
 import cartReducer from '../reducers/cartReducer';
 import orderReducer from '../reducers/orderReducer';
+import paymentReducer from '../reducers/paymentReducer';
 import productReducer from '../reducers/productReducer';
 import shippingReducer from '../reducers/shippingReducer';
 import userReducer from '../reducers/userReducer';
@@ -24,6 +25,7 @@ const store = configureStore({
     order: orderReducer,
     address: addressStore,
     shipping: shippingReducer,
+    payment: paymentReducer,
   },
   devTools: true,
 });
