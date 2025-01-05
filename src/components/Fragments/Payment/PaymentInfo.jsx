@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-unused-vars */
@@ -5,6 +7,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Calendar,
   CircleDollarSign,
@@ -14,7 +17,9 @@ import {
   TrendingUp,
   User,
 } from 'lucide-react';
+import Notiflix from 'notiflix';
 
+import { useCreatePayment } from '../../../hooks/payment/useCreatePayment';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
@@ -26,12 +31,33 @@ import PaymentMethod, {
 
 function PaymentInfo() {
   const [selectedMethod, setSelectedMethod] = useState(null);
+  const dispatch = useDispatch();
+  const { createPaymentMutation } = useCreatePayment(dispatch);
   const user = JSON.parse(localStorage.getItem('data'));
   const order = JSON.parse(localStorage.getItem('order'));
   const address = JSON.parse(localStorage.getItem('address'));
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
 
   const addressMap = address && address.length > 0 ? address[0] : null;
 
+  const totalPriceFromRedux = useSelector(
+    (state) => state.cartItem.total_price,
+  );
+
+  const handleCreatePayment = () => {
+    createPaymentMutation({
+      order_id: order.order_id,
+      payment_method: selectedMethod,
+      payment_status: 'Pending',
+      payment_date: formattedDate,
+      amount: totalPriceFromRedux,
+    });
+    Notiflix.Notify.success('Payment Success!');
+  };
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="border border-gray-200 rounded-lg overflow-hidden pb-2">
@@ -65,7 +91,7 @@ function PaymentInfo() {
               </div>
               <div className="flex flex-col items-end">
                 <h3 className="text-lg font-medium text-gray-800">
-                  {addressMap ? addressMap.country : 'Not Available'}
+                  {address ? address.country : 'Not Available'}
                 </h3>
               </div>
             </Card.Footer>
@@ -85,7 +111,7 @@ function PaymentInfo() {
             <Card.Header className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* bank tf */}
               <PaymentMethod
-                onClick={() => setSelectedMethod('BankTransfer')}
+                onClick={() => setSelectedMethod('Bank_Transfer')}
                 className={`flex items-center p-4 border border-gray-200 rounded-lg justify-center gap-3 cursor-pointer ${
                   selectedMethod === 'BankTransfer' ? 'bg-gray-100' : ''
                 }`}
@@ -97,7 +123,7 @@ function PaymentInfo() {
 
               {/* Credit Card */}
               <PaymentMethod
-                onClick={() => setSelectedMethod('CreditCards')}
+                onClick={() => setSelectedMethod('Credit_Card')}
                 className={`flex items-center p-4 border border-gray-200 rounded-lg justify-center gap-3 cursor-pointer ${
                   selectedMethod === 'CreditCards' ? 'bg-gray-100' : ''
                 }`}
@@ -108,7 +134,7 @@ function PaymentInfo() {
 
               {/* E Wallet */}
               <PaymentMethod
-                onClick={() => setSelectedMethod('EWallet')}
+                onClick={() => setSelectedMethod('E_Wallet')}
                 className={`flex items-center p-4 border border-gray-200 rounded-lg justify-center gap-3 cursor-pointer ${
                   selectedMethod === 'EWallet' ? 'bg-gray-100' : ''
                 }`}
@@ -122,9 +148,9 @@ function PaymentInfo() {
               {/* Conditional Rendering */}
               {selectedMethod && (
                 <div className="relative">
-                  {selectedMethod === 'BankTransfer' && <BankTransfer />}
-                  {selectedMethod === 'CreditCards' && <CreditCards />}
-                  {selectedMethod === 'EWallet' && <EWallet />}
+                  {selectedMethod === 'Bank_Transfer' && <BankTransfer />}
+                  {selectedMethod === 'Credit_Card' && <CreditCards />}
+                  {selectedMethod === 'E_Wallet' && <EWallet />}
                 </div>
               )}
             </Card.Body>
@@ -171,7 +197,9 @@ function PaymentInfo() {
                   </div>
                   <p className="text-lg text-gray-600">Amount</p>
                 </div>
-                <h3 className="text-lg font-medium text-gray-800">Rp.000</h3>
+                <h3 className="text-lg font-medium text-gray-800">
+                  Rp {totalPriceFromRedux.toLocaleString('id-ID')}
+                </h3>
               </div>
             </Card.Footer>
 
@@ -180,7 +208,10 @@ function PaymentInfo() {
                 Continue Shopping
               </Button>
 
-              <Button className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg px-3 py-4 hover:shadow-lg cursor-pointer transition-all text-lg">
+              <Button
+                onClick={handleCreatePayment}
+                className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg px-3 py-4 hover:shadow-lg cursor-pointer transition-all text-lg"
+              >
                 Payment Now
               </Button>
             </div>

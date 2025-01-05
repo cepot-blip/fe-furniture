@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-use-before-define */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -14,7 +15,7 @@ import { useFormik } from 'formik';
 import Notiflix from 'notiflix';
 
 import { useCreateAddress } from '../../../hooks/address/useCreateAddress';
-import useOrderById from '../../../hooks/order/useOrderById';
+import { useUpdateAddress } from '../../../hooks/address/useUpdateAddress';
 import { addressStore } from '../../../redux/reducers/addressReducer';
 import addressSchema from '../../../schema/address';
 import Button from '../../Elements/Button/Button';
@@ -29,7 +30,7 @@ function AddressForm() {
   const { id } = useParams();
 
   const { createAddressMutation } = useCreateAddress();
-  const { orderId } = useOrderById(id);
+  const { updateAddressMutation } = useUpdateAddress();
   const data = JSON.parse(localStorage.getItem('data'));
   const addresFromRedux = useSelector((state) => state.address);
   const address = JSON.parse(localStorage.getItem('address'));
@@ -37,12 +38,11 @@ function AddressForm() {
 
   // console.log('datauser:', data);
   console.log('orderStorage', orderStorage);
-  console.log('orderId', orderId);
   console.log('addresFromRedux', addresFromRedux);
 
   const formik = useFormik({
     initialValues: {
-      street: '',
+      street: '', // Pastikan 'street' ada atau set ke string kosong
       city: '',
       state: '',
       postal_code: '',
@@ -63,13 +63,22 @@ function AddressForm() {
 
       setIsLoading(true);
       try {
-        const dataAddress = {
-          user_id: data?.id,
-          ...dataToSend,
-        };
-
-        await createAddressMutation(dataAddress);
-        dispatch(addressStore(dataToSend));
+        if (!address) {
+          const dataAddress = {
+            user_id: data.id,
+            ...dataToSend,
+          };
+          await createAddressMutation(dataAddress);
+          dispatch(addressStore(dataToSend));
+        } else {
+          const dataAddress = {
+            id: address.id,
+            user_id: data.id,
+            ...dataToSend,
+          };
+          await updateAddressMutation(dataAddress);
+          dispatch(addressStore(dataToSend));
+        }
 
         Notiflix.Notify.success('Success create Address!');
         setModalOpen(true);

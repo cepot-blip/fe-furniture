@@ -1,67 +1,59 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable no-console */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/react-in-jsx-scope */
 
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Car } from 'lucide-react';
+import Notiflix from 'notiflix';
 
 import useAddressById from '../../../hooks/address/useAddressById';
-import useCreateShipping from '../../../hooks/shipping/useCreateShipping';
+import { useCreateShipping } from '../../../hooks/shipping/useCreateShipping';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
 function ModalShipping() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const id = useParams();
   const user = JSON.parse(localStorage.getItem('data'));
-  const addressStorage = JSON.parse(localStorage.getItem('address'));
-  const navigate = useNavigate();
-
+  const address = JSON.parse(localStorage.getItem('address'));
+  const order = JSON.parse(localStorage.getItem('order'));
+  const { createShippingMutation } = useCreateShipping(dispatch);
   const addressData = useSelector((state) => state.address.address);
   const { addressId } = useAddressById(id);
-  const { createShippingMutation } = useCreateShipping();
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
+  console.log('isi order: ', order.id);
+  console.log('hari ini: ', formattedDate);
 
-  const [shippingCostValue, setShippingCostValue] = useState(0);
-
-  // async function handleCreateShipping() {
-  //   navigate('/payment');
-
-  //   try {
-  //     await createShippingMutation();
-
-  //     // belum kelar
-  //     const shippingPayload = {};
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-  const handleNavigate = () => {
-    navigate('/payment');
-  };
-
-  function shippingCost(country) {
-    const costs = {
-      ID: 90000,
-      US: 200000,
-      IN: 122222,
-      default: 150000,
+  function countryCost() {
+    return {
+      ID: '90000',
+      US: '200000',
+      IN: '122222',
     };
-    return costs[country] || costs.default;
   }
 
-  useEffect(() => {
-    const country = addressStorage?.[0]?.country || 'default'; // berdasarkan country biaya cost
-    const cost = shippingCost(country);
-    setShippingCostValue(cost);
-  }, [addressStorage]);
-
-  console.log('user data for shipping', user);
-  console.log('address storage', addressStorage);
-  console.log('address redux', addressData);
-  console.log('addressId:', addressId);
+  const handleCreateShipping = () => {
+    createShippingMutation({
+      order_id: order.order_id,
+      address_id: address.id,
+      shipping_cost: 100000,
+      shipping_date: formattedDate,
+      status: 'Pending',
+    });
+    Notiflix.Notify.success('Succes create shipping!');
+    navigate('/payment', { replace: true });
+  };
+  // console.log('addressId:', addressId);
 
   return (
     <div>
@@ -87,62 +79,45 @@ function ModalShipping() {
             </div>
           </div>
         </Card.Header>
-        {addressStorage.map((e) => (
-          <div key={e.id} className="p-4 flex flex-col gap-10">
-            <Card.Body className="grid grid-cols-2 gap-10">
-              <div>
-                <p className="text-xs text-gray-500">Street:</p>
-                <h3 className="text-gray-800 font-medium">{e.street}</h3>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">City:</p>
-                <h3 className="text-gray-800 font-medium">{e.city}</h3>
-              </div>
-            </Card.Body>
+        <div className="p-4 flex flex-col gap-10">
+          <Card.Body className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-xs text-gray-500">Street:</p>
+              <h3 className="text-gray-800 font-medium">{address.street}</h3>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500">City:</p>
+              <h3 className="text-gray-800 font-medium">{address.city}</h3>
+            </div>
+          </Card.Body>
 
-            <Card.Body className="grid grid-cols-2 gap-10">
-              <div>
-                <p className="text-xs text-gray-500">Country:</p>
-                <h3 className="text-gray-800 font-medium">{e.country}</h3>
-              </div>
+          <Card.Body className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-xs text-gray-500">Country:</p>
+              <h3 className="text-gray-800 font-medium">{address.country}</h3>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500">Postal Code:</p>
+              <h3 className="text-gray-800 font-medium">
+                {address.postal_code}
+              </h3>
+            </div>
+          </Card.Body>
 
-              <div className="flex flex-col">
-                <p className="text-xs text-gray-500">Shipping Cost:</p>
-                <h3 className="text-gray-800 font-medium">
-                  {shippingCostValue.toLocaleString('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                  })}
-                </h3>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Postal Code:</p>
-                <h3 className="text-gray-800 font-medium">{e.postal_code}</h3>
-              </div>
+          <Card.Body className="grid grid-cols-1">
+            <div>
+              <p className="text-xs text-gray-500">State:</p>
+              <h3 className="text-gray-800 font-medium">{address.state}</h3>
+            </div>
+          </Card.Body>
 
-              <div>
-                <p className="text-xs text-gray-500">Shipping Date:</p>
-                <h3 className="text-gray-800 font-medium">
-                  {new Date().toLocaleString('ID', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </h3>
-              </div>
-            </Card.Body>
-
-            <Card.Body className="grid grid-cols-1">
-              <div>
-                <p className="text-xs text-gray-500">State:</p>
-                <h3 className="text-gray-800 font-medium">{e.state}</h3>
-              </div>
-            </Card.Body>
-          </div>
-        ))}
-
+          <Card.Body className="grid grid-cols-1">
+            <div>
+              <p className="text-xs text-gray-500">Cost:</p>
+              <h3 className="text-gray-800 font-medium">Rp10.000</h3>
+            </div>
+          </Card.Body>
+        </div>
         <Card.Footer className="bg-gray-50 p-4 rounded-md flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
@@ -157,8 +132,8 @@ function ModalShipping() {
 
           <div>
             <Button
+              onClick={handleCreateShipping}
               className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg px-3 py-4 hover:shadow-lg cursor-pointer transition-all text-xs"
-              onClick={handleNavigate}
             >
               Continue to Payment
             </Button>

@@ -1,27 +1,37 @@
 /* eslint-disable no-console */
-/* eslint-disable no-return-await */
+/* eslint-disable camelcase */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-unused-vars */
+import { useDispatch } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
-import Notiflix from 'notiflix';
 
 import { shippingService } from '../../service/shipping/shipping';
 
-export default function useCreateShipping() {
-  const { createShipping } = shippingService();
+export function useCreateShipping() {
+  const dispatch = useDispatch();
+  const { createShipping } = shippingService(dispatch);
   const { mutate: createShippingMutation } = useMutation({
-    mutationFn: async (payload) => await createShipping(payload),
-
-    onSuccess: (data) => {
-      Notiflix.Notify.success('Category berhasil dibuat');
-      console.log('Create shipping succes', data);
+    mutationFn: async ({
+      order_id,
+      address_id,
+      shipping_cost,
+      shipping_date,
+      status,
+    }) => {
+      await createShipping({
+        order_id,
+        address_id,
+        shipping_cost,
+        shipping_date,
+        status,
+      });
     },
-
+    onSuccess: (data) => {
+      console.log('Success create shipping : ', data);
+    },
     onError: (error) => {
-      Notiflix.Notify.failure(
-        error.message || 'Gagal membuat category, periksa kembali',
-      );
-      console.log('Error creating category', error);
+      console.log('Error create shipping : ', error);
     },
   });
-
   return { createShippingMutation };
 }

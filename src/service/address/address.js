@@ -17,6 +17,41 @@ export const addressService = (dispatch) => {
     return response.data.query;
   };
 
+  const updateAddress = async ({
+    id,
+    user_id,
+    street,
+    city,
+    state,
+    postal_code,
+    country,
+  }) => {
+    console.log(
+      'Updating Address Item',
+      id,
+      user_id,
+      street,
+      city,
+      state,
+      postal_code,
+      country,
+    );
+    const response = await instance.put('/address', {
+      id,
+      user_id,
+      street,
+      city,
+      state,
+      postal_code,
+      country,
+    });
+    console.log('response Update: ', response.data);
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Failed to update Address');
+    }
+    return response.data;
+  };
+
   const createAddress = async ({
     id,
     user_id,
@@ -42,7 +77,7 @@ export const addressService = (dispatch) => {
     }
 
     const addressData = {
-      id,
+      id: response.data.data.id,
       user_id,
       street,
       city,
@@ -51,7 +86,7 @@ export const addressService = (dispatch) => {
       country,
     };
 
-    // dispatch(addressStore(addressData));
+    dispatch(addressStore(addressData));
 
     if (!response.data.success) {
       throw new Error(response.data.message || 'Failed to create address');
@@ -78,5 +113,5 @@ export const addressService = (dispatch) => {
     return response.data.data;
   };
 
-  return { getAllAddress, createAddress, addressById };
+  return { getAllAddress, createAddress, addressById, updateAddress };
 };

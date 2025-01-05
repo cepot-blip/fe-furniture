@@ -1,49 +1,45 @@
 /* eslint-disable no-console */
-/* eslint-disable no-restricted-globals */
 /* eslint-disable camelcase */
-/* eslint-disable no-undef */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unused-vars */
-import Cookies from 'js-cookie';
-
+import { shippingStore } from '../../redux/reducers/shippingReducer';
 import instance from '../api';
 
-export const shippingService = () => {
-  const createShipping = async (payload) => {
-    const response = await instance.post(
-      '/shipping',
-      payload,
-      {
-        order_id,
-        address_id,
-        shipping_cost,
-        shipping_date,
-        status,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('token')}`,
-        },
-      },
+export const shippingService = (dispatch) => {
+  const createShipping = async ({
+    order_id,
+    address_id,
+    shipping_cost,
+    shipping_date,
+    status,
+  }) => {
+    console.log(
+      'order_id: ',
+      order_id,
+      'address_id: ',
+      address_id,
+      'shipping_cost: ',
+      shipping_cost,
+      'shipping_date: ',
+      shipping_date,
+      'status: ',
+      status,
     );
+    const response = await instance.post('/shipping', {
+      order_id,
+      address_id,
+      shipping_cost,
+      shipping_date,
+      status,
+    });
+    console.log('response: ', response.data);
+    const shipping_id = response.data.data.id;
+    dispatch(shippingStore({ shipping_id }));
 
-    console.log(response.data);
-
-    if (!response.data.succes) {
-      throw new Error(response.data.message || 'Failed to create shipping');
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Failed create shipping');
     }
     return response.data;
   };
-
-  const shippingById = async (id) => {
-    const response = await instance.get(`/shipping${id}`, {
-      headers: {
-        Authorization: `Bearer ${Cookies.get('token')}`,
-      },
-    });
-
-    return response.data;
-  };
-
-  return { createShipping, shippingById };
+  return { createShipping };
 };

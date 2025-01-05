@@ -13,6 +13,7 @@ import { User } from 'lucide-react';
 import Notiflix from 'notiflix';
 
 import useUserId from '../../../hooks/users/useUserId';
+import { addressReset } from '../../../redux/reducers/addressReducer';
 import { setReset } from '../../../redux/reducers/authReducer';
 import { setResetCartItem } from '../../../redux/reducers/cartItemReducer';
 import Button from '../../Elements/Button/Button';
@@ -31,8 +32,8 @@ function Profile() {
       Cookies.remove('token');
       dispatch(setReset());
       dispatch(setResetCartItem());
+      dispatch(addressReset());
       localStorage.removeItem('data');
-      localStorage.removeItem('address');
       console.log('Berhasil logout');
 
       Notiflix.Notify.success('Anda berhasil logout');
