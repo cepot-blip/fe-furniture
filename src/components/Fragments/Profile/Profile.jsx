@@ -38,6 +38,7 @@ function Profile() {
 
       Notiflix.Notify.success('Anda berhasil logout');
       navigate('/login');
+      window.location.reload();
     }
   };
 

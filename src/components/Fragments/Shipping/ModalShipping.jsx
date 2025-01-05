@@ -20,7 +20,7 @@ function ModalShipping() {
   const id = useParams();
   const user = JSON.parse(localStorage.getItem('data'));
   const address = JSON.parse(localStorage.getItem('address'));
-  const order = useSelector((state) => state.order);
+  const order = JSON.parse(localStorage.getItem('order'));
   const { createShippingMutation } = useCreateShipping(dispatch);
   const addressData = useSelector((state) => state.address.address);
   const { addressId } = useAddressById(id);
@@ -29,7 +29,7 @@ function ModalShipping() {
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
   const formattedDate = `${year}-${month}-${day}`;
-  console.log('isi order: ', typeof order.id);
+  console.log('isi order: ', order.id);
   console.log('hari ini: ', formattedDate);
 
   function countryCost() {
@@ -42,7 +42,7 @@ function ModalShipping() {
 
   const handleCreateShipping = () => {
     createShippingMutation({
-      order_id: order.id,
+      order_id: order.order_id,
       address_id: address.id,
       shipping_cost: 100000,
       shipping_date: formattedDate,
