@@ -34,6 +34,9 @@ function Profile() {
       dispatch(setResetCartItem());
       dispatch(addressReset());
       localStorage.removeItem('data');
+      localStorage.removeItem('payment');
+      localStorage.removeItem('order');
+      localStorage.removeItem('shipping');
       console.log('Berhasil logout');
 
       Notiflix.Notify.success('Anda berhasil logout');
