@@ -6,12 +6,13 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unused-vars */
 import { useDispatch } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { paymentService } from '../../service/payment/payment';
 
 export function useCreatePayment() {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const { createPayment } = paymentService(dispatch);
 
   const { mutate: createPaymentMutation } = useMutation({
@@ -29,7 +30,10 @@ export function useCreatePayment() {
         payment_date,
         amount,
       }),
-    onSuccess: (data) => console.log('Success Create Payment: ', data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(['payment']);
+      console.log('Success Create Payment: ', data);
+    },
     onError: (error) => console.log('Error Create Payment: ', error),
   });
   return { createPaymentMutation };
