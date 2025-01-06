@@ -13,18 +13,6 @@ export const shippingService = (dispatch) => {
     shipping_date,
     status,
   }) => {
-    console.log(
-      'order_id: ',
-      order_id,
-      'address_id: ',
-      address_id,
-      'shipping_cost: ',
-      shipping_cost,
-      'shipping_date: ',
-      shipping_date,
-      'status: ',
-      status,
-    );
     const response = await instance.post('/shipping', {
       order_id,
       address_id,
@@ -33,8 +21,15 @@ export const shippingService = (dispatch) => {
       status,
     });
     console.log('response: ', response.data);
-    const shipping_id = response.data.data.id;
-    dispatch(shippingStore({ shipping_id }));
+    const dataShipping = {
+      id: response.data.data.id,
+      order_id: response.data.data.order_id,
+      address_id: response.data.data.address_id,
+      shipping_cost: response.data.data.shipping_cost,
+      shipping_date: response.data.data.shipping_date,
+      status: response.data.data.status,
+    };
+    dispatch(shippingStore(dataShipping));
 
     if (!response.data.success) {
       throw new Error(response.data.message || 'Failed create shipping');
