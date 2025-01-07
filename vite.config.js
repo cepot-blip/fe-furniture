@@ -9,13 +9,7 @@ export default defineConfig({
       target: 'es2020',
     },
   },
-  server: {
-    watch: {
-      usePolling: true,
-    },
-    host: true, // needed for the docker container port mapping to work
-    strictPort: true,
-    port: 5173, // default
-    origin: 'http://0.0.0.0:5173',
+  build: {
+    outDir: 'dist',
   },
 });
