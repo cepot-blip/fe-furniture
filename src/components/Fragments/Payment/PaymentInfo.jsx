@@ -24,6 +24,7 @@ import Notiflix from 'notiflix';
 import { useCreatePayment } from '../../../hooks/payment/useCreatePayment';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
+import CheckoutModal from '../Checkout/CheckoutModal';
 
 import PaymentMethod, {
   BankTransfer,
@@ -33,6 +34,7 @@ import PaymentMethod, {
 
 function PaymentInfo() {
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(null);
   const dispatch = useDispatch();
   const { createPaymentMutation } = useCreatePayment(dispatch);
@@ -60,7 +62,12 @@ function PaymentInfo() {
       amount: totalPriceFromRedux,
     });
     Notiflix.Notify.success('Payment Success!');
-    navigate('/checkout');
+    setModalOpen(true);
+    // navigate('/checkout');
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
   const handleCancelPayment = () => {
@@ -230,6 +237,20 @@ function PaymentInfo() {
               </Button>
             </div>
           </Card>
+
+          {modalOpen && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30"
+              onClick={closeModal}
+            >
+              <div
+                className="bg-white rounded-lg shadow-lg p-8 w-[600px] h-auto z-50"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <CheckoutModal />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -40,8 +40,8 @@ function Navbar({ onCartClick }) {
   };
 
   return (
-    <div className="border-b-gray-300 relative pb-20 pt-3 flex justify-center">
-      <header className="w-[1400px] py-2 fixed bg-gray10 rounded-lg z-50 border border-gray-100">
+    <div className="border-b-gray-300 relative pb-20 pt-3 flex justify-center z-40">
+      <header className="w-[1400px] py-2 fixed bg-gray10 rounded-lg  border border-gray-100">
         <div className="flex items-center justify-between px-6">
           <Link to="/">
             <div className="flex items-center">
