@@ -11,8 +11,6 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 
-import { setReset } from './authReducer';
-
 const initialState = {
   cartItem: [],
   cartItemStore: [],
