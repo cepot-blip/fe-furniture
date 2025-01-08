@@ -13,9 +13,12 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
-    host: true, // needed for the docker container port mapping to work
+    host: true,
     strictPort: true,
-    port: 5173, // default
+    port: 5173,
     origin: 'http://0.0.0.0:5173',
+  },
+  build: {
+    outDir: 'dist',
   },
 });
