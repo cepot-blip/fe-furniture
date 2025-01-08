@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable import/extensions */
 import React, { lazy, Suspense } from 'react';
@@ -96,7 +97,7 @@ function App() {
                 element={<AddressPages />}
                 errorElement={<ErrorElements />}
               />
-              <Route
+              {/* <Route
                 path="/checkout"
                 element={
                   <ProtectedRoute>
@@ -104,7 +105,7 @@ function App() {
                   </ProtectedRoute>
                 }
                 errorElement={<ErrorElements />}
-              />
+              /> */}
               <Route
                 path="/payment"
                 element={

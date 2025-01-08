@@ -17,9 +17,11 @@ function Input(props) {
     max,
     maxLength,
     minLength,
+    children,
   } = props;
   return (
     <div>
+      {children}
       <input
         icons={icons}
         type={type}

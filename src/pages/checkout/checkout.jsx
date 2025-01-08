@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import CheckoutContainer from '../../components/Fragments/Checkout/CheckoutContainer';
 import Navbar from '../../components/Fragments/Navbar/Navbar';
 import Sidebar from '../../components/Fragments/Sidebar/Sidebar';
 
@@ -15,7 +16,7 @@ function Checkout() {
       <Sidebar isVisible={isSidebarVisible} onClose={handleSidebarToggle} />
 
       <div className="w-full flex py-8">
-        <h1>Checkout page</h1>
+        <CheckoutContainer />
       </div>
     </main>
   );

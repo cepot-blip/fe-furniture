@@ -28,6 +28,7 @@ import { addToCartItem } from '../../../redux/reducers/cartItemReducer';
 import { addToCartItemStore } from '../../../redux/reducers/cartItemReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
+import SearchDebounce from '../Search/SearchDebounce';
 
 import FormProduct from './FormProduct';
 
@@ -87,9 +88,10 @@ function ItemProduct() {
           <h1 className="text-3xl font-semibold">Must have product</h1>
         </div>
 
-        <div className="flex w-1/2 items-center gap-8 justify-end">
+        <div className="flex w-1/2 items-center gap-5 justify-end">
+          <SearchDebounce />
           <Link
-            className="py-2 px-3 rounded-full border border-black"
+            className="py-2 px-2 rounded-full border border-black text-xs"
             to="/category"
           >
             All Product

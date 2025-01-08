@@ -57,7 +57,7 @@ function Profile() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left z-50">
       <Button
         onClick={toggleMenu}
         className="inline-flex justify-center w-full px-4 py-3 text-sm font-medium text-gray-700 border border-gray-100 rounded-lg"
@@ -69,7 +69,7 @@ function Profile() {
       </Button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+        <div className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg z-50">
           <div
             className="py-1 z-30"
             role="menu"
