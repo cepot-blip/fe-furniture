@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable import/named */
 /* eslint-disable no-undef */
 /* eslint-disable simple-import-sort/imports */
@@ -23,6 +24,7 @@ function Navbar({ onCartClick }) {
   const data = JSON.parse(localStorage.getItem('data'));
   const total_price = useSelector((state) => state.cartItem.total_price);
   const { createCartMutation } = useCreateCart(dispatch);
+  const cartItem = useSelector((state) => state.cartItem.cartItem);
 
   const handleCrartClick = () => {
     if (!token) {
@@ -54,10 +56,17 @@ function Navbar({ onCartClick }) {
           <div className="flex items-center ml-auto gap-20">
             <div className="flex items-center gap-6">
               <Search className="text-gray-900 hover:text-gray-800 text-2xl cursor-pointer transition-colors" />
-              <ShoppingCart
-                className="text-gray-900 hover:text-gray-800 text-2xl cursor-pointer transition-colors"
-                onClick={handleCrartClick}
-              />
+              <div className="relative">
+                <ShoppingCart
+                  className="text-gray-900 hover:text-gray-800 text-2xl cursor-pointer transition-colors"
+                  onClick={handleCrartClick}
+                />
+                {cartItem.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5">
+                    {cartItem.length}
+                  </span>
+                )}
+              </div>
             </div>
             <div>
               {token ? (

@@ -54,6 +54,10 @@ function PaymentInfo() {
   );
 
   const handleCreatePayment = () => {
+    if (!selectedMethod) {
+      Notiflix.Notify.failure('Please select a payment method.');
+      return;
+    }
     createPaymentMutation({
       order_id: order.order_id,
       payment_method: selectedMethod,
