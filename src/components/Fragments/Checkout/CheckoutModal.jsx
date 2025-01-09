@@ -1,9 +1,10 @@
+/* eslint-disable no-undef */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable consistent-return */
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   CircleCheckBig,
@@ -16,14 +17,22 @@ import {
   TrendingUp,
 } from 'lucide-react';
 
+import { useCreateCheckout } from '../../../hooks/checkout/useCreateCheckout';
+import { addressReset } from '../../../redux/reducers/addressReducer';
+import { setResetCartItem } from '../../../redux/reducers/cartItemReducer';
 import Button from '../../Elements/Button/Button';
 import Card from '../Card/Card';
 
 function CheckoutModal() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(10);
   const dataUser = JSON.parse(localStorage.getItem('data'));
-
+  const dataPayment = JSON.parse(localStorage.getItem('payment'));
+  const dataShipping = JSON.parse(localStorage.getItem('shipping'));
+  const dataAddress = JSON.parse(localStorage.getItem('address'));
+  const { createCheckoutMutation } = useCreateCheckout();
+  const cartFromRedux = useSelector((state) => state.cart);
   useEffect(() => {
     if (timeLeft <= 0) return;
 
@@ -41,6 +50,21 @@ function CheckoutModal() {
 
   const handleDone = () => {
     // logic create checkout
+    const checkoutData = {
+      user_id: dataUser.id,
+      cart_id: cartFromRedux.id,
+      payment_id: dataPayment.id,
+      shipping_id: dataShipping.id,
+      address_id: dataAddress.id,
+      status: 'Pending',
+      total_price: totalPriceFromRedux,
+    };
+    createCheckoutMutation(checkoutData);
+    dispatch(setResetCartItem());
+    dispatch(addressReset());
+    localStorage.removeItem('payment');
+    localStorage.removeItem('order');
+    localStorage.removeItem('shipping');
     navigate('/');
   };
 
