@@ -42,7 +42,7 @@ function Navbar({ onCartClick }) {
   };
 
   return (
-    <div className="border-b-gray-300 relative pb-20 pt-3 flex justify-center z-40">
+    <div className="border-b-gray-300 relative pb-20 pt-3 flex justify-center z-10">
       <header className="w-[1400px] py-2 fixed bg-gray10 rounded-lg  border border-gray-100">
         <div className="flex items-center justify-between px-6">
           <Link to="/">
@@ -62,7 +62,7 @@ function Navbar({ onCartClick }) {
                   onClick={handleCrartClick}
                 />
                 {cartItem.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full text-center">
                     {cartItem.length}
                   </span>
                 )}

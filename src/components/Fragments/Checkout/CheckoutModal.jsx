@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-undef */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
@@ -48,18 +49,23 @@ function CheckoutModal() {
   );
   const order = JSON.parse(localStorage.getItem('order'));
 
-  const handleDone = () => {
+  const handleDone = async () => {
     // logic create checkout
-    const checkoutData = {
-      user_id: dataUser.id,
-      cart_id: cartFromRedux.id,
-      payment_id: dataPayment.id,
-      shipping_id: dataShipping.id,
-      address_id: dataAddress.id,
-      status: 'Pending',
-      total_price: totalPriceFromRedux,
-    };
-    createCheckoutMutation(checkoutData);
+    try {
+      const checkoutData = {
+        user_id: dataUser.id,
+        cart_id: cartFromRedux.id,
+        payment_id: dataPayment.id,
+        shipping_id: dataShipping.id,
+        address_id: dataAddress.id,
+        status: 'Pending',
+        total_price: totalPriceFromRedux,
+      };
+
+      await createCheckoutMutation(checkoutData);
+    } catch (error) {
+      console.log(error);
+    }
     dispatch(setResetCartItem());
     dispatch(addressReset());
     localStorage.removeItem('payment');
@@ -69,7 +75,7 @@ function CheckoutModal() {
   };
 
   return (
-    <Card className="flex flex-col gap-6 rounded-xl w-full max-w-2xl z-50 ">
+    <Card className="flex flex-col gap-6 rounded-xl w-full max-w-2xl z-50">
       <Card.Header className="flex flex-col gap-3 items-center justify-center">
         <div className="p-4 bg-gray-200 rounded-lg">
           <CircleCheckBig className="text-blue-600 font-bold" size={30} />
