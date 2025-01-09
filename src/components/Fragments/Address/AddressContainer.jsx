@@ -7,7 +7,7 @@ import AddressForm from './AddressForm';
 
 function AddressContainer() {
   return (
-    <section className="flex flex-col mx-auto max-w-[1300px] z-30">
+    <section className="flex flex-col mx-auto max-w-[1300px] z-5">
       <div className="flex gap-10">
         {/* left */}
         <div className="w-1/2">
