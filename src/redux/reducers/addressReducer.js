@@ -8,7 +8,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  address: [],
+  address: null,
   // id: null,
   // user_id: null,
   // street: null,
@@ -25,8 +25,6 @@ const addressReducer = createSlice({
     addressStore(state, action) {
       console.log('payloaded:', action.payload);
       const {
-        id,
-        user_id,
         street,
         city,
         state: propincies,
@@ -34,9 +32,11 @@ const addressReducer = createSlice({
         country,
       } = action.payload;
 
+      const existAddress = state.address || {};
+
       const newAddress = {
-        id,
-        user_id,
+        id: existAddress.id || action.payload.id,
+        user_id: existAddress.user_id || action.payload.user_id,
         street,
         city,
         state: propincies,
@@ -44,14 +44,14 @@ const addressReducer = createSlice({
         country,
       };
 
-      state.address = [...state.address, newAddress];
+      state.address = newAddress;
 
       localStorage.setItem('address', JSON.stringify(state.address));
 
       console.log('Address:', state.address);
     },
 
-    addressReset(state) {
+    addressReset() {
       localStorage.removeItem('address');
       return initialState;
     },

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable import/extensions */
 import React, { lazy, Suspense } from 'react';
@@ -6,6 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import ProtectedRoute from './components/Template/Auth/ProtectedRoute.jsx';
+import Payment from './pages/payment/Payment.jsx';
 import store from './redux/store/index.js';
 
 const ErrorElements = lazy(
@@ -95,11 +97,20 @@ function App() {
                 element={<AddressPages />}
                 errorElement={<ErrorElements />}
               />
-              <Route
+              {/* <Route
                 path="/checkout"
                 element={
                   <ProtectedRoute>
                     <Checkout />
+                  </ProtectedRoute>
+                }
+                errorElement={<ErrorElements />}
+              /> */}
+              <Route
+                path="/payment"
+                element={
+                  <ProtectedRoute>
+                    <Payment />
                   </ProtectedRoute>
                 }
                 errorElement={<ErrorElements />}
