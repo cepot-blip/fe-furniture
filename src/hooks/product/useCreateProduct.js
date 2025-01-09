@@ -20,7 +20,6 @@ export function useCreateProduct() {
       price,
       stock,
       category_id,
-      mitra_id,
       image_url,
     }) =>
       await createProduct({
@@ -29,7 +28,6 @@ export function useCreateProduct() {
         price,
         stock,
         category_id,
-        mitra_id,
         image_url,
       }),
 
@@ -44,7 +42,7 @@ export function useCreateProduct() {
         error.message || 'Gagal membuat produk. Periksa kembali data Anda!',
       );
       // console.error('Error creating product:', error);
-      console.log('Error creating product', error.message);
+      console.log('Error creating product', error);
     },
   });
 
