@@ -11,7 +11,7 @@ function Hero({ children }) {
     navigate('/products');
   };
   return (
-    <section className="w-full py-8">
+    <section className="w-full py-8 z-30">
       <div className="flex justify-between items-center mx-auto max-w-[1400px]">
         {/* Text Section */}
         <div className="flex-1 pr-12">

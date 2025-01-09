@@ -6,7 +6,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   order: [],
-  id: null,
 };
 
 const orderReducer = createSlice({
@@ -14,11 +13,24 @@ const orderReducer = createSlice({
   initialState,
   reducers: {
     orderStore(state, action) {
-      console.log('payloaded:', action.payload);
-      const { order_id } = action.payload;
-      state.id = order_id || 0;
+      console.log('payload redux store:', action.payload);
+
+      // const { order_id, user_id, total_price, status } = action.payload;
+
+      // state.order.push({
+      //   order_id: order_id || 0,
+      //   user_id: user_id || 0,
+      //   total_price: total_price || 0,
+      //   status: status || 0,
+      // });
+      state.order = action.payload;
+
+      console.log('Updated state:', state.order);
+
+      localStorage.setItem('order', JSON.stringify(state.order));
     },
   },
 });
+
 export const { orderStore } = orderReducer.actions;
 export default orderReducer.reducer;

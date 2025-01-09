@@ -10,7 +10,7 @@ export default function useOrderById(id) {
     isError,
   } = useQuery({
     queryKey: ['orderId', id],
-    queryFn: () => orderById(),
+    queryFn: () => orderById(id),
     enabled: !!id,
   });
 

@@ -13,6 +13,7 @@ import { User } from 'lucide-react';
 import Notiflix from 'notiflix';
 
 import useUserId from '../../../hooks/users/useUserId';
+import { addressReset } from '../../../redux/reducers/addressReducer';
 import { setReset } from '../../../redux/reducers/authReducer';
 import { setResetCartItem } from '../../../redux/reducers/cartItemReducer';
 import Button from '../../Elements/Button/Button';
@@ -31,12 +32,16 @@ function Profile() {
       Cookies.remove('token');
       dispatch(setReset());
       dispatch(setResetCartItem());
+      dispatch(addressReset());
       localStorage.removeItem('data');
-      localStorage.removeItem('address');
+      localStorage.removeItem('payment');
+      localStorage.removeItem('order');
+      localStorage.removeItem('shipping');
       console.log('Berhasil logout');
 
       Notiflix.Notify.success('Anda berhasil logout');
       navigate('/login');
+      window.location.reload();
     }
   };
 
@@ -52,7 +57,7 @@ function Profile() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left z-50">
       <Button
         onClick={toggleMenu}
         className="inline-flex justify-center w-full px-4 py-3 text-sm font-medium text-gray-700 border border-gray-100 rounded-lg"
@@ -64,7 +69,7 @@ function Profile() {
       </Button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+        <div className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg z-50">
           <div
             className="py-1 z-30"
             role="menu"

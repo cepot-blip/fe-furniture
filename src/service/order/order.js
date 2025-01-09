@@ -15,28 +15,43 @@ export const orderService = (dispatch) => {
       status,
     });
 
-    console.log('response: ', response.data);
-    const order_id = response.data.data.id;
-    dispatch(orderStore({ order_id }));
+    console.log('Response from API:', response.data);
 
     if (!response.data.success) {
-      throw new Error(response.data.message || 'Failed create order');
+      throw new Error(response.data.message || 'Failed to create order');
     }
+
+    const orderData = {
+      order_id: response.data.data.id,
+      user_id,
+      total_price,
+      status,
+    };
+
+    console.log('Dispatching order data to Redux:', orderData);
+    dispatch(orderStore(orderData));
+
     return response.data;
   };
 
   const orderById = async (id) => {
-    console.log('order sebelum response:', id);
+    console.log('Fetching order by ID:', id);
 
     const response = await instance.get(`/order/${id}`);
-    console.log('order setelah response:', id);
+    console.log('Response for order by ID:', response.data);
 
-    const order_id = response.data.data.id;
-    dispatch(orderStore({ order_id }));
+    const orderData = {
+      order_id: response.data.data.id,
+      user_id: response.data.data.user_id,
+      total_price: response.data.data.total_price,
+      status: response.data.data.status,
+    };
 
-    console.log('res redux:', response.data, 'order id:', order_id);
+    console.log('Dispatching fetched order data to Redux:', orderData);
+    dispatch(orderStore(orderData));
 
-    return response.data || order_id;
+    return response.data;
   };
+
   return { createOrder, orderById };
 };

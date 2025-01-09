@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-use-before-define */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -9,10 +10,12 @@
 /* eslint-disable no-alert */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import Notiflix from 'notiflix';
 
 import { useCreateAddress } from '../../../hooks/address/useCreateAddress';
+import { useUpdateAddress } from '../../../hooks/address/useUpdateAddress';
 import { addressStore } from '../../../redux/reducers/addressReducer';
 import addressSchema from '../../../schema/address';
 import Button from '../../Elements/Button/Button';
@@ -24,17 +27,22 @@ function AddressForm() {
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   const { createAddressMutation } = useCreateAddress();
+  const { updateAddressMutation } = useUpdateAddress();
   const data = JSON.parse(localStorage.getItem('data'));
-
-  const address = JSON.parse(localStorage.getItem('address')); // test untuk 1 user = 1 address
+  const addresFromRedux = useSelector((state) => state.address);
+  const address = JSON.parse(localStorage.getItem('address'));
+  const orderStorage = JSON.parse(localStorage.getItem('order'));
 
   // console.log('datauser:', data);
+  console.log('orderStorage', orderStorage);
+  console.log('addresFromRedux', addresFromRedux);
 
   const formik = useFormik({
     initialValues: {
-      street: '',
+      street: '', // Pastikan 'street' ada atau set ke string kosong
       city: '',
       state: '',
       postal_code: '',
@@ -55,13 +63,22 @@ function AddressForm() {
 
       setIsLoading(true);
       try {
-        const dataAddress = {
-          user_id: data?.id,
-          ...dataToSend,
-        };
-
-        await createAddressMutation(dataAddress);
-        dispatch(addressStore(dataToSend));
+        if (!address) {
+          const dataAddress = {
+            user_id: data.id,
+            ...dataToSend,
+          };
+          await createAddressMutation(dataAddress);
+          dispatch(addressStore(dataToSend));
+        } else {
+          const dataAddress = {
+            id: address.id,
+            user_id: data.id,
+            ...dataToSend,
+          };
+          await updateAddressMutation(dataAddress);
+          dispatch(addressStore(dataToSend));
+        }
 
         Notiflix.Notify.success('Success create Address!');
         setModalOpen(true);
@@ -151,8 +168,8 @@ function AddressForm() {
             label="Select Country"
             options={[
               { value: 'Indonesia', label: 'Indonesia' },
-              { value: 'United States', label: 'United States (Rp. 10000)' },
-              { value: 'India', label: 'India (Rp. 8000)' },
+              { value: 'United States', label: 'United States' },
+              { value: 'India', label: 'India' },
             ]}
           />
           {formik.touched.country && formik.errors.country && (
@@ -164,7 +181,7 @@ function AddressForm() {
           <Button
             className="text-white w-full bg-gray-800 hover:bg-gray-900 font-medium rounded-lg text-lg px-5 py-3 hover:shadow-lg cursor-pointer transition-all"
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || formik.isSubmitting}
           >
             {isLoading ? 'Loading..' : 'Continue Address to Shipping'}
           </Button>
