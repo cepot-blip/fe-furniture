@@ -9,7 +9,7 @@ function CheckoutContent({ children, className }) {
 
 function CheckoutContainer() {
   return (
-    <section className="w-full max-w-[1300px] z-30">
+    <section className="w-full max-w-[1300px] z-10 ">
       <div className="flex border border-gray-200 rounded-lg overflow-hidden p-4">
         <CheckoutContent className="w-full flex">
           <div className="w-1/2 flex-1 pr-4">

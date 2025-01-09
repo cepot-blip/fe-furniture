@@ -7,7 +7,7 @@ import PaymentInfo from './PaymentInfo';
 
 function PaymentContainer() {
   return (
-    <section className="flex flex-col mx-auto max-w-[1300px] z-30">
+    <section className="flex flex-col mx-auto max-w-[1300px] z-5">
       <div className="flex gap-10">
         {/* left */}
         <div className="flex-1 w-full">
