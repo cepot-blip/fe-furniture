@@ -26,7 +26,7 @@ function FormCategory() {
     const checkRole = JSON.parse(localStorage.getItem('data'));
     const role = checkRole?.role;
 
-    if (role !== 'Mitra') {
+    if (role !== 'Mitra' && role !== 'Admin') {
       setLoading(false);
       Notiflix.Notify.failure('Anda tidak memiliki hak akses untuk fitur ini!');
 
