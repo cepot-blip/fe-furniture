@@ -35,7 +35,7 @@ export const useCreateReviews = () => {
         error.message,
         'Gagal membuat review. Periksa kembali',
       );
-      console.log(error.message, 'Error create review');
+      console.log(error, 'Error create review');
     },
   });
 
