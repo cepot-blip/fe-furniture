@@ -13,12 +13,12 @@ import Input from '../../Elements/Fields/Input';
 
 function FormReview({ product_id, onSuccess }) {
   const { id } = useParams();
-  const id_user = useSelector((state) => state.auth.userAuth.id);
+  const user = JSON.parse(localStorage.getItem('data'));
   const { createReviewMutation } = useCreateReviews();
 
   const [loading, setLoading] = useState(false);
   const [senderData, setSenderData] = useState({
-    user_id: id_user,
+    user_id: user.id,
     product_id: Number(id),
     rating: '',
     review_content: '',
