@@ -34,7 +34,7 @@ function FormRegister() {
         email: values.email,
         phone_number: values.phone_number,
         password: values.password,
-        role: values.role === 'admin' ? 'Admin' : 'User',
+        role: values.role === 'mitra' ? 'Mitra' : 'User',
       };
 
       // dispatch(authStore(payload));
@@ -136,7 +136,7 @@ function FormRegister() {
           className="mt-1 block w-full px-3 py-3 border border-gray-300 bg-white rounded-lg shadow-sm cursor-pointer text-gray-500"
           label="Silakhan pilih role anda"
           options={[
-            { value: 'admin', label: 'Admin' },
+            { value: 'mitra', label: 'Mitra' },
             { value: 'user', label: 'User' },
           ]}
         />

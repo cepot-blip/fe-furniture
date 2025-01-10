@@ -24,7 +24,6 @@ export const productService = () => {
     price,
     stock,
     category_id,
-    mitra_id,
     image_url,
   }) => {
     const response = await instance.post(
@@ -35,7 +34,6 @@ export const productService = () => {
         price,
         stock,
         category_id,
-        mitra_id,
         image_url,
       },
       {

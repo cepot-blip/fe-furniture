@@ -12,10 +12,11 @@ import Fields from '../../Elements/Fields';
 function FormMitra() {
   const [loading, setLoading] = useState(false);
   const { createMitraMutation, isSuccess, isError } = useCreateMitra();
+  const user = JSON.parse(localStorage.getItem('data'));
 
   const formik = useFormik({
     initialValues: {
-      user_id: '',
+      user_id: user.id,
       company_name: '',
       business_type: '',
       address: '',
@@ -33,26 +34,6 @@ function FormMitra() {
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6 w-full">
       <div>
         <Fields
-          htmlFor="user_id"
-          label="User Id"
-          type="number"
-          name="user_id"
-          id="user_id"
-          value={formik.values.user_id}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          placeholder="Enter our user id"
-          className={`mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm ${formik.errors.user_id && formik.touched.user_id ? 'ring-2 ring-red-500' : ''}`}
-        />
-        {formik.errors.user_id && formik.touched.user_id && (
-          <small className="text-red-500 text-xs">
-            {formik.errors.user_id}
-          </small>
-        )}
-      </div>
-
-      <div>
-        <Fields
           htmlFor="company_name"
           label="Company Name"
           type="text"
@@ -61,7 +42,7 @@ function FormMitra() {
           value={formik.values.company_name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder="Enter our user id"
+          placeholder="Enter our company name"
           className={`mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm ${formik.errors.company_name && formik.touched.company_name ? 'ring-2 ring-red-500' : ''}`}
         />
         {formik.errors.company_name && formik.touched.company_name && (
@@ -81,7 +62,7 @@ function FormMitra() {
           value={formik.values.business_type}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder="Enter our user id"
+          placeholder="Enter our business type"
           className={`mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm ${formik.errors.business_type && formik.touched.business_type ? 'ring-2 ring-red-500' : ''}`}
         />
         {formik.errors.business_type && formik.touched.business_type && (
@@ -101,7 +82,7 @@ function FormMitra() {
           value={formik.values.address}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder="Enter our user id"
+          placeholder="Enter our address"
           className={`mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm ${formik.errors.address && formik.touched.address ? 'ring-2 ring-red-500' : ''}`}
         />
         {formik.errors.address && formik.touched.address && (
@@ -121,7 +102,7 @@ function FormMitra() {
           value={formik.values.contact_info}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder="Enter our user id"
+          placeholder="Enter our contact info"
           className={`mt-1 block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm ${formik.errors.contact_info && formik.touched.contact_info ? 'ring-2 ring-red-500' : ''}`}
         />
         {formik.errors.contact_info && formik.touched.contact_info && (
